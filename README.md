@@ -1,6 +1,6 @@
 # 📦 Marubase
 
-Marubase's media assets repository.
+Marubase's source code repository.
 
 # ⚖️ License
 
