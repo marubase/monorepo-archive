@@ -1,0 +1,9 @@
+{
+  "name": "@marubase/marubase",
+  "description": "An open source document database for the web.",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "typescript": "^4.5.4"
+  }
+}
