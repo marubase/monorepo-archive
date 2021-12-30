@@ -1,15 +1,105 @@
 {
-  "env": { "mocha": true, "node": true },
+  "env": { "browser": true, "mocha": true, "node": true },
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:prettier/recommended"
   ],
-  "parserOptions": { "project": "./tsconfig.json" },
+  "parserOptions": { "ecmaVersion": "latest", "project": "./tsconfig.json" },
   "plugins": ["tsdoc"],
+  "root": true,
   "rules": {
-    "tsdoc/syntax": "warn"
-  },
-  "root": true
+    "@typescript-eslint/explicit-function-return-type": [
+      "error",
+      {
+        "allowExpressions": true,
+        "allowTypedFunctionExpressions": true,
+        "allowHigherOrderFunctions": true,
+        "allowDirectConstAssertionInArrowFunctions": true,
+        "allowConciseArrowFunctionExpressionsStartingWithVoid": true
+      }
+    ],
+    "@typescript-eslint/explicit-member-accessibility": ["error"],
+    "@typescript-eslint/member-ordering": [
+      "error",
+      {
+        "default": {
+          "memberTypes": [
+            "public-static-field",
+            "protected-static-field",
+            "private-static-field",
+            "public-instance-field",
+            "protected-instance-field",
+            "private-instance-field",
+            "public-abstract-field",
+            "protected-abstract-field",
+            "private-abstract-field",
+            "public-field",
+            "protected-field",
+            "private-field",
+            "static-field",
+            "instance-field",
+            "abstract-field",
+            "field",
+            "signature",
+            "public-constructor",
+            "protected-constructor",
+            "private-constructor",
+            "constructor",
+            "public-static-get",
+            "protected-static-get",
+            "private-static-get",
+            "public-instance-get",
+            "protected-instance-get",
+            "private-instance-get",
+            "public-abstract-get",
+            "protected-abstract-get",
+            "private-abstract-get",
+            "public-get",
+            "protected-get",
+            "private-get",
+            "static-get",
+            "instance-get",
+            "abstract-get",
+            "get",
+            "public-static-set",
+            "protected-static-set",
+            "private-static-set",
+            "public-instance-set",
+            "protected-instance-set",
+            "private-instance-set",
+            "public-abstract-set",
+            "protected-abstract-set",
+            "private-abstract-set",
+            "public-set",
+            "protected-set",
+            "private-set",
+            "static-set",
+            "instance-set",
+            "abstract-set",
+            "set",
+            "public-static-method",
+            "protected-static-method",
+            "private-static-method",
+            "public-instance-method",
+            "protected-instance-method",
+            "private-instance-method",
+            "public-abstract-method",
+            "protected-abstract-method",
+            "private-abstract-method",
+            "public-method",
+            "protected-method",
+            "private-method",
+            "static-method",
+            "instance-method",
+            "abstract-method",
+            "method"
+          ],
+          "order": "alphabetically"
+        }
+      }
+    ],
+    "tsdoc/syntax": ["error"]
+  }
 }
