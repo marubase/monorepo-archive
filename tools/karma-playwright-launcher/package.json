@@ -6,7 +6,7 @@
   "scripts": {
     "clean": "pnpm clean:module",
     "clean:module": "del-cli ./node_modules",
-    "lint": "eslint --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts ./source"
+    "lint": "eslint --ext .cjs,.cts,.js,.jsx,.mjs,.mts,.ts,.tsx ./source"
   },
   "publishConfig": {
     "access": "public"
