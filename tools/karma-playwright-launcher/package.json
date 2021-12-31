@@ -1,0 +1,14 @@
+{
+  "name": "@marubase-tools/karma-playwright-launcher",
+  "version": "0.0.0",
+  "type": "commonjs",
+  "main": "./source/index.js",
+  "scripts": {
+    "clean": "pnpm clean:module",
+    "clean:module": "del-cli ./node_modules",
+    "lint": "eslint --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts ./source"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
