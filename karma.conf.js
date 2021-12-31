@@ -8,7 +8,11 @@ module.exports = function (karmaConfig) {
       : ["Chromium", "Firefox", "WebKit"],
     client: { mocha: { opts: path.join(__dirname, ".mocharc.json") } },
     files: [
+      { pattern: "source/**/*.test.cjs", watched: false },
       { pattern: "source/**/*.test.cts", watched: false },
+      { pattern: "source/**/*.test.js", watched: false },
+      { pattern: "source/**/*.test.jsx", watched: false },
+      { pattern: "source/**/*.test.mjs", watched: false },
       { pattern: "source/**/*.test.mts", watched: false },
       { pattern: "source/**/*.test.ts", watched: false },
       { pattern: "source/**/*.test.tsx", watched: false },
@@ -24,6 +28,10 @@ module.exports = function (karmaConfig) {
     ],
     preprocessors: {
       "**/*.cts": ["webpack", "sourcemap"],
+      "**/*.cjs": ["webpack", "sourcemap"],
+      "**/*.js": ["webpack", "sourcemap"],
+      "**/*.jsx": ["webpack", "sourcemap"],
+      "**/*.mjs": ["webpack", "sourcemap"],
       "**/*.mts": ["webpack", "sourcemap"],
       "**/*.ts": ["webpack", "sourcemap"],
       "**/*.tsx": ["webpack", "sourcemap"],
