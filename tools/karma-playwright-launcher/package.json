@@ -5,7 +5,7 @@
   "main": "./source/index.js",
   "scripts": {
     "clean": "pnpm clean:module",
-    "clean:module": "del-cli ./node_modules",
+    "clean:module": "rm -rf ./node_modules",
     "lint": "eslint --ext .cjs,.cts,.js,.jsx,.mjs,.mts,.ts,.tsx ./source"
   },
   "publishConfig": {
