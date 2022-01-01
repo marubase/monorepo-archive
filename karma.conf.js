@@ -1,4 +1,3 @@
-const path = require("path");
 module.exports = function (karmaConfig) {
   karmaConfig.set({
     autoWatch: false,
@@ -6,8 +5,9 @@ module.exports = function (karmaConfig) {
     browsers: process.env.KARMA_BROWSER
       ? process.env.KARMA_BROWSER.split(",")
       : ["Chromium", "Firefox", "WebKit"],
-    client: { mocha: { opts: path.join(__dirname, ".mocharc.json") } },
+    client: { mocha: { ui: "tdd" } },
     coverageIstanbulReporter: {
+      combineBrowserReports: process.env.KARMA_REPORT_COMBINE ? true : false,
       dir: "coverage/%browser%",
       fixWebpackSourcePaths: true,
       reports: process.env.KARMA_REPORT
