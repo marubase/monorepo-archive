@@ -1,0 +1,4 @@
+{
+  "exclude": ["**/index.*"],
+  "extension": [".cjs", ".cts", ".js", ".jsx", ".mjs", ".mts", ".ts", ".tsx"]
+}
