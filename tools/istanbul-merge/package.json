@@ -1,13 +1,16 @@
 {
-  "name": "@marubase-tools/karma-playwright-launcher",
+  "name": "@marubase-tools/istanbul-merge",
   "version": "0.0.0",
   "type": "commonjs",
-  "main": "./source/index.js",
+  "bin": "./source/index.js",
   "scripts": {
     "clean:vendor": "rm -rf ./node_modules",
     "lint": "eslint --ext .cjs,.cts,.js,.jsx,.mjs,.mts,.ts,.tsx ./source"
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "istanbul-lib-coverage": "^3.2.0"
   }
 }
