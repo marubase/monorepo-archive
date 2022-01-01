@@ -24,7 +24,7 @@
     "build:commonjs": "tsc --project ./tsconfig.commonjs.json && echo '{\"type\":\"commonjs\"}' > ./build/commonjs/package.json",
     "build:module": "tsc --project ./tsconfig.module.json && echo '{\"type\":\"module\"}' > ./build/module/package.json",
     "build:types": "tsc --project ./tsconfig.types.json",
-    "clean": "pnpm clean:build && pnpm clean:coverage && pnpm clean:report",
+    "clean": "pnpm clean:build && pnpm clean:coverage && pnpm clean:log && pnpm clean:report",
     "clean:build": "rm -rf ./build",
     "clean:coverage": "rm -rf ./coverage",
     "clean:log": "rm ./.pnpm-debug.log",
