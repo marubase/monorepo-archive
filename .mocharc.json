@@ -3,5 +3,5 @@
   "enable-source-maps": true,
   "extension": ["cjs", "cts", "js", "jsx", "mjs", "mts", "ts", "tsx"],
   "node-option": ["loader=ts-node/esm", "no-warnings"],
-  "reporter": ["min"]
+  "reporter": ["dot"]
 }

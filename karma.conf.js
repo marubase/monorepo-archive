@@ -3,10 +3,17 @@ module.exports = function (karmaConfig) {
   karmaConfig.set({
     autoWatch: false,
     basePath: process.cwd(),
-    browsers: process.env.BROWSER
-      ? process.env.BROWSER.split(",")
+    browsers: process.env.KARMA_BROWSER
+      ? process.env.KARMA_BROWSER.split(",")
       : ["Chromium", "Firefox", "WebKit"],
     client: { mocha: { opts: path.join(__dirname, ".mocharc.json") } },
+    coverageIstanbulReporter: {
+      dir: "coverage/%browser%",
+      fixWebpackSourcePaths: true,
+      reports: process.env.KARMA_REPORT
+        ? process.env.KARMA_REPORT.split(",")
+        : ["text"],
+    },
     files: [
       { pattern: "source/**/*.test.cjs", watched: false },
       { pattern: "source/**/*.test.cts", watched: false },
@@ -22,6 +29,7 @@ module.exports = function (karmaConfig) {
     logLevel: karmaConfig.LOG_ERROR,
     plugins: [
       "@marubase-tools/karma-playwright-launcher",
+      "karma-coverage-istanbul-reporter",
       "karma-mocha",
       "karma-sourcemap-loader",
       "karma-webpack",
@@ -36,7 +44,7 @@ module.exports = function (karmaConfig) {
       "**/*.ts": ["webpack", "sourcemap"],
       "**/*.tsx": ["webpack", "sourcemap"],
     },
-    reporters: ["dots"],
+    reporters: ["coverage-istanbul"],
     singleRun: true,
     webpack: require("./webpack.config.js"),
   });

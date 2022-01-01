@@ -6,8 +6,16 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.ts/,
-        use: [{ loader: "ts-loader", options: { transpileOnly: true } }],
+        exclude: /node_modules|\.test\.(cts|mts|ts|tsx)$/,
+        loader: "@jsdevtools/coverage-istanbul-loader",
+        options: { esModules: true, produceSourceMap: true },
+        test: /\.(cts|mts|ts|tsx)$/,
+      },
+      {
+        exclude: /node_modules/,
+        loader: "ts-loader",
+        options: { transpileOnly: true },
+        test: /\.(cts|mts|ts|tsx)$/,
       },
     ],
   },
