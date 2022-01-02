@@ -6,6 +6,8 @@ export interface RegistryContract {
 
   bind(bindable: Bindable): Binding;
 
+  bound(bindable: Bindable): boolean;
+
   clearByKey(key: ResolvableKey, resolver: ResolverContract): this;
 
   clearByTag(tag: ResolvableTag, resolver: ResolverContract): this;
@@ -38,6 +40,8 @@ export interface RegistryContract {
   setByKey(key: ResolvableKey, resolver: ResolverContract): this;
 
   setByTag(tag: ResolvableTag, resolver: ResolverContract): this;
+
+  unbind(bindable: Bindable): this;
 }
 
 export type Bindable = Function | ResolvableKey;
@@ -62,12 +66,9 @@ export type Binding = {
 };
 
 export type Resolvable =
-  | [Function, string | symbol] // Static method
-  | [Object, string | symbol] // Instance method
-  | [string, string | symbol] // ResolvableKey method
-  | [symbol, string | symbol] // ResolvableKey method
-  | Function // ResolvableKey, Constructor
-  | string // ResolvableKey, ResolvableKey method
+  | [Function | string | symbol, string | symbol] // ResolvableKey method
+  | Function // ResolvableKey
+  | string // ResolvableKey
   | symbol; // ResolvableKey
 
 export type ResolvableKey = string | symbol;
@@ -88,6 +89,11 @@ export type ResolverFactory = {
   createConstructorResolver(
     registry: RegistryContract,
     target: Function,
+  ): ResolverContract;
+
+  createFactoryResolver(
+    registry: RegistryContract,
+    resolvable: Resolvable,
   ): ResolverContract;
 
   createFunctionResolver(
