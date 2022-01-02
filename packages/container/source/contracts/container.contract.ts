@@ -5,6 +5,7 @@ import {
   Resolvable,
   ResolvableKey,
   ResolvableTag,
+  ResolveFactory,
 } from "./registry.contract.js";
 import { ResolverDependencies } from "./resolver.contract.js";
 import { ScopeContract } from "./scope.contract.js";
@@ -40,10 +41,7 @@ export interface ContainerContract {
     ...args: Array<unknown>
   ): Result;
 
-  resolveFactory<Result>(
-    resolvable: Resolvable,
-    ...args: Array<unknown>
-  ): ResolveFactory<Result>;
+  resolveFactory<Result>(resolvable: Resolvable): ResolveFactory<Result>;
 
   resolveFunction<Result>(
     target: Function,
@@ -54,6 +52,7 @@ export interface ContainerContract {
   resolveMethod<Result>(
     target: Function | Object,
     method: string | symbol,
+    dependencies: ResolverDependencies,
     ...args: Array<unknown>
   ): Result;
 
@@ -61,5 +60,3 @@ export interface ContainerContract {
 
   unbind(bindable: Bindable): this;
 }
-
-export type ResolveFactory<Result> = (...args: Array<unknown>) => Result;
