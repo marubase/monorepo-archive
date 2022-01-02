@@ -13,7 +13,7 @@ export interface RegistryContract {
 
   clearByTag(tag: ResolvableTag, resolver: ResolverContract): this;
 
-  clearPlugin(key: unknown): this;
+  clearPlugin(pluginKey: unknown): this;
 
   createAliasResolver(alias: ResolvableKey): ResolverContract;
 
@@ -34,7 +34,7 @@ export interface RegistryContract {
 
   getByTag(tag: ResolvableTag): Array<ResolverContract>;
 
-  getPlugin(key: unknown): PluginContract | undefined;
+  getPlugin(pluginKey: unknown): PluginContract | undefined;
 
   getPlugins(): Array<PluginContract>;
 
@@ -96,7 +96,7 @@ export interface RegistryContract {
 
   setByTag(tag: ResolvableTag, resolver: ResolverContract): this;
 
-  setPlugin(key: unknown, plugin: PluginContract): this;
+  setPlugin(pluginKey: unknown, plugin: PluginContract): this;
 
   unbind(bindable: Bindable): this;
 }
