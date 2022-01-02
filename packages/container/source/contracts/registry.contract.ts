@@ -1,3 +1,4 @@
+import { PluginContract } from "./plugin.contract.js";
 import { ResolverContract, ResolverDependencies } from "./resolver.contract.js";
 import { ScopeContract } from "./scope.contract.js";
 
@@ -11,6 +12,8 @@ export interface RegistryContract {
   clearByKey(key: ResolvableKey, resolver: ResolverContract): this;
 
   clearByTag(tag: ResolvableTag, resolver: ResolverContract): this;
+
+  clearPlugin(key: unknown): this;
 
   createAliasResolver(alias: ResolvableKey): ResolverContract;
 
@@ -30,6 +33,10 @@ export interface RegistryContract {
   getByKey(key: ResolvableKey): ResolverContract | undefined;
 
   getByTag(tag: ResolvableTag): Array<ResolverContract>;
+
+  getPlugin(key: unknown): PluginContract | undefined;
+
+  getPlugins(): Array<PluginContract>;
 
   resolve<Result>(
     scope: ScopeContract,
@@ -88,6 +95,8 @@ export interface RegistryContract {
   setByKey(key: ResolvableKey, resolver: ResolverContract): this;
 
   setByTag(tag: ResolvableTag, resolver: ResolverContract): this;
+
+  setPlugin(key: unknown, plugin: PluginContract): this;
 
   unbind(bindable: Bindable): this;
 }
