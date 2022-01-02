@@ -1,3 +1,4 @@
+import { MiddlewareContract } from "./middleware.contract.js";
 import {
   Bindable,
   Binding,
@@ -17,7 +18,11 @@ export interface ContainerContract {
 
   bound(bindable: Bindable): boolean;
 
+  clearMiddleware(key: unknown): this;
+
   fork(): this;
+
+  getMiddleware(key: unknown): MiddlewareContract;
 
   getRegistry(): RegistryContract;
 
@@ -57,6 +62,8 @@ export interface ContainerContract {
   ): Result;
 
   resolveTag<Result>(tag: ResolvableTag, ...args: Array<unknown>): Result;
+
+  setMiddleware(key: unknown, middleware: MiddlewareContract): this;
 
   unbind(bindable: Bindable): this;
 }
