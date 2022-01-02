@@ -1,4 +1,4 @@
-import { ResolverContract } from "./resolver.contract.js";
+import { ResolverContract, ResolverDependencies } from "./resolver.contract.js";
 import { ScopeContract } from "./scope.contract.js";
 
 export interface RegistryContract {
@@ -32,8 +32,56 @@ export interface RegistryContract {
   getByTag(tag: ResolvableTag): Array<ResolverContract>;
 
   resolve<Result>(
-    resolvable: Resolvable,
     scope: ScopeContract,
+    resolvable: Resolvable,
+    ...args: Array<unknown>
+  ): Result;
+
+  resolveAlias<Result>(
+    scope: ScopeContract,
+    alias: ResolvableKey,
+    ...args: Array<unknown>
+  ): Result;
+
+  resolveClass<Result>(
+    scope: ScopeContract,
+    target: Function,
+    dependencies: ResolverDependencies,
+    ...args: Array<unknown>
+  ): Result;
+
+  resolveConstant<Result>(scope: ScopeContract, constant: unknown): Result;
+
+  resolveConstructor<Result>(
+    scope: ScopeContract,
+    target: Function,
+    dependencies: ResolverDependencies,
+    ...args: Array<unknown>
+  ): Result;
+
+  resolveFactory<Result>(
+    scope: ScopeContract,
+    resolvable: Resolvable,
+  ): ResolveFactory<Result>;
+
+  resolveFunction<Result>(
+    scope: ScopeContract,
+    target: Function,
+    dependencies: ResolverDependencies,
+    ...args: Array<unknown>
+  ): Result;
+
+  resolveMethod<Result>(
+    scope: ScopeContract,
+    target: Function | Object,
+    method: string | symbol,
+    dependencies: ResolverDependencies,
+    ...args: Array<unknown>
+  ): Result;
+
+  resolveTag<Result>(
+    scope: ScopeContract,
+    tag: ResolvableTag,
     ...args: Array<unknown>
   ): Result;
 
@@ -74,6 +122,8 @@ export type Resolvable =
 export type ResolvableKey = string | symbol;
 
 export type ResolvableTag = string | symbol;
+
+export type ResolveFactory<Result> = (...args: Array<unknown>) => Result;
 
 export type ResolverFactory = {
   createAliasResolver(
