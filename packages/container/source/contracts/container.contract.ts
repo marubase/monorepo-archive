@@ -1,3 +1,4 @@
+import { PluginContract } from "./plugin.contract.js";
 import {
   Bindable,
   Binding,
@@ -16,6 +17,8 @@ export interface ContainerContract {
   bind(bindable: Bindable): Binding;
 
   bound(bindable: Bindable): boolean;
+
+  clearPlugin(pluginKey: unknown): this;
 
   fork(): this;
 
@@ -57,6 +60,8 @@ export interface ContainerContract {
   ): Result;
 
   resolveTag<Result>(tag: ResolvableTag, ...args: Array<unknown>): Result;
+
+  setPlugin(pluginKey: unknown, plugin: PluginContract): this;
 
   unbind(bindable: Bindable): this;
 }
