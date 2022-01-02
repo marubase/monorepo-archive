@@ -10,6 +10,7 @@
   "plugins": ["tsdoc"],
   "root": true,
   "rules": {
+    "@typescript-eslint/ban-types": "off",
     "@typescript-eslint/explicit-member-accessibility": "error",
     "@typescript-eslint/no-var-requires": "off",
     "tsdoc/syntax": "error",
