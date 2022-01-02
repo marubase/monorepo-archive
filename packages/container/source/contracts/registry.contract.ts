@@ -1,4 +1,3 @@
-import { MiddlewareContract } from "./middleware.contract.js";
 import { ResolverContract, ResolverDependencies } from "./resolver.contract.js";
 import { ScopeContract } from "./scope.contract.js";
 
@@ -12,8 +11,6 @@ export interface RegistryContract {
   clearByKey(key: ResolvableKey, resolver: ResolverContract): this;
 
   clearByTag(tag: ResolvableTag, resolver: ResolverContract): this;
-
-  clearMiddleware(key: unknown): this;
 
   createAliasResolver(alias: ResolvableKey): ResolverContract;
 
@@ -33,8 +30,6 @@ export interface RegistryContract {
   getByKey(key: ResolvableKey): ResolverContract | undefined;
 
   getByTag(tag: ResolvableTag): Array<ResolverContract>;
-
-  getMiddleware(key: unknown): MiddlewareContract;
 
   resolve<Result>(
     scope: ScopeContract,
@@ -93,8 +88,6 @@ export interface RegistryContract {
   setByKey(key: ResolvableKey, resolver: ResolverContract): this;
 
   setByTag(tag: ResolvableTag, resolver: ResolverContract): this;
-
-  setMiddleware(key: unknown, middleware: MiddlewareContract): this;
 
   unbind(bindable: Bindable): this;
 }
