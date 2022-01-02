@@ -64,11 +64,11 @@ export type Binding = {
 export type Resolvable =
   | [Function, string | symbol] // Static method
   | [Object, string | symbol] // Instance method
-  | [string, string | symbol] // ResolveKey method
-  | [symbol, string | symbol] // ResolveKey method
-  | Function // ResolveKey, Constructor, Function
-  | string // ResolveKey
-  | symbol; // ResolveKey
+  | [string, string | symbol] // Resolvable method
+  | [symbol, string | symbol] // Resolvable method
+  | Function // Resolvable, Constructor, Function
+  | string // Resolvable
+  | symbol; // Resolvable
 
 export type ResolvableKey = string | symbol;
 
