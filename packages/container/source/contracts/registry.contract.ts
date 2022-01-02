@@ -67,7 +67,7 @@ export type Resolvable =
   | [string, string | symbol] // ResolvableKey method
   | [symbol, string | symbol] // ResolvableKey method
   | Function // ResolvableKey, Constructor
-  | string // ResolvableKey
+  | string // ResolvableKey, ResolvableKey method
   | symbol; // ResolvableKey
 
 export type ResolvableKey = string | symbol;
