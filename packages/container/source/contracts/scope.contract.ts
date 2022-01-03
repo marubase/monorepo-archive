@@ -2,25 +2,27 @@ export interface ScopeContract {
   new (): this;
   new (type: ScopeType, parent: ScopeContract): this;
 
-  clear(): this;
+  clearEntry(key: ScopeKey): this;
 
   fork(type: ScopeType): this;
 
-  get(key: ScopeKey): unknown;
+  getEntry(key: ScopeKey): unknown;
 
   getParent(): this | undefined;
 
+  getRecord(): Record<ScopeKey, unknown>;
+
   getType(): ScopeType;
 
-  has(key: ScopeKey): boolean;
+  hasEntry(key: ScopeKey): boolean;
 
-  set(set: ScopeKey, value: unknown): this;
+  search(query: ScopeQuery): this;
 
-  to(query: ScopeQuery): this;
+  setEntry(set: ScopeKey, value: unknown): this;
 }
 
-export type ScopeKey = string | symbol;
-
 export type ScopeQuery = "container" | "request" | "singleton" | "transient";
+
+export type ScopeKey = string | symbol;
 
 export type ScopeType = "container" | "request";
