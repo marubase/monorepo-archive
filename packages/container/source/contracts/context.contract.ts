@@ -3,11 +3,11 @@ export interface ContextContract {
 
   fork(type: ContextType): this;
 
-  getEntries(): Record<EntryKey, unknown>;
-
   getEntry(key: EntryKey): unknown;
 
   getParent(): this | undefined;
+
+  getRecord(): Record<EntryKey, unknown>;
 
   getType(): ContextType;
 
