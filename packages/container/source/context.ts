@@ -28,7 +28,15 @@ export class Context implements ContextContract {
     return new Static(type, this) as this;
   }
 
-  public getEntries(): Record<EntryKey, unknown> {
+  public getEntry(key: EntryKey): unknown {
+    return this.getRecord()[key];
+  }
+
+  public getParent(): this | undefined {
+    return this._parent;
+  }
+
+  public getRecord(): Record<EntryKey, unknown> {
     const byDefinedValue = ([, value]: [EntryKey, unknown]): boolean =>
       typeof value !== "undefined";
     const toEntries = (
@@ -38,17 +46,9 @@ export class Context implements ContextContract {
       entries[key] = value;
       return entries;
     };
-    return Object.entries(this._collapseEntries())
+    return Object.entries(this._collapseRecord())
       .filter(byDefinedValue)
       .reduce(toEntries, {});
-  }
-
-  public getEntry(key: EntryKey): unknown {
-    return this.getEntries()[key];
-  }
-
-  public getParent(): this | undefined {
-    return this._parent;
   }
 
   public getType(): ContextType {
@@ -56,7 +56,7 @@ export class Context implements ContextContract {
   }
 
   public hasEntry(key: EntryKey): boolean {
-    return key in this.getEntries();
+    return key in this.getRecord();
   }
 
   public scopeTo(scope: ContextScope): this {
@@ -84,7 +84,7 @@ export class Context implements ContextContract {
     return this;
   }
 
-  protected _collapseEntries(): Record<EntryKey, unknown> {
+  protected _collapseRecord(): Record<EntryKey, unknown> {
     return typeof this._parent !== "undefined"
       ? Object.assign(this._parent._entries, this._entries)
       : Object.assign({}, this._entries);
