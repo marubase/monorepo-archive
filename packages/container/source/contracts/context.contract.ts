@@ -1,7 +1,4 @@
 export interface ContextContract {
-  new (): this;
-  new (type: ContextType, parent: this): this;
-
   clearEntry(key: EntryKey): this;
 
   fork(type: ContextType): this;
