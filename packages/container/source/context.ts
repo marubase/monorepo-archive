@@ -6,9 +6,9 @@ import {
 } from "./contracts/context.contract.js";
 
 export class Context implements ContextContract {
-  protected _entries: Record<EntryKey, unknown> = {};
-
   protected _parent?: this | undefined;
+
+  protected _record: Record<EntryKey, unknown> = {};
 
   protected _type: ContextType;
 
@@ -18,8 +18,8 @@ export class Context implements ContextContract {
   }
 
   public clearEntry(key: EntryKey): this {
-    if (typeof this._parent !== "undefined") this._entries[key] = undefined;
-    else delete this._entries[key];
+    if (typeof this._parent !== "undefined") this._record[key] = undefined;
+    else delete this._record[key];
     return this;
   }
 
@@ -80,13 +80,13 @@ export class Context implements ContextContract {
   }
 
   public setEntry(key: EntryKey, value: unknown): this {
-    this._entries[key] = value;
+    this._record[key] = value;
     return this;
   }
 
   protected _collapseRecord(): Record<EntryKey, unknown> {
     return typeof this._parent !== "undefined"
-      ? Object.assign(this._parent._entries, this._entries)
-      : Object.assign({}, this._entries);
+      ? Object.assign(this._parent._collapseRecord(), this._record)
+      : Object.assign({}, this._record);
   }
 }
