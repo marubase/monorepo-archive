@@ -2,9 +2,11 @@ import { CacheContract } from "./cache.contract.js";
 import { Resolvable, ResolverContract } from "./resolver.contract.js";
 
 export interface BindingContract {
+  getArgs(): Array<unknown>;
+
   getDependencies(): BindingDependencies;
 
-  getKey(): BindingKey;
+  getKey(): BindingKey | undefined;
 
   getResolver(): ResolverContract;
 
@@ -14,11 +16,13 @@ export interface BindingContract {
 
   resolve<Result>(cache: CacheContract, ...args: Array<unknown>): Result;
 
-  resolveDependencies(): Array<unknown>;
+  resolveDependencies(cache: CacheContract): Array<unknown>;
+
+  setArgs(args: Array<unknown>): this;
 
   setDependencies(dependencies: BindingDependencies): this;
 
-  setKey(key: BindingKey): this;
+  setKey(key: BindingKey | undefined): this;
 
   setScope(scope: BindingScope): this;
 
