@@ -4,7 +4,7 @@ import {
   CacheScope,
   CacheType,
 } from "./contracts/cache.contract.js";
-import { CacheError } from "./errors/cache-error.js";
+import { CacheError } from "./errors/cache.error.js";
 
 export class Cache implements CacheContract {
   protected _parent?: this;

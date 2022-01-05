@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { Cache } from "./cache.js";
 import { CacheKey, CacheType } from "./contracts/cache.contract.js";
-import { CacheError } from "./errors/cache-error.js";
+import { CacheError } from "./errors/cache.error.js";
 
 suite("Cache", function () {
   let cache: Cache;
