@@ -10,6 +10,8 @@ export interface CacheContract {
 
   getParent(): this | undefined;
 
+  getRecord(): Record<CacheKey, unknown>;
+
   getType(): CacheType;
 
   hasEntry(key: CacheKey): boolean;
