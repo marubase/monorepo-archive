@@ -57,7 +57,7 @@ export class BaseBinding implements BindingContract {
     cache: CacheContract,
     ...args: Array<unknown>
   ): Result {
-    throw new Error("Not implemented");
+    throw new BindingError("Not implemented");
   }
 
   public resolveDependencies(cache: CacheContract): Array<unknown> {
@@ -76,7 +76,7 @@ export class BaseBinding implements BindingContract {
     return this;
   }
 
-  public setKey(key: BindingKey | undefined): this {
+  public setKey(key?: BindingKey): this {
     if (typeof key !== "undefined" && this._resolver.hasBindingByKey(key)) {
       const context = `Setting binding key.`;
       const problem = `Binding key already exist.`;
