@@ -54,8 +54,8 @@ export class BaseBinding implements BindingContract {
   }
 
   public resolve<Result>(
-    cache: CacheContract,
-    ...args: Array<unknown>
+    cache: CacheContract /* eslint-disable-line @typescript-eslint/no-unused-vars */,
+    ...args: Array<unknown> /* eslint-disable-line @typescript-eslint/no-unused-vars */
   ): Result {
     throw new BindingError("Not implemented");
   }
