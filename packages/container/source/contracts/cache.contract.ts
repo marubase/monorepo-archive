@@ -1,7 +1,4 @@
 export interface CacheContract {
-  new (): this;
-  new (type: CacheType, parent: CacheContract): this;
-
   clearEntry(key: CacheKey): this;
 
   fork(type: CacheType): this;
