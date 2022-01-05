@@ -16,7 +16,8 @@ export class FactoryBinding extends BaseBinding implements BindingContract {
 
   public resolve<Result>(cache: CacheContract): Result {
     return ((...args: Array<unknown>): unknown => {
-      return this._resolver.resolve(cache, this._resolvable, ...args);
+      const resolveArgs = args.length < 1 ? this._args : args;
+      return this._resolver.resolve(cache, this._resolvable, ...resolveArgs);
     }) as unknown as Result;
   }
 }
