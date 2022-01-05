@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { anything, instance, mock, when } from "ts-mockito";
+import { anything, instance, mock, reset, when } from "ts-mockito";
 import { CacheContract } from "../contracts/cache.contract.js";
 import { ResolverContract } from "../contracts/resolver.contract.js";
 import { AliasBinding } from "./alias-binding.js";
@@ -12,6 +12,10 @@ suite("AliasBinding", function () {
     mockCache = mock<CacheContract>();
     mockResolver = mock<ResolverContract>();
     binding = new AliasBinding(instance(mockResolver), "test");
+  });
+  teardown(async function () {
+    reset(mockCache);
+    reset(mockResolver);
   });
 
   suite("#resolve(cache, ...args)", function () {
