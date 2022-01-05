@@ -7,11 +7,15 @@ import {
 import { CacheContract } from "./cache.contract.js";
 
 export interface ResolverContract {
+  bind(bindable: Bindable): BindToSyntax;
+
   clearBindingByKey(key: BindingKey): this;
 
   clearBindingByTag(tag: BindingTag, binding: BindingContract): this;
 
   createAliasBinding(alias: BindingKey): BindingContract;
+
+  createClassBinding(target: Function): BindingContract;
 
   createConstantBinding(constant: unknown): BindingContract;
 
@@ -129,6 +133,26 @@ export type BindingFactory = {
     resolver: ResolverContract,
     tag: BindingTag,
   ): BindingContract;
+};
+
+export type Bindable = Function | string | symbol;
+
+export type BindToSyntax = {
+  toAlias(alias: BindingKey): BindingContract;
+
+  toClass(target: Function): BindingContract;
+
+  toConstant(constant: unknown): BindingContract;
+
+  toConstructor(target: Function): BindingContract;
+
+  toFactory(resolvable: Resolvable): BindingContract;
+
+  toFunction(target: Function): BindingContract;
+
+  toMethod(target: Function | Object, method: string | symbol): BindingContract;
+
+  toTag(tag: BindingTag): BindingContract;
 };
 
 export type Resolvable =
