@@ -1,5 +1,5 @@
 {
   "extends": "@istanbuljs/nyc-config-typescript",
-  "exclude": ["**/*.test.*", "**/index.*"],
+  "exclude": ["**/*.contract.*", "**/*.error.*", "**/*.test.*", "**/index.*"],
   "extension": [".cjs", ".cts", ".js", ".jsx", ".mjs", ".mts", ".ts", ".tsx"]
 }
