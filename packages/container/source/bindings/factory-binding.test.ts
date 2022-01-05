@@ -22,16 +22,31 @@ suite("FactoryBinding", function () {
   });
 
   suite("#resolve(cache)", function () {
-    test("should return factory", async function () {
-      when(mockResolver.resolve<Date>(anything(), "test")).thenReturn(
-        new Date(),
-      );
+    suite("when there is args", function () {
+      test("should return factory", async function () {
+        when(mockResolver.resolve<Date>(anything(), "test", "test")).thenReturn(
+          new Date(),
+        );
 
-      const factory = binding.resolve<ResolveFactory<Date>>(
-        instance(mockCache),
-      );
-      const actualResult = factory();
-      expect(actualResult).to.be.an.instanceOf(Date);
+        const factory = binding.resolve<ResolveFactory<Date>>(
+          instance(mockCache),
+        );
+        const actualResult = factory("test");
+        expect(actualResult).to.be.an.instanceOf(Date);
+      });
+    });
+    suite("when there is no args", function () {
+      test("should return factory", async function () {
+        when(mockResolver.resolve<Date>(anything(), "test")).thenReturn(
+          new Date(),
+        );
+
+        const factory = binding.resolve<ResolveFactory<Date>>(
+          instance(mockCache),
+        );
+        const actualResult = factory();
+        expect(actualResult).to.be.an.instanceOf(Date);
+      });
     });
   });
 });
