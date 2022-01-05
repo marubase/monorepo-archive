@@ -1,38 +1,33 @@
-import { PluginContract } from "./plugin.contract.js";
+import {
+  BindingDependencies,
+  BindingKey,
+  BindingTag,
+} from "./binding.contract.js";
+import { CacheContract } from "./cache.contract.js";
 import {
   Bindable,
-  Binding,
-  RegistryContract,
+  BindToSyntax,
   Resolvable,
-  ResolvableKey,
-  ResolvableTag,
   ResolveFactory,
-} from "./registry.contract.js";
-import { ResolverDependencies } from "./resolver.contract.js";
-import { ScopeContract } from "./scope.contract.js";
+  ResolverContract,
+} from "./resolver.contract.js";
 
 export interface ContainerContract {
-  new (registry: RegistryContract, scope: ScopeContract): this;
-
-  bind(bindable: Bindable): Binding;
-
-  bound(bindable: Bindable): boolean;
-
-  clearPlugin(pluginKey: unknown): this;
+  bind(bindable: Bindable): BindToSyntax;
 
   fork(): this;
 
-  getRegistry(): RegistryContract;
+  getCache(): CacheContract;
 
-  getScope(): ScopeContract;
+  getResolver(): ResolverContract;
 
   resolve<Result>(resolvable: Resolvable, ...args: Array<unknown>): Result;
 
-  resolveAlias<Result>(alias: ResolvableKey, ...args: Array<unknown>): Result;
+  resolveAlias<Result>(alias: BindingKey, ...args: Array<unknown>): Result;
 
   resolveClass<Result>(
     target: Function,
-    dependencies: ResolverDependencies,
+    dependencies: BindingDependencies,
     ...args: Array<unknown>
   ): Result;
 
@@ -40,7 +35,7 @@ export interface ContainerContract {
 
   resolveConstructor<Result>(
     target: Function,
-    dependencies: ResolverDependencies,
+    dependencies: BindingDependencies,
     ...args: Array<unknown>
   ): Result;
 
@@ -48,20 +43,16 @@ export interface ContainerContract {
 
   resolveFunction<Result>(
     target: Function,
-    dependencies: ResolverDependencies,
+    dependencies: BindingDependencies,
     ...args: Array<unknown>
   ): Result;
 
   resolveMethod<Result>(
     target: Function | Object,
     method: string | symbol,
-    dependencies: ResolverDependencies,
+    dependencies: BindingDependencies,
     ...args: Array<unknown>
   ): Result;
 
-  resolveTag<Result>(tag: ResolvableTag, ...args: Array<unknown>): Result;
-
-  setPlugin(pluginKey: unknown, plugin: PluginContract): this;
-
-  unbind(bindable: Bindable): this;
+  resolveTag<Result>(tag: BindingTag, ...args: Array<unknown>): Result;
 }
