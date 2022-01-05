@@ -4,6 +4,7 @@ import {
   CacheScope,
   CacheType,
 } from "./contracts/cache.contract.js";
+import { CacheError } from "./errors/cache-error.js";
 
 export class Cache implements CacheContract {
   protected _parent?: this;
@@ -21,6 +22,12 @@ export class Cache implements CacheContract {
   }
 
   public clearEntry(key: CacheKey): this {
+    if (!this.hasEntry(key)) {
+      const context = `Clearing cache entry.`;
+      const problem = `Cache entry not found.`;
+      const solution = `Please use another key.`;
+      throw new CacheError(`${context} ${problem} ${solution}`);
+    }
     delete this._record[key];
     return this;
   }
@@ -31,6 +38,12 @@ export class Cache implements CacheContract {
   }
 
   public getEntry(key: CacheKey): unknown {
+    if (!this.hasEntry(key)) {
+      const context = `Getting cache entry.`;
+      const problem = `Cache entry not found.`;
+      const solution = `Please use another key.`;
+      throw new CacheError(`${context} ${problem} ${solution}`);
+    }
     return this._record[key];
   }
 
@@ -71,6 +84,12 @@ export class Cache implements CacheContract {
   }
 
   public setEntry(key: CacheKey, value: unknown): this {
+    if (this.hasEntry(key)) {
+      const context = `Setting cache entry.`;
+      const problem = `Cache entry already exist.`;
+      const solution = `Please use another key.`;
+      throw new CacheError(`${context} ${problem} ${solution}`);
+    }
     this._record[key] = value;
     return this;
   }
