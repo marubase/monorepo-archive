@@ -11,7 +11,10 @@ export class TagBinding extends BaseBinding implements BindingContract {
     this._tag = tag;
   }
 
-  public resolve<Result>(cache: CacheContract, ...args: unknown[]): Result {
+  public resolve<Result>(
+    cache: CacheContract,
+    ...args: unknown[] /* eslint-disable-line @typescript-eslint/no-unused-vars */
+  ): Result {
     return this._resolver
       .getBindingByTags(this._tag)
       .map((binding) => binding.resolve(cache)) as unknown as Result;
