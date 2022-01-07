@@ -11,7 +11,7 @@ import {
   Resolvable,
   ResolverContract,
 } from "../contracts/resolver.contract.js";
-import { BindingError } from "../errors/binding-error.js";
+import { BindingError } from "../errors/binding.error.js";
 
 export class BaseBinding implements BindingContract {
   protected _dependencies: BindingDependencies = [];
@@ -78,7 +78,7 @@ export class BaseBinding implements BindingContract {
   public resolve<Result>(
     cache: CacheContract /* eslint-disable-line */,
     ...args: Array<unknown> /* eslint-disable-line */
-  ): Result | undefined {
+  ): Result {
     const context = `Resolving binding.`;
     const problem = `Method not implemented.`;
     const solution = `Please use another concrete binding implementation.`;
