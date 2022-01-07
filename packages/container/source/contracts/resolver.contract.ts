@@ -27,7 +27,7 @@ export interface ResolverContract {
 
   deindexByTag(binding: BindingContract, tag: BindingTag): this;
 
-  findByKey(key: BindingKey): BindingContract | undefined;
+  findByKey(key: BindingKey): BindingContract;
 
   findByTag(tag: BindingTag): BindingContract[];
 
