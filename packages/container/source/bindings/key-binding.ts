@@ -14,7 +14,7 @@ export class KeyBinding extends BaseBinding implements BindingContract {
     if (typeof binding === "undefined") {
       const context = `Resolving binding.`;
       const problem = `Binding key not found.`;
-      const solution = `Please use another binding key as alias.`;
+      const solution = `Please use another binding key.`;
       throw new BindingError(`${context} ${problem} ${solution}`);
     }
     return binding.resolve(cache, ...args) as Result;
