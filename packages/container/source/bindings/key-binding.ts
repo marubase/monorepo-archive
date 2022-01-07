@@ -4,7 +4,7 @@ import { ResolverContract } from "../contracts/resolver.contract.js";
 import { BindingError } from "../errors/binding.error.js";
 import { BaseBinding } from "./base-binding.js";
 
-export class AliasBinding extends BaseBinding implements BindingContract {
+export class KeyBinding extends BaseBinding implements BindingContract {
   public constructor(resolver: ResolverContract, public alias: BindingKey) {
     super(resolver);
   }
