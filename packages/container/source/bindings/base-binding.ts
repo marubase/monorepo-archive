@@ -78,7 +78,7 @@ export class BaseBinding implements BindingContract {
   public resolve<Result>(
     cache: CacheContract /* eslint-disable-line */,
     ...args: Array<unknown> /* eslint-disable-line */
-  ): Result {
+  ): Result | undefined {
     const context = `Resolving binding.`;
     const problem = `Method not implemented.`;
     const solution = `Please use another concrete binding implementation.`;
