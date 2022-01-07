@@ -31,6 +31,8 @@ export interface ResolverContract {
 
   findByTag(tag: BindingTag): BindingContract[];
 
+  fork(): this;
+
   indexByKey(binding: BindingContract, key: BindingKey): this;
 
   indexByTag(binding: BindingContract, tag: BindingTag): this;
