@@ -1,4 +1,4 @@
-export interface ContextContract extends Map<ContextKey, unknown> {
+export interface CacheContract extends Map<ContextKey, unknown> {
   readonly parent?: this;
 
   readonly type: ContextType;
