@@ -80,7 +80,7 @@ export class BaseBinding implements BindingContract {
   ): Result {
     const context = `Resolving binding.`;
     const problem = `Method not implemented.`;
-    const solution = `Please use another concrete binding implementation.`;
+    const solution = `Please use concrete binding implementation.`;
     throw new BindingError(`${context} ${problem} ${solution}`);
   }
 
