@@ -108,8 +108,6 @@ export type Binding = {
 
   toMethod(target: Function | Object, method: string | symbol): BindingContract;
 
-  toSelf(): BindingContract;
-
   toTag(tag: BindingTag): BindingContract;
 };
 
