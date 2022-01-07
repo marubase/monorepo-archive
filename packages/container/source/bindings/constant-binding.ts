@@ -11,7 +11,7 @@ export class ConstantBinding extends BaseBinding implements BindingContract {
   public resolve<Result>(
     cache: CacheContract /* eslint-disable-line */,
     ...args: Array<unknown> /* eslint-disable-line */
-  ): Result | undefined {
+  ): Result {
     return this.constant as Result;
   }
 }

@@ -15,7 +15,7 @@ export class MethodBinding extends BaseBinding implements BindingContract {
   public resolve<Result>(
     cache: CacheContract,
     ...args: Array<unknown>
-  ): Result | undefined {
+  ): Result {
     const target = this.target as Instance<Result>;
     const targetArgs = this.resolveDependencies(cache).concat(args);
     return target[this.method](...targetArgs);

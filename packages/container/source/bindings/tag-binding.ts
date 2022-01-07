@@ -11,7 +11,7 @@ export class TagBinding extends BaseBinding implements BindingContract {
   public resolve<Result>(
     cache: CacheContract,
     ...args: Array<unknown>
-  ): Result | undefined {
+  ): Result {
     const toInstance = (binding: BindingContract): unknown =>
       binding.resolve(cache, ...args);
     const bindings = this._resolver.findByTag(this.tag);
