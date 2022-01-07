@@ -18,14 +18,13 @@ export interface BindingContract {
 
   clearTag(tag: BindingTag): this;
 
+  clearTags(): this;
+
   hasTag(tag: BindingTag): boolean;
 
   resolve<Result>(cache: CacheContract, ...args: Array<unknown>): Result;
 
-  resolveDependencies<Result = Array<unknown>>(
-    cache: CacheContract,
-    ...args: Array<unknown>
-  ): Result;
+  resolveDependencies(cache: CacheContract, ...args: Array<unknown>): unknown[];
 
   setDependencies(dependencies: BindingDependencies): this;
 
@@ -34,6 +33,8 @@ export interface BindingContract {
   setScope(scope: BindingScope): this;
 
   setTag(tag: BindingTag): this;
+
+  setTags(tags: BindingTags): this;
 }
 
 export type BindingArgs = Array<unknown>;
