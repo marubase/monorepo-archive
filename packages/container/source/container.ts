@@ -11,14 +11,17 @@ import {
 import { DefaultBindingFactory, Resolver } from "./resolver.js";
 
 export class Container implements ContainerContract {
-  protected _cache: CacheContract;
+  protected _cache: CacheContract = new Cache();
 
-  protected _resolver: ResolverContract;
+  protected _resolver: ResolverContract = new Resolver(DefaultBindingFactory);
 
-  public constructor(cache?: CacheContract, resolver?: ResolverContract) {
-    this._cache = cache || new Cache();
-    this._resolver = resolver || new Resolver(DefaultBindingFactory);
-    this.bind(Container).toConstant(this);
+  public constructor(parent?: ContainerContract) {
+    if (typeof parent !== "undefined") {
+      this._cache = parent.cache.fork("container");
+      this._resolver = parent.resolver;
+    } else {
+      this.bind(this.constructor.name).toConstant(this);
+    }
   }
 
   public get cache(): CacheContract {
@@ -35,7 +38,7 @@ export class Container implements ContainerContract {
 
   public fork(): this {
     const Static = this.constructor as typeof Container;
-    return new Static(this._cache.fork("container"), this._resolver) as this;
+    return new Static(this) as this;
   }
 
   public resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result {
