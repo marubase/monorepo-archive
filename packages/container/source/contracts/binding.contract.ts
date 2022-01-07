@@ -22,10 +22,7 @@ export interface BindingContract {
 
   hasTag(tag: BindingTag): boolean;
 
-  resolve<Result>(
-    cache: CacheContract,
-    ...args: Array<unknown>
-  ): Result | undefined;
+  resolve<Result>(cache: CacheContract, ...args: Array<unknown>): Result;
 
   resolveDependencies(cache: CacheContract, ...args: Array<unknown>): unknown[];
 
