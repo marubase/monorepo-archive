@@ -145,17 +145,7 @@ export class Resolver implements ResolverContract {
       : typeof resolvable === "function"
       ? resolvable.name
       : resolvable;
-
-    const binding = this.findByKey(bindingKey);
-    if (binding.scope === "transient")
-      return this.resolveKey(cache, bindingKey, ...args);
-
-    const scope = cache.scopeTo(binding.scope);
-    return scope.has(bindingKey)
-      ? (scope.get(bindingKey) as Result)
-      : (scope
-          .set(bindingKey, this.resolveKey(cache, bindingKey, ...args))
-          .get(bindingKey) as Result);
+    return this.resolveKey(cache, bindingKey, ...args) as Result;
   }
 
   public resolveAlias<Result>(
