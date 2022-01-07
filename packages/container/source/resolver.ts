@@ -17,7 +17,6 @@ import {
   Resolvable,
   ResolverContract,
 } from "./contracts/resolver.contract.js";
-import { ResolverError } from "./errors/resolver.error.js";
 
 export class Resolver implements ResolverContract {
   protected _bindingFactory: BindingFactory;
@@ -100,14 +99,8 @@ export class Resolver implements ResolverContract {
     return this;
   }
 
-  public findByKey(key: BindingKey): BindingContract {
-    if (!this._keyIndex.has(key)) {
-      const context = `Resolving binding.`;
-      const problem = `Binding key not found.`;
-      const solution = `Please use another binding key.`;
-      throw new ResolverError(`${context} ${problem} ${solution}`);
-    }
-    return this._keyIndex.get(key) as BindingContract;
+  public findByKey(key: BindingKey): BindingContract | undefined {
+    return this._keyIndex.get(key);
   }
 
   public findByTag(tag: BindingTag): BindingContract[] {
