@@ -18,6 +18,7 @@ export class Container implements ContainerContract {
   public constructor(cache?: CacheContract, resolver?: ResolverContract) {
     this._cache = cache || new Cache();
     this._resolver = resolver || new Resolver(DefaultBindingFactory);
+    this.bind(Container).toConstant(this);
   }
 
   public get cache(): CacheContract {
@@ -37,10 +38,7 @@ export class Container implements ContainerContract {
     return new Static(this._cache.fork("container"), this._resolver) as this;
   }
 
-  public resolve<Result>(
-    resolvable: Resolvable,
-    ...args: Array<unknown>
-  ): Result {
+  public resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result {
     return this._resolver.resolve(
       this._cache.fork("request"),
       resolvable,
@@ -48,10 +46,7 @@ export class Container implements ContainerContract {
     );
   }
 
-  public resolveAlias<Result>(
-    alias: BindingKey,
-    ...args: Array<unknown>
-  ): Result {
+  public resolveAlias<Result>(alias: BindingKey, ...args: unknown[]): Result {
     return this._resolver.resolveAlias(
       this._cache.fork("request"),
       alias,
@@ -59,10 +54,7 @@ export class Container implements ContainerContract {
     );
   }
 
-  public resolveClass<Result>(
-    target: Function,
-    ...args: Array<unknown>
-  ): Result {
+  public resolveClass<Result>(target: Function, ...args: unknown[]): Result {
     return this._resolver.resolveClass(
       this._cache.fork("request"),
       target,
@@ -72,7 +64,7 @@ export class Container implements ContainerContract {
 
   public resolveConstant<Result>(
     constant: unknown,
-    ...args: Array<unknown>
+    ...args: unknown[]
   ): Result {
     return this._resolver.resolveConstant(
       this._cache.fork("request"),
@@ -83,7 +75,7 @@ export class Container implements ContainerContract {
 
   public resolveConstructor<Result>(
     target: Function,
-    ...args: Array<unknown>
+    ...args: unknown[]
   ): Result {
     return this._resolver.resolveConstructor(
       this._cache.fork("request"),
@@ -92,10 +84,7 @@ export class Container implements ContainerContract {
     );
   }
 
-  public resolveFunction<Result>(
-    target: Function,
-    ...args: Array<unknown>
-  ): Result {
+  public resolveFunction<Result>(target: Function, ...args: unknown[]): Result {
     return this._resolver.resolveFunction(
       this._cache.fork("request"),
       target,
@@ -103,14 +92,14 @@ export class Container implements ContainerContract {
     );
   }
 
-  public resolveKey<Result>(key: BindingKey, ...args: Array<unknown>): Result {
+  public resolveKey<Result>(key: BindingKey, ...args: unknown[]): Result {
     return this._resolver.resolveKey(this._cache.fork("request"), key, ...args);
   }
 
   public resolveMethod<Result>(
     target: Object | Function,
     method: string | symbol,
-    ...args: Array<unknown>
+    ...args: unknown[]
   ): Result {
     return this._resolver.resolveMethod(
       this._cache.fork("request"),
@@ -120,7 +109,7 @@ export class Container implements ContainerContract {
     );
   }
 
-  public resolveTag<Result>(tag: BindingTag, ...args: Array<unknown>): Result {
+  public resolveTag<Result>(tag: BindingTag, ...args: unknown[]): Result {
     return this._resolver.resolveTag(this._cache.fork("request"), tag, ...args);
   }
 }

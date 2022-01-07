@@ -8,10 +8,7 @@ export class FunctionBinding extends BaseBinding implements BindingContract {
     super(resolver);
   }
 
-  public resolve<Result>(
-    cache: CacheContract,
-    ...args: Array<unknown>
-  ): Result {
+  public resolve<Result>(cache: CacheContract, ...args: unknown[]): Result {
     const target = this.target;
     const targetArgs = this.resolveDependencies(cache).concat(args);
     return target(...targetArgs);

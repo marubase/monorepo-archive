@@ -4,7 +4,6 @@ import {
   BindingKey,
   BindingScope,
   BindingTag,
-  BindingTags,
 } from "../contracts/binding.contract.js";
 import { CacheContract } from "../contracts/cache.contract.js";
 import {
@@ -44,7 +43,7 @@ export class BaseBinding implements BindingContract {
     return this._scope;
   }
 
-  public get tags(): BindingTags {
+  public get tags(): BindingTag[] {
     return Array.from(this._tags);
   }
 
@@ -77,7 +76,7 @@ export class BaseBinding implements BindingContract {
 
   public resolve<Result>(
     cache: CacheContract /* eslint-disable-line */,
-    ...args: Array<unknown> /* eslint-disable-line */
+    ...args: unknown[] /* eslint-disable-line */
   ): Result {
     const context = `Resolving binding.`;
     const problem = `Method not implemented.`;
@@ -87,8 +86,8 @@ export class BaseBinding implements BindingContract {
 
   public resolveDependencies(
     cache: CacheContract,
-    ...args: Array<unknown>
-  ): Array<unknown> {
+    ...args: unknown[]
+  ): unknown[] {
     const toInstance = (resolvable: Resolvable): unknown =>
       this._resolver.resolve(cache, resolvable, ...args);
     return this._dependencies.map(toInstance);
@@ -117,7 +116,7 @@ export class BaseBinding implements BindingContract {
     return this;
   }
 
-  public setTags(tags: BindingTags): this {
+  public setTags(tags: BindingTag[]): this {
     if (this._tags.size > 0) this.clearTags();
     for (const tag of tags) this.setTag(tag);
     return this;

@@ -29,7 +29,7 @@ export interface ResolverContract {
 
   findByKey(key: BindingKey): BindingContract | undefined;
 
-  findByTag(tag: BindingTag): Array<BindingContract>;
+  findByTag(tag: BindingTag): BindingContract[];
 
   indexByKey(binding: BindingContract, key: BindingKey): this;
 
@@ -38,56 +38,56 @@ export interface ResolverContract {
   resolve<Result>(
     cache: CacheContract,
     resolvable: Resolvable,
-    ...args: Array<unknown>
+    ...args: unknown[]
   ): Result;
 
   resolveAlias<Result>(
     cache: CacheContract,
     alias: BindingKey,
-    ...args: Array<unknown>
+    ...args: unknown[]
   ): Result;
 
   resolveClass<Result>(
     cache: CacheContract,
     target: Function,
-    ...args: Array<unknown>
+    ...args: unknown[]
   ): Result;
 
   resolveConstant<Result>(
     cache: CacheContract,
     constant: unknown,
-    ...args: Array<unknown>
+    ...args: unknown[]
   ): Result;
 
   resolveConstructor<Result>(
     cache: CacheContract,
     target: Function,
-    ...args: Array<unknown>
+    ...args: unknown[]
   ): Result;
 
   resolveFunction<Result>(
     cache: CacheContract,
     target: Function,
-    ...args: Array<unknown>
+    ...args: unknown[]
   ): Result;
 
   resolveKey<Result>(
     cache: CacheContract,
     key: BindingKey,
-    ...args: Array<unknown>
+    ...args: unknown[]
   ): Result;
 
   resolveMethod<Result>(
     cache: CacheContract,
     target: Function | Object,
     method: string | symbol,
-    ...args: Array<unknown>
+    ...args: unknown[]
   ): Result;
 
   resolveTag<Result>(
     cache: CacheContract,
     tag: BindingTag,
-    ...args: Array<unknown>
+    ...args: unknown[]
   ): Result;
 }
 

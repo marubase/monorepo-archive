@@ -12,10 +12,7 @@ export class MethodBinding extends BaseBinding implements BindingContract {
     super(resolver);
   }
 
-  public resolve<Result>(
-    cache: CacheContract,
-    ...args: Array<unknown>
-  ): Result {
+  public resolve<Result>(cache: CacheContract, ...args: unknown[]): Result {
     const target = this.target as Instance<Result>;
     const targetArgs = this.resolveDependencies(cache).concat(args);
     return target[this.method](...targetArgs);
@@ -23,5 +20,5 @@ export class MethodBinding extends BaseBinding implements BindingContract {
 }
 
 export type Instance<Result> = {
-  [method: string | symbol]: (...args: Array<unknown>) => Result;
+  [method: string | symbol]: (...args: unknown[]) => Result;
 };

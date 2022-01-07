@@ -16,25 +16,25 @@ export interface ContainerContract {
 
   fork(): this;
 
-  resolve<Result>(resolvable: Resolvable, ...args: Array<unknown>): Result;
+  resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result;
 
-  resolveAlias<Result>(alias: BindingKey, ...args: Array<unknown>): Result;
+  resolveAlias<Result>(alias: BindingKey, ...args: unknown[]): Result;
 
-  resolveClass<Result>(target: Function, ...args: Array<unknown>): Result;
+  resolveClass<Result>(target: Function, ...args: unknown[]): Result;
 
-  resolveConstant<Result>(constant: unknown, ...args: Array<unknown>): Result;
+  resolveConstant<Result>(constant: unknown, ...args: unknown[]): Result;
 
-  resolveConstructor<Result>(target: Function, ...args: Array<unknown>): Result;
+  resolveConstructor<Result>(target: Function, ...args: unknown[]): Result;
 
-  resolveFunction<Result>(target: Function, ...args: Array<unknown>): Result;
+  resolveFunction<Result>(target: Function, ...args: unknown[]): Result;
 
-  resolveKey<Result>(key: BindingKey, ...args: Array<unknown>): Result;
+  resolveKey<Result>(key: BindingKey, ...args: unknown[]): Result;
 
   resolveMethod<Result>(
     target: Function | Object,
     method: string | symbol,
-    ...args: Array<unknown>
+    ...args: unknown[]
   ): Result;
 
-  resolveTag<Result>(tag: BindingTag, ...args: Array<unknown>): Result;
+  resolveTag<Result>(tag: BindingTag, ...args: unknown[]): Result;
 }

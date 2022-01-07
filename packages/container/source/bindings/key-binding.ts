@@ -9,10 +9,7 @@ export class KeyBinding extends BaseBinding implements BindingContract {
     super(resolver);
   }
 
-  public resolve<Result>(
-    cache: CacheContract,
-    ...args: Array<unknown>
-  ): Result {
+  public resolve<Result>(cache: CacheContract, ...args: unknown[]): Result {
     const binding = this._resolver.findByKey(this.alias);
     if (typeof binding === "undefined") {
       const context = `Resolving binding.`;

@@ -10,7 +10,7 @@ export interface BindingContract {
 
   readonly scope: BindingScope;
 
-  readonly tags: BindingTags;
+  readonly tags: BindingTag[];
 
   clearDependencies(): this;
 
@@ -22,9 +22,9 @@ export interface BindingContract {
 
   hasTag(tag: BindingTag): boolean;
 
-  resolve<Result>(cache: CacheContract, ...args: Array<unknown>): Result;
+  resolve<Result>(cache: CacheContract, ...args: unknown[]): Result;
 
-  resolveDependencies(cache: CacheContract, ...args: Array<unknown>): unknown[];
+  resolveDependencies(cache: CacheContract, ...args: unknown[]): unknown[];
 
   setDependencies(dependencies: BindingDependencies): this;
 
@@ -34,17 +34,13 @@ export interface BindingContract {
 
   setTag(tag: BindingTag): this;
 
-  setTags(tags: BindingTags): this;
+  setTags(tags: BindingTag[]): this;
 }
 
-export type BindingArgs = Array<unknown>;
-
-export type BindingDependencies = Array<Resolvable>;
+export type BindingDependencies = Resolvable[];
 
 export type BindingKey = string | symbol;
 
 export type BindingScope = "container" | "request" | "singleton" | "transient";
 
 export type BindingTag = string | symbol;
-
-export type BindingTags = Array<BindingTag>;

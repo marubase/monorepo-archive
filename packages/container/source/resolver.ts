@@ -120,7 +120,7 @@ export class Resolver implements ResolverContract {
   public resolve<Result>(
     cache: CacheContract,
     resolvable: Resolvable,
-    ...args: Array<unknown>
+    ...args: unknown[]
   ): Result {
     const bindingKey = Array.isArray(resolvable)
       ? typeof resolvable[0] === "function"

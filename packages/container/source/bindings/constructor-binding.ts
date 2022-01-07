@@ -8,14 +8,11 @@ export class ConstructorBinding extends BaseBinding implements BindingContract {
     super(resolver);
   }
 
-  public resolve<Result>(
-    cache: CacheContract,
-    ...args: Array<unknown>
-  ): Result {
+  public resolve<Result>(cache: CacheContract, ...args: unknown[]): Result {
     const target = this.target as Constructor<Result>;
     const targetArgs = this.resolveDependencies(cache).concat(args);
     return new target(...targetArgs);
   }
 }
 
-export type Constructor<Result> = new (...args: Array<unknown>) => Result;
+export type Constructor<Result> = new (...args: unknown[]) => Result;
