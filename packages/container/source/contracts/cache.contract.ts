@@ -1,19 +1,19 @@
 export interface CacheContract extends Map<CacheKey, unknown> {
   readonly parent?: this;
 
-  readonly type: ContextType;
+  readonly type: CacheType;
 
-  fork(type: ContextType): this;
+  fork(type: CacheType): this;
 
-  scopeTo(scope: ContextScope): this;
+  scopeTo(scope: CacheScope): this;
 
   setParent(parent?: this): this;
 
-  setType(type: ContextType): this;
+  setType(type: CacheType): this;
 }
 
 export type CacheKey = string | symbol;
 
-export type ContextScope = "container" | "request" | "singleton" | "transient";
+export type CacheScope = "container" | "request" | "singleton" | "transient";
 
-export type ContextType = "container" | "request";
+export type CacheType = "container" | "request";
