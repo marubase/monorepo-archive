@@ -1,4 +1,4 @@
-import { ContextContract } from "./context.contract.js";
+import { CacheContract } from "./cache.contract.js";
 import { Resolvable, ResolverContract } from "./resolver.contract.js";
 
 export interface BindingContract {
@@ -18,12 +18,12 @@ export interface BindingContract {
 
   clearTag(tag: BindingTag): this;
 
-  clearTags(): this;
+  hasTag(tag: BindingTag): boolean;
 
-  resolve<Result>(context: ContextContract, ...args: Array<unknown>): Result;
+  resolve<Result>(cache: CacheContract, ...args: Array<unknown>): Result;
 
   resolveDependencies<Result = Array<unknown>>(
-    context: ContextContract,
+    cache: CacheContract,
     ...args: Array<unknown>
   ): Result;
 
@@ -34,8 +34,6 @@ export interface BindingContract {
   setScope(scope: BindingScope): this;
 
   setTag(tag: BindingTag): this;
-
-  setTags(tags: BindingTags): this;
 }
 
 export type BindingArgs = Array<unknown>;
