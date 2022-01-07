@@ -1,5 +1,5 @@
 {
-  "name": "@marubase/inversion",
+  "name": "@marubase/container",
   "version": "0.0.0",
   "type": "module",
   "main": "./build/commonjs/index.js",
