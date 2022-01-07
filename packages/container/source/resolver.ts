@@ -26,7 +26,11 @@ export class Resolver implements ResolverContract {
 
   protected _tagIndex: Map<BindingKey, Set<BindingContract>> = new Map();
 
-  public constructor(bindingFactory: BindingFactory) {
+  public constructor(bindingFactory: BindingFactory, parent?: Resolver) {
+    if (typeof parent !== "undefined") {
+      this._keyIndex = new Map(parent._keyIndex);
+      this._tagIndex = new Map(parent._tagIndex);
+    }
     this._bindingFactory = bindingFactory;
   }
 
@@ -110,6 +114,11 @@ export class Resolver implements ResolverContract {
     if (!this._tagIndex.has(tag)) this._tagIndex.set(tag, new Set());
     const tags = this._tagIndex.get(tag) as Set<BindingContract>;
     return Array.from(tags);
+  }
+
+  public fork(): this {
+    const Static = this.constructor as typeof Resolver;
+    return new Static(this._bindingFactory, this) as this;
   }
 
   public indexByKey(binding: BindingContract, key: BindingKey): this {
