@@ -96,8 +96,14 @@ export class Resolver implements ResolverContract {
     return this;
   }
 
-  public findByKey(key: BindingKey): BindingContract | undefined {
-    return this._keyIndex.get(key);
+  public findByKey(key: BindingKey): BindingContract {
+    if (!this._keyIndex.has(key)) {
+      const context = `Finding binding key.`;
+      const problem = `Binding key not found.`;
+      const solution = `Please use another binding key.`;
+      throw new ResolverError(`${context} ${problem} ${solution}`);
+    }
+    return this._keyIndex.get(key) as BindingContract;
   }
 
   public findByTag(tag: BindingTag): BindingContract[] {
@@ -132,13 +138,6 @@ export class Resolver implements ResolverContract {
       : resolvable;
 
     const binding = this.findByKey(bindingKey);
-    if (typeof binding === "undefined") {
-      const context = `Resolving binding.`;
-      const problem = `Binding key not found.`;
-      const solution = `Please use another binding key.`;
-      throw new ResolverError(`${context} ${problem} ${solution}`);
-    }
-
     if (binding.scope === "transient")
       return this.resolveKey(cache, bindingKey, ...args);
 
