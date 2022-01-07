@@ -15,10 +15,10 @@ export class Container implements ContainerContract {
 
   protected _resolver: ResolverContract = new Resolver(DefaultBindingFactory);
 
-  public constructor(parent?: ContainerContract) {
+  public constructor(parent?: Container) {
     if (typeof parent !== "undefined") {
       this._cache = parent.cache.fork("container");
-      this._resolver = parent.resolver;
+      this._resolver = parent.resolver.fork();
     }
     this.bind(this.constructor.name).toConstant(this);
   }
