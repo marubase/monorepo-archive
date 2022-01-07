@@ -19,9 +19,8 @@ export class Container implements ContainerContract {
     if (typeof parent !== "undefined") {
       this._cache = parent.cache.fork("container");
       this._resolver = parent.resolver;
-    } else {
-      this.bind(this.constructor.name).toConstant(this);
     }
+    this.bind(this.constructor.name).toConstant(this);
   }
 
   public get cache(): CacheContract {
