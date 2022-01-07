@@ -14,6 +14,6 @@ export interface CacheContract extends Map<CacheKey, unknown> {
 
 export type CacheKey = string | symbol;
 
-export type CacheScope = "container" | "request" | "singleton" | "transient";
+export type CacheScope = "container" | "request" | "singleton";
 
 export type CacheType = "container" | "request";
