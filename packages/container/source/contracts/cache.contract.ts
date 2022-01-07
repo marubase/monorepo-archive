@@ -1,4 +1,4 @@
-export interface CacheContract extends Map<ContextKey, unknown> {
+export interface CacheContract extends Map<CacheKey, unknown> {
   readonly parent?: this;
 
   readonly type: ContextType;
@@ -12,7 +12,7 @@ export interface CacheContract extends Map<ContextKey, unknown> {
   setType(type: ContextType): this;
 }
 
-export type ContextKey = string | symbol;
+export type CacheKey = string | symbol;
 
 export type ContextScope = "container" | "request" | "singleton" | "transient";
 
