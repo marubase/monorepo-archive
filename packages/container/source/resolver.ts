@@ -50,6 +50,12 @@ export class Resolver implements ResolverContract {
     };
   }
 
+  public bound(bindable: Bindable): boolean {
+    const bindingKey =
+      typeof bindable === "function" ? bindable.name : bindable;
+    return this._keyIndex.has(bindingKey);
+  }
+
   public createConstantBinding(constant: unknown): BindingContract {
     return this._bindingFactory.createConstantBinding(this, constant);
   }
@@ -124,6 +130,14 @@ export class Resolver implements ResolverContract {
     const bindingKey =
       typeof resolvable === "function" ? resolvable.name : resolvable;
     return this.createKeyBinding(bindingKey).resolve(cache, ...args);
+  }
+
+  public unbind(bindable: Bindable): this {
+    const bindingKey =
+      typeof bindable === "function" ? bindable.name : bindable;
+    const binding = this.findByKey(bindingKey);
+    if (typeof binding !== "undefined") binding.clearKey();
+    return this;
   }
 }
 
