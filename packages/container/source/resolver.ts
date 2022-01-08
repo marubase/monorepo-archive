@@ -12,9 +12,9 @@ import {
 import { CacheContract } from "./contracts/cache.contract.js";
 import {
   Bindable,
-  Binding,
   BindingFactory,
   Resolvable,
+  ResolverBinding,
   ResolverContract,
 } from "./contracts/resolver.contract.js";
 
@@ -33,31 +33,21 @@ export class Resolver implements ResolverContract {
     this._bindingFactory = bindingFactory;
   }
 
-  public bind(bindable: Bindable): Binding {
+  public bind(bindable: Bindable): ResolverBinding {
     const bindingKey =
       typeof bindable === "function" ? bindable.name : bindable;
     return {
-      toAlias: (alias) => this.createAliasBinding(alias).setKey(bindingKey),
-      toClass: (target) => this.createClassBinding(target).setKey(bindingKey),
+      toAlias: (alias) => this.createKeyBinding(alias).setKey(bindingKey),
+      toClass: (target) =>
+        this.createConstructorBinding(target).setKey(bindingKey),
       toConstant: (constant) =>
         this.createConstantBinding(constant).setKey(bindingKey),
-      toConstructor: (target) =>
-        this.createConstructorBinding(target).setKey(bindingKey),
       toFunction: (target) =>
         this.createFunctionBinding(target).setKey(bindingKey),
-      toKey: (key) => this.createKeyBinding(key).setKey(bindingKey),
       toMethod: (target, method) =>
         this.createMethodBinding(target, method).setKey(bindingKey),
       toTag: (tag) => this.createTagBinding(tag).setKey(bindingKey),
     };
-  }
-
-  public createAliasBinding(alias: BindingKey): BindingContract {
-    return this.createKeyBinding(alias);
-  }
-
-  public createClassBinding(target: Function): BindingContract {
-    return this.createConstructorBinding(target);
   }
 
   public createConstantBinding(constant: unknown): BindingContract {
@@ -131,79 +121,9 @@ export class Resolver implements ResolverContract {
     resolvable: Resolvable,
     ...args: unknown[]
   ): Result {
-    const bindingKey = Array.isArray(resolvable)
-      ? typeof resolvable[0] === "function"
-        ? resolvable[0].name
-        : resolvable[0]
-      : typeof resolvable === "function"
-      ? resolvable.name
-      : resolvable;
-    return this.resolveKey(cache, bindingKey, ...args) as Result;
-  }
-
-  public resolveAlias<Result>(
-    cache: CacheContract,
-    alias: BindingKey,
-    ...args: unknown[]
-  ): Result {
-    return this.createAliasBinding(alias).resolve(cache, ...args);
-  }
-
-  public resolveClass<Result>(
-    cache: CacheContract,
-    target: Function,
-    ...args: unknown[]
-  ): Result {
-    return this.createClassBinding(target).resolve(cache, ...args);
-  }
-
-  public resolveConstant<Result>(
-    cache: CacheContract,
-    constant: unknown,
-    ...args: unknown[]
-  ): Result {
-    return this.createConstantBinding(constant).resolve(cache, ...args);
-  }
-
-  public resolveConstructor<Result>(
-    cache: CacheContract,
-    target: Function,
-    ...args: unknown[]
-  ): Result {
-    return this.createConstructorBinding(target).resolve(cache, ...args);
-  }
-
-  public resolveFunction<Result>(
-    cache: CacheContract,
-    target: Function,
-    ...args: unknown[]
-  ): Result {
-    return this.createFunctionBinding(target).resolve(cache, ...args);
-  }
-
-  public resolveKey<Result>(
-    cache: CacheContract,
-    key: BindingKey,
-    ...args: unknown[]
-  ): Result {
-    return this.createKeyBinding(key).resolve(cache, ...args);
-  }
-
-  public resolveMethod<Result>(
-    cache: CacheContract,
-    target: Object | Function,
-    method: string | symbol,
-    ...args: unknown[]
-  ): Result {
-    return this.createMethodBinding(target, method).resolve(cache, ...args);
-  }
-
-  public resolveTag<Result>(
-    cache: CacheContract,
-    tag: BindingTag,
-    ...args: unknown[]
-  ): Result {
-    return this.createTagBinding(tag).resolve(cache, ...args);
+    const bindingKey =
+      typeof resolvable === "function" ? resolvable.name : resolvable;
+    return this.createKeyBinding(bindingKey).resolve(cache, ...args);
   }
 }
 
