@@ -1,11 +1,10 @@
 import { Cache } from "./cache.js";
-import { BindingKey, BindingTag } from "./contracts/binding.contract.js";
 import { CacheContract } from "./contracts/cache.contract.js";
 import { ContainerContract } from "./contracts/container.contract.js";
 import {
   Bindable,
-  Binding,
   Resolvable,
+  ResolverBinding,
   ResolverContract,
 } from "./contracts/resolver.contract.js";
 import { DefaultBindingFactory, Resolver } from "./resolver.js";
@@ -31,7 +30,7 @@ export class Container implements ContainerContract {
     return this._resolver;
   }
 
-  public bind(bindable: Bindable): Binding {
+  public bind(bindable: Bindable): ResolverBinding {
     return this._resolver.bind(bindable);
   }
 
@@ -46,72 +45,5 @@ export class Container implements ContainerContract {
       resolvable,
       ...args,
     );
-  }
-
-  public resolveAlias<Result>(alias: BindingKey, ...args: unknown[]): Result {
-    return this._resolver.resolveAlias(
-      this._cache.fork("request"),
-      alias,
-      ...args,
-    );
-  }
-
-  public resolveClass<Result>(target: Function, ...args: unknown[]): Result {
-    return this._resolver.resolveClass(
-      this._cache.fork("request"),
-      target,
-      ...args,
-    );
-  }
-
-  public resolveConstant<Result>(
-    constant: unknown,
-    ...args: unknown[]
-  ): Result {
-    return this._resolver.resolveConstant(
-      this._cache.fork("request"),
-      constant,
-      ...args,
-    );
-  }
-
-  public resolveConstructor<Result>(
-    target: Function,
-    ...args: unknown[]
-  ): Result {
-    return this._resolver.resolveConstructor(
-      this._cache.fork("request"),
-      target,
-      ...args,
-    );
-  }
-
-  public resolveFunction<Result>(target: Function, ...args: unknown[]): Result {
-    return this._resolver.resolveFunction(
-      this._cache.fork("request"),
-      target,
-      ...args,
-    );
-  }
-
-  public resolveKey<Result>(key: BindingKey, ...args: unknown[]): Result {
-    return this._resolver.resolveKey(this._cache.fork("request"), key, ...args);
-  }
-
-  public resolveMethod<Result>(
-    target: Object | Function,
-    method: string | symbol,
-    ...args: unknown[]
-  ): Result {
-    return this._resolver.resolveMethod(
-      this._cache.fork("request"),
-      target,
-      method,
-      ...args,
-    );
-  }
-
-  public resolveTag<Result>(tag: BindingTag, ...args: unknown[]): Result {
-    return this._resolver.resolveTag(this._cache.fork("request"), tag, ...args);
   }
 }
