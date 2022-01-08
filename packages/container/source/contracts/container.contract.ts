@@ -19,6 +19,8 @@ export interface ContainerContract {
 
   boot(): Promise<void>;
 
+  bound(bindable: Bindable): boolean;
+
   fork(): this;
 
   install(name: ServiceName, service: ServiceProvider): this;
@@ -28,6 +30,8 @@ export interface ContainerContract {
   resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result;
 
   shutdown(): Promise<void>;
+
+  unbind(bindable: Bindable): this;
 
   uninstall(name: ServiceName): this;
 }
