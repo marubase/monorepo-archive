@@ -57,6 +57,10 @@ export class Container implements ContainerContract {
       if (service.onBoot) await service.onBoot(this);
   }
 
+  public bound(bindable: Bindable): boolean {
+    return this._resolver.bound(bindable);
+  }
+
   public fork(): this {
     const Static = this.constructor as typeof Container;
     return new Static(this) as this;
@@ -93,6 +97,11 @@ export class Container implements ContainerContract {
       if (service.onShutdown) await service.onShutdown(this);
     for (const [, service] of this._services)
       if (service.onUninstall) service.onUninstall(this);
+  }
+
+  public unbind(bindable: Bindable): this {
+    this._resolver.unbind(bindable);
+    return this;
   }
 
   public uninstall(name: ServiceName): this {
