@@ -6,6 +6,7 @@
   "configurations": [
     {
       "args": ["--color", "--timeout=0", "--reporter=spec", "${file}"],
+      "internalConsoleOptions": "openOnSessionStart",
       "name": "Mocha tests",
       "program": "${workspaceFolder}/node_modules/mocha/bin/mocha",
       "request": "launch",
@@ -13,6 +14,7 @@
       "type": "pwa-node"
     },
     {
+      "internalConsoleOptions": "openOnSessionStart",
       "name": "Node Debug",
       "program": "${file}",
       "request": "launch",
