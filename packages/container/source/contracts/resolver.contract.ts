@@ -4,6 +4,8 @@ import { CacheContract } from "./cache.contract.js";
 export interface ResolverContract {
   bind(bindable: Bindable): ResolverBinding;
 
+  bound(bindable: Bindable): boolean;
+
   createConstantBinding(constant: unknown): BindingContract;
 
   createConstructorBinding(target: Function): BindingContract;
@@ -38,6 +40,8 @@ export interface ResolverContract {
     resolvable: Resolvable,
     ...args: unknown[]
   ): Result;
+
+  unbind(bindable: Bindable): this;
 }
 
 export type Bindable = Function | string | symbol;
