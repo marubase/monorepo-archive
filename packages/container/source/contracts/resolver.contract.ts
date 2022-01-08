@@ -2,11 +2,7 @@ import { BindingContract, BindingKey, BindingTag } from "./binding.contract.js";
 import { CacheContract } from "./cache.contract.js";
 
 export interface ResolverContract {
-  bind(bindable: Bindable): Binding;
-
-  createAliasBinding(alias: BindingKey): BindingContract;
-
-  createClassBinding(target: Function): BindingContract;
+  bind(bindable: Bindable): ResolverBinding;
 
   createConstantBinding(constant: unknown): BindingContract;
 
@@ -42,76 +38,9 @@ export interface ResolverContract {
     resolvable: Resolvable,
     ...args: unknown[]
   ): Result;
-
-  resolveAlias<Result>(
-    cache: CacheContract,
-    alias: BindingKey,
-    ...args: unknown[]
-  ): Result;
-
-  resolveClass<Result>(
-    cache: CacheContract,
-    target: Function,
-    ...args: unknown[]
-  ): Result;
-
-  resolveConstant<Result>(
-    cache: CacheContract,
-    constant: unknown,
-    ...args: unknown[]
-  ): Result;
-
-  resolveConstructor<Result>(
-    cache: CacheContract,
-    target: Function,
-    ...args: unknown[]
-  ): Result;
-
-  resolveFunction<Result>(
-    cache: CacheContract,
-    target: Function,
-    ...args: unknown[]
-  ): Result;
-
-  resolveKey<Result>(
-    cache: CacheContract,
-    key: BindingKey,
-    ...args: unknown[]
-  ): Result;
-
-  resolveMethod<Result>(
-    cache: CacheContract,
-    target: Function | Object,
-    method: string | symbol,
-    ...args: unknown[]
-  ): Result;
-
-  resolveTag<Result>(
-    cache: CacheContract,
-    tag: BindingTag,
-    ...args: unknown[]
-  ): Result;
 }
 
 export type Bindable = Function | string | symbol;
-
-export type Binding = {
-  toAlias(alias: BindingKey): BindingContract;
-
-  toClass(target: Function): BindingContract;
-
-  toConstant(constant: unknown): BindingContract;
-
-  toConstructor(target: Function): BindingContract;
-
-  toFunction(target: Function): BindingContract;
-
-  toKey(key: BindingKey): BindingContract;
-
-  toMethod(target: Function | Object, method: string | symbol): BindingContract;
-
-  toTag(tag: BindingTag): BindingContract;
-};
 
 export type BindingFactory = {
   createConstantBinding(
@@ -146,8 +75,18 @@ export type BindingFactory = {
   ): BindingContract;
 };
 
-export type Resolvable =
-  | [Function | string | symbol, string | symbol]
-  | Function
-  | string
-  | symbol;
+export type Resolvable = Function | string | symbol;
+
+export type ResolverBinding = {
+  toAlias(alias: BindingKey): BindingContract;
+
+  toClass(target: Function): BindingContract;
+
+  toConstant(constant: unknown): BindingContract;
+
+  toFunction(target: Function): BindingContract;
+
+  toMethod(target: Function | Object, method: string | symbol): BindingContract;
+
+  toTag(tag: BindingTag): BindingContract;
+};
