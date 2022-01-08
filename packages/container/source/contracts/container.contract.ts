@@ -1,9 +1,8 @@
-import { BindingKey, BindingTag } from "./binding.contract.js";
 import { CacheContract } from "./cache.contract.js";
 import {
   Bindable,
-  Binding,
   Resolvable,
+  ResolverBinding,
   ResolverContract,
 } from "./resolver.contract.js";
 
@@ -12,29 +11,9 @@ export interface ContainerContract {
 
   readonly resolver: ResolverContract;
 
-  bind(bindable: Bindable): Binding;
+  bind(bindable: Bindable): ResolverBinding;
 
   fork(): this;
 
   resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result;
-
-  resolveAlias<Result>(alias: BindingKey, ...args: unknown[]): Result;
-
-  resolveClass<Result>(target: Function, ...args: unknown[]): Result;
-
-  resolveConstant<Result>(constant: unknown, ...args: unknown[]): Result;
-
-  resolveConstructor<Result>(target: Function, ...args: unknown[]): Result;
-
-  resolveFunction<Result>(target: Function, ...args: unknown[]): Result;
-
-  resolveKey<Result>(key: BindingKey, ...args: unknown[]): Result;
-
-  resolveMethod<Result>(
-    target: Function | Object,
-    method: string | symbol,
-    ...args: unknown[]
-  ): Result;
-
-  resolveTag<Result>(tag: BindingTag, ...args: unknown[]): Result;
 }
