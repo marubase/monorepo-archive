@@ -17,8 +17,8 @@ suite("KeyBinding", function () {
   let mockCache: CacheContract;
   let mockResolver: ResolverContract;
   let binding: KeyBinding;
-  let dateBinding: ConstructorBinding;
   let cache: CacheContract;
+  let dateBinding: ConstructorBinding;
   let resolver: ResolverContract;
   setup(async function () {
     mockCache = mock<CacheContract>();
