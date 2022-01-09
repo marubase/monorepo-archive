@@ -1,4 +1,5 @@
 const ResolveTsPlugin = require("resolve-typescript-plugin").default;
+const webpack = require("webpack");
 module.exports = {
   devtool: "inline-source-map",
   mode: "development",
@@ -20,6 +21,12 @@ module.exports = {
       },
     ],
   },
+  plugins: [
+    new webpack.ProvidePlugin({
+      Buffer: ["buffer", "Buffer"],
+      process: "process/browser",
+    }),
+  ],
   resolve: {
     plugins: [new ResolveTsPlugin()],
   },
