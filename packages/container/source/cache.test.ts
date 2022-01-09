@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { instance, mock, resetCalls, verify, when } from "ts-mockito";
+import { instance, mock, reset, resetCalls, verify, when } from "ts-mockito";
 import { Cache } from "./cache.js";
 
 suite("Cache", function () {
@@ -10,6 +10,9 @@ suite("Cache", function () {
     mockParent = mock(Cache);
     parent = instance(mockParent);
     cache = new Cache();
+  });
+  teardown(async function () {
+    reset(mockParent);
   });
 
   suite("#parent", function () {
