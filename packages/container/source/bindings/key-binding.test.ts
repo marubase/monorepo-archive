@@ -3,6 +3,7 @@ import {
   anyOfClass,
   instance,
   mock,
+  reset,
   resetCalls,
   verify,
   when,
@@ -27,6 +28,10 @@ suite("KeyBinding", function () {
     resolver = instance(mockResolver);
     binding = new KeyBinding(resolver, "Date");
     dateBinding = new ConstructorBinding(resolver, Date);
+  });
+  teardown(async function () {
+    reset(mockCache);
+    reset(mockResolver);
   });
 
   suite("#resolve(cache, ...args)", function () {
