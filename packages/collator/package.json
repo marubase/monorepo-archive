@@ -27,7 +27,7 @@
     "clean": "pnpm clean:build && pnpm clean:coverage && pnpm clean:log && pnpm clean:report",
     "clean:build": "rm -rf ./build",
     "clean:coverage": "rm -rf ./coverage",
-    "clean:log": "rm ./.pnpm-debug.log",
+    "clean:log": "rm -f ./.pnpm-debug.log",
     "clean:report": "rm -rf ./report",
     "clean:vendor": "rm -rf ./node_modules",
     "coverage:html": "pnpm clean:report && nyc report --reporter=html --report-dir=./report --temp-dir=./coverage",
