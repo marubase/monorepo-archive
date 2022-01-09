@@ -55,6 +55,7 @@ export class Container implements ContainerContract {
     if (this._booted) return Promise.resolve();
     for (const [, service] of this._services)
       if (service.onBoot) await service.onBoot(this);
+    this._booted = true;
   }
 
   public bound(bindable: Bindable): boolean {
@@ -97,6 +98,7 @@ export class Container implements ContainerContract {
       if (service.onShutdown) await service.onShutdown(this);
     for (const [, service] of this._services)
       if (service.onUninstall) service.onUninstall(this);
+    this._booted = false;
   }
 
   public unbind(bindable: Bindable): this {
