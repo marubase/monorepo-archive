@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { instance, mock, verify, when } from "ts-mockito";
+import { instance, mock, reset, verify, when } from "ts-mockito";
 import { CacheContract } from "../contracts/cache.contract.js";
 import { ResolverContract } from "../contracts/resolver.contract.js";
 import { ConstructorBinding } from "./constructor-binding.js";
@@ -19,6 +19,10 @@ suite("TagBinding", function () {
     resolver = instance(mockResolver);
     binding = new TagBinding(resolver, "tag");
     dateBinding = new ConstructorBinding(resolver, Date);
+  });
+  teardown(async function () {
+    reset(mockCache);
+    reset(mockResolver);
   });
 
   suite("#resolve(cache, ...args)", function () {
