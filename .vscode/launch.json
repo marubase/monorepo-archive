@@ -7,7 +7,7 @@
     {
       "args": ["--color", "--timeout=0", "--reporter=spec", "${file}"],
       "internalConsoleOptions": "openOnSessionStart",
-      "name": "Mocha tests",
+      "name": "Mocha Tests",
       "program": "${workspaceFolder}/node_modules/mocha/bin/mocha",
       "request": "launch",
       "skipFiles": ["<node_internals>/**"],
