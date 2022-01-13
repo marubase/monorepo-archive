@@ -5,14 +5,7 @@ export class IntegerValue {
       : value;
   }
 
-  public type: IntegerType;
-
-  public value: bigint | number;
-
-  public constructor(value: bigint | number, type: IntegerType) {
-    this.type = type;
-    this.value = value;
-  }
+  public constructor(public value: bigint | number, public type: IntegerType) {}
 }
 
 export type IntegerType =
