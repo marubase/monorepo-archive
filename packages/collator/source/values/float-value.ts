@@ -5,14 +5,7 @@ export class FloatValue {
       : value;
   }
 
-  public type: FloatType;
-
-  public value: number;
-
-  public constructor(value: number, type: FloatType) {
-    this.type = type;
-    this.value = value;
-  }
+  public constructor(public value: number, public type: FloatType) {}
 }
 
 export type FloatType = "float32" | "float64";
