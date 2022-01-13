@@ -50,5 +50,11 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "devDependencies": {
+    "@marubase/collator": "workspace:^0.0.0"
+  },
+  "peerDependencies": {
+    "@marubase/collator": "workspace:^0.0.0"
   }
 }
