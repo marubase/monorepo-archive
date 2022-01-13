@@ -11,7 +11,7 @@ import { VersionCodec } from "./codecs/version-codec.js";
 import { Collator } from "./collator.js";
 import { FloatValue } from "./values/float-value.js";
 import { IntegerValue } from "./values/integer-value.js";
-import { VersionStamp } from "./values/version-stamp.js";
+import { VersionstampValue } from "./values/versionstamp-value.js";
 
 suite("Collator", function () {
   let collator: Collator;
@@ -160,14 +160,14 @@ suite("Collator", function () {
     suite("when no code is given", function () {
       test("should returns versionstamp with code '0'", async function () {
         const versionstamp = collator.versionstamp();
-        expect(versionstamp).to.be.an.instanceOf(VersionStamp);
+        expect(versionstamp).to.be.an.instanceOf(VersionstampValue);
         expect(versionstamp.code).to.equals(0);
       });
     });
     suite("when code '127' is given", function () {
       test("should returns versionstamp with code '127'", async function () {
         const versionstamp = collator.versionstamp(127);
-        expect(versionstamp).to.be.an.instanceOf(VersionStamp);
+        expect(versionstamp).to.be.an.instanceOf(VersionstampValue);
         expect(versionstamp.code).to.equals(127);
       });
     });
@@ -175,7 +175,7 @@ suite("Collator", function () {
       test("should returns versionstamp with code '127'", async function () {
         const buffer = Buffer.from("00010203040506070809007f", "hex");
         const versionstamp = collator.versionstamp(buffer);
-        expect(versionstamp).to.be.an.instanceOf(VersionStamp);
+        expect(versionstamp).to.be.an.instanceOf(VersionstampValue);
         expect(versionstamp.code).to.equals(127);
       });
     });
