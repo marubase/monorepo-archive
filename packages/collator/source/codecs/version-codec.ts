@@ -1,5 +1,5 @@
 import { MetaValue } from "../values/meta-value.js";
-import { VersionStamp } from "../values/version-stamp.js";
+import { VersionstampValue } from "../values/versionstamp-value.js";
 import { BaseCodec } from "./base-codec.js";
 import { ComplexCodec, EncodeBuffer } from "./complex-codec.js";
 
@@ -27,11 +27,11 @@ export class VersionCodec extends BaseCodec {
     const { buffer, byteOffset } = binary;
     const value = Buffer.from(buffer, byteOffset + 1, 10);
     const code = Buffer.from(buffer, byteOffset + 11, 2).readUInt16BE();
-    return VersionStamp.create(code, value);
+    return VersionstampValue.create(code, value);
   }
 
   public encode(binaries: EncodeBuffer[], meta: MetaValue): EncodeBuffer[] {
-    const versionstamp = meta.value as VersionStamp;
+    const versionstamp = meta.value as VersionstampValue;
     const buffer = Buffer.alloc(13);
     versionstamp.buffer.copy(buffer, 1);
     if (meta.ascending) {
