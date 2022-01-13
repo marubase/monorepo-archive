@@ -50,5 +50,11 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "devDependencies": {
+    "@marubase/storage": "workspace:^0.0.0"
+  },
+  "peerDependencies": {
+    "@marubase/storage": "workspace:^0.0.0"
   }
 }

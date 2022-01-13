@@ -87,6 +87,12 @@ importers:
     devDependencies:
       '@marubase/storage': link:../storage
 
+  packages/storage-idb:
+    specifiers:
+      '@marubase/storage': workspace:^0.0.0
+    devDependencies:
+      '@marubase/storage': link:../storage
+
   packages/storage-lmdb:
     specifiers:
       '@marubase/storage': workspace:^0.0.0
