@@ -3,7 +3,7 @@ import { CollatorError } from "./errors/collator.error.js";
 import { FloatValue } from "./values/float-value.js";
 import { IntegerValue } from "./values/integer-value.js";
 import { MetaValue } from "./values/meta-value.js";
-import { VersionStamp } from "./values/version-stamp.js";
+import { VersionstampValue } from "./values/versionstamp-value.js";
 
 export class Collator {
   protected codec: ComplexCodec;
@@ -24,7 +24,7 @@ export class Collator {
     return MetaValue.create(value, false);
   }
 
-  public encode(value: unknown): Buffer | { buffer: Buffer; position: number } {
+  public encode(value: unknown): Buffer | VersionstampedBuffer {
     const meta = MetaValue.create(value, true);
     const binaries = this.codec.encode([], meta);
 
@@ -102,9 +102,17 @@ export class Collator {
     return IntegerValue.create(value, "uint8");
   }
 
-  public versionstamp(code: Buffer | number = 0, value?: Buffer): VersionStamp {
+  public versionstamp(
+    code: Buffer | number = 0,
+    value?: Buffer,
+  ): VersionstampValue {
     return Buffer.isBuffer(code)
-      ? VersionStamp.create(code.readUInt16BE(10), code.subarray(0, 10))
-      : VersionStamp.create(code, value);
+      ? VersionstampValue.create(code.readUInt16BE(10), code.subarray(0, 10))
+      : VersionstampValue.create(code, value);
   }
 }
+
+export type VersionstampedBuffer = {
+  buffer: Buffer;
+  position: number;
+};
