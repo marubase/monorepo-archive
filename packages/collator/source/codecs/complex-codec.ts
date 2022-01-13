@@ -3,9 +3,9 @@ import { MetaValue } from "../values/meta-value.js";
 import { BaseCodec } from "./base-codec.js";
 
 export class ComplexCodec extends BaseCodec {
-  public handler: Record<number, Handler> = {};
+  public codecs: Record<string, CodecInterface> = {};
 
-  public types: Record<string, CodecInterface> = {};
+  public decodeHandlers: Record<number, DecodeHandler> = {};
 
   public constructor(table: typeof CodeTable) {
     super(table);
@@ -36,7 +36,7 @@ export class ComplexCodec extends BaseCodec {
 
     const data: unknown[] = [];
     const cursorStack = [data];
-    const context = {
+    const context: DecodeContext = {
       cursor: cursorStack[cursorStack.length - 1],
       index: 0,
       key: { target: false, value: "" },
@@ -47,8 +47,8 @@ export class ComplexCodec extends BaseCodec {
       context.cursor = cursorStack[cursorStack.length - 1];
       const { cursor, index, key } = context;
 
-      if (binary[index] in this.handler) {
-        this.handler[binary[index]](context, binary);
+      if (binary[index] in this.decodeHandlers) {
+        this.decodeHandlers[binary[index]](context, binary);
         continue;
       }
 
@@ -96,8 +96,8 @@ export class ComplexCodec extends BaseCodec {
   }
 
   public encode(binaries: EncodeBuffer[], meta: MetaValue): EncodeBuffer[] {
-    if (this.types[meta.type])
-      return this.types[meta.type].encode(binaries, meta);
+    if (this.codecs[meta.type])
+      return this.codecs[meta.type].encode(binaries, meta);
     if (meta.type === "array") return this.encodeArray(binaries, meta);
     if (meta.type === "object") return this.encodeObject(binaries, meta);
     if (meta.type === "null") return this.encodeNull(binaries, meta);
@@ -109,13 +109,13 @@ export class ComplexCodec extends BaseCodec {
     return this;
   }
 
-  public registerHandler(prefix: number, handler: Handler): ComplexCodec {
-    this.handler[prefix] = handler;
+  public registerHandler(prefix: number, handler: DecodeHandler): ComplexCodec {
+    this.decodeHandlers[prefix] = handler;
     return this;
   }
 
   public registerType(type: string, codec: CodecInterface): ComplexCodec {
-    this.types[type] = codec;
+    this.codecs[type] = codec;
     return this;
   }
 
@@ -184,7 +184,7 @@ export class ComplexCodec extends BaseCodec {
         const [key, item] = itemEntries[index];
         const metaKey = MetaValue.create(key, meta.ascending);
         const metaItem = MetaValue.create(item, meta.ascending);
-        this.types.string.encode(binaries, metaKey);
+        this.codecs.string.encode(binaries, metaKey);
         binaries.push(AOCOLON);
         this.encode(binaries, metaItem);
         if (index < itemLength - 1) binaries.push(AOCOMMA);
@@ -202,7 +202,7 @@ export class ComplexCodec extends BaseCodec {
         const [key, item] = itemEntries[index];
         const metaKey = MetaValue.create(key, meta.ascending);
         const metaItem = MetaValue.create(item, meta.ascending);
-        this.types.string.encode(binaries, metaKey);
+        this.codecs.string.encode(binaries, metaKey);
         binaries.push(DOCOLON);
         this.encode(binaries, metaItem);
         if (index < itemLength - 1) binaries.push(DOCOMMA);
@@ -233,17 +233,12 @@ export type CodecInterface = {
   encode(binaries: EncodeBuffer[], meta: MetaValue): EncodeBuffer[];
 };
 
-export type Context = {
-  cursor: unknown;
+export type DecodeContext = {
+  cursor: unknown[];
   index: number;
-  key: ContextKey;
+  key: { target: boolean; value: string };
 };
 
-export type ContextKey = {
-  target: boolean;
-  value: string;
-};
+export type DecodeHandler = (context: DecodeContext, binary: Buffer) => void;
 
 export type EncodeBuffer = Buffer | { buffer: Buffer; type: string };
-
-export type Handler = (context: Context, binary: Buffer) => void;
