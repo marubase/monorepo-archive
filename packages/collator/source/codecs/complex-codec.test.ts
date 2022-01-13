@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { CodeTable } from "../code-table.js";
-import { VersionStamp } from "../values/version-stamp.js";
+import { VersionstampValue } from "../values/versionstamp-value.js";
 import { BooleanCodec } from "./boolean-codec.js";
 import { BufferCodec } from "./buffer-codec.js";
 import { ComplexCodec } from "./complex-codec.js";
@@ -341,8 +341,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           const prefixBinary = toBuffer(prefixHex);
           const valueBinary = Buffer.from("ffffffffffffffffffff00ff", "hex");
           const binary = Buffer.concat([prefixBinary, valueBinary]);
-          const decoded = codec.decode(binary) as VersionStamp;
-          expect(decoded).to.an.instanceOf(VersionStamp);
+          const decoded = codec.decode(binary) as VersionstampValue;
+          expect(decoded).to.an.instanceOf(VersionstampValue);
           expect(decoded.code).to.equals(255);
 
           const expectedValue = Buffer.from("ffffffffffffffffffff", "hex");
@@ -361,8 +361,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
             valueBinary,
             suffixBinary,
           ]);
-          const decoded = codec.decode(binary) as { a: VersionStamp };
-          expect(decoded.a).to.an.instanceOf(VersionStamp);
+          const decoded = codec.decode(binary) as { a: VersionstampValue };
+          expect(decoded.a).to.an.instanceOf(VersionstampValue);
           expect(decoded.a.code).to.equals(255);
 
           const expectedValue = Buffer.from("ffffffffffffffffffff", "hex");
@@ -538,7 +538,7 @@ mirrorRun(function (ascending, toBuffer, toValue) {
       });
       suite("when given versionstamp value", function () {
         test("should returns versionstamp binary", async function () {
-          const value = VersionStamp.create(127);
+          const value = VersionstampValue.create(127);
           const meta = toValue(value);
           const encoded = codec.encode([], meta) as {
             buffer: Buffer;
