@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "outDir": "build/module"
+  },
+  "include": ["source/**/*"],
+  "exclude": [
+    "source/**/*.test.cts",
+    "source/**/*.test.mts",
+    "source/**/*.test.ts",
+    "source/**/*.test.tsx"
+  ]
+}
