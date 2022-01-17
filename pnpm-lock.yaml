@@ -88,17 +88,23 @@ importers:
   packages/container:
     specifiers: {}
 
-  packages/container/build/commonjs:
+  packages/contracts:
     specifiers: {}
 
-  packages/container/build/module:
+  packages/contracts/build/commonjs:
     specifiers: {}
 
-  packages/storage:
-    specifiers:
-      '@marubase/collator': workspace:^0.0.0
-    devDependencies:
-      '@marubase/collator': link:../collator
+  packages/contracts/build/module:
+    specifiers: {}
+
+  packages/errors:
+    specifiers: {}
+
+  packages/errors/build/commonjs:
+    specifiers: {}
+
+  packages/errors/build/module:
+    specifiers: {}
 
   packages/storage-fdb:
     specifiers:
@@ -107,18 +113,6 @@ importers:
     dependencies:
       '@marubase/collator': link:../collator
       foundationdb: 1.1.3
-
-  packages/storage-idb:
-    specifiers: {}
-
-  packages/storage-lmdb:
-    specifiers: {}
-
-  packages/storage/build/commonjs:
-    specifiers: {}
-
-  packages/storage/build/module:
-    specifiers: {}
 
   tools/istanbul-merge:
     specifiers:
