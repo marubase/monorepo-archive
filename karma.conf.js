@@ -14,6 +14,7 @@ module.exports = function (karmaConfig) {
         ? process.env.KARMA_REPORT.split(",")
         : ["text"],
     },
+    failOnEmptyTestSuite: false,
     files: [
       { pattern: "source/**/*.test.cjs", watched: false },
       { pattern: "source/**/*.test.cts", watched: false },
