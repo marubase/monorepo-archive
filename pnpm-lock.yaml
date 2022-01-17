@@ -88,24 +88,6 @@ importers:
   packages/container:
     specifiers: {}
 
-  packages/contracts:
-    specifiers: {}
-
-  packages/contracts/build/commonjs:
-    specifiers: {}
-
-  packages/contracts/build/module:
-    specifiers: {}
-
-  packages/errors:
-    specifiers: {}
-
-  packages/errors/build/commonjs:
-    specifiers: {}
-
-  packages/errors/build/module:
-    specifiers: {}
-
   packages/storage-fdb:
     specifiers:
       '@marubase/collator': workspace:^0.0.0
