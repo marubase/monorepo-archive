@@ -76,7 +76,22 @@ importers:
       webpack: 5.65.0_webpack-cli@4.9.1
       webpack-cli: 4.9.1_webpack@5.65.0
 
-  packages/application:
+  packages/collator:
+    specifiers: {}
+
+  packages/collator/build/commonjs:
+    specifiers: {}
+
+  packages/collator/build/module:
+    specifiers: {}
+
+  packages/container:
+    specifiers: {}
+
+  packages/container/build/commonjs:
+    specifiers: {}
+
+  packages/container/build/module:
     specifiers: {}
 
   packages/storage:
@@ -88,31 +103,31 @@ importers:
   packages/storage-fdb:
     specifiers:
       '@marubase/collator': workspace:^0.0.0
-      '@marubase/storage': workspace:^0.0.0
       foundationdb: ^1.1.3
     dependencies:
       '@marubase/collator': link:../collator
       foundationdb: 1.1.3
-    devDependencies:
-      '@marubase/storage': link:../storage
 
   packages/storage-idb:
-    specifiers:
-      '@marubase/storage': workspace:^0.0.0
-    devDependencies:
-      '@marubase/storage': link:../storage
+    specifiers: {}
 
   packages/storage-lmdb:
-    specifiers:
-      '@marubase/storage': workspace:^0.0.0
-    devDependencies:
-      '@marubase/storage': link:../storage
+    specifiers: {}
+
+  packages/storage/build/commonjs:
+    specifiers: {}
+
+  packages/storage/build/module:
+    specifiers: {}
 
   tools/istanbul-merge:
     specifiers:
       istanbul-lib-coverage: ^3.2.0
     dependencies:
       istanbul-lib-coverage: 3.2.0
+
+  tools/karma-playwright-launcher:
+    specifiers: {}
 
 packages:
 
