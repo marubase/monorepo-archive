@@ -5,7 +5,6 @@ module.exports = function (karmaConfig) {
     browsers: process.env.KARMA_BROWSER
       ? process.env.KARMA_BROWSER.split(",")
       : ["Chromium", "Firefox", "WebKit"],
-    client: { mocha: { ui: "tdd" } },
     coverageIstanbulReporter: {
       combineBrowserReports: process.env.KARMA_REPORT_COMBINE ? true : false,
       dir: "coverage/%browser%",
