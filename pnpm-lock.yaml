@@ -92,6 +92,12 @@ importers:
   packages/container/build/module:
     specifiers: {}
 
+  packages/storage:
+    specifiers:
+      '@marubase/storage-adapter': workspace:^0.0.0
+    dependencies:
+      '@marubase/storage-adapter': link:../storage-adapter
+
   packages/storage-adapter-fdb:
     specifiers:
       '@marubase/storage-adapter': workspace:^0.0.0
