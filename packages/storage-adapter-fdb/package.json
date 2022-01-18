@@ -52,7 +52,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@marubase/collator": "workspace:^0.0.0"
+    "@marubase/collator": "workspace:^0.0.0",
+    "foundationdb": "^1.1.3"
   },
   "devDependencies": {
     "@marubase/storage-adapter": "workspace:^0.0.0"
