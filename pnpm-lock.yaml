@@ -104,6 +104,12 @@ importers:
     dependencies:
       '@marubase/storage-adapter': link:../storage-adapter
 
+  packages/storage-adapter-lmdb:
+    specifiers:
+      '@marubase/storage-adapter': workspace:^0.0.0
+    dependencies:
+      '@marubase/storage-adapter': link:../storage-adapter
+
   packages/storage-fdb:
     specifiers:
       '@marubase/collator': workspace:^0.0.0
