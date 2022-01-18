@@ -1,3 +1,6 @@
-import { BaseError } from "./base.error.js";
-
-export class CollatorError extends BaseError {}
+export class CollatorError extends Error {
+  public constructor(message?: string) {
+    super(message);
+    this.name = this.constructor.name;
+  }
+}
