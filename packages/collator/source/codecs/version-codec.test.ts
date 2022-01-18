@@ -5,15 +5,15 @@ import { mirrorRun } from "./mirror-run.test.js";
 import { VersionCodec } from "./version-codec.js";
 
 mirrorRun(function (ascending, toBuffer, toValue) {
-  suite(`VersionCodec (${ascending ? "asc" : "desc"})`, function () {
+  describe(`VersionCodec (${ascending ? "asc" : "desc"})`, function () {
     let codec: VersionCodec;
-    setup(async function () {
+    beforeEach(async function () {
       codec = new VersionCodec(CodeTable);
     });
 
-    suite("#decode(binary)", function () {
-      suite("when given versionstamp binary", function () {
-        test("should returns versionstamp value", async function () {
+    describe("#decode(binary)", function () {
+      context("when given versionstamp binary", function () {
+        it("should returns versionstamp value", async function () {
           const prefixHex = "19";
           const prefixBinary = toBuffer(prefixHex);
           const valueBinary = Buffer.from("ffffffffffffffffffff00ff", "hex");
@@ -28,9 +28,9 @@ mirrorRun(function (ascending, toBuffer, toValue) {
       });
     });
 
-    suite("#encode(binaries, meta)", function () {
-      suite("when given versionstamp with no value", function () {
-        test("should returns versionstamp binary", async function () {
+    describe("#encode(binaries, meta)", function () {
+      context("when given versionstamp with no value", function () {
+        it("should returns versionstamp binary", async function () {
           const value = VersionstampValue.create(127);
           const meta = toValue(value);
           const encoded = codec.encode([], meta) as [
@@ -48,8 +48,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(encoded[0].buffer).to.deep.equals(expectedBinary);
         });
       });
-      suite("when given versionstamp with value", function () {
-        test("should returns versionstamp binary", async function () {
+      context("when given versionstamp with value", function () {
+        it("should returns versionstamp binary", async function () {
           const stampBinary = Buffer.from("ffffffffffffffffffff", "hex");
           const value = VersionstampValue.create(128, stampBinary);
           const meta = toValue(value);

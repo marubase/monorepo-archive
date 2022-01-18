@@ -4,15 +4,15 @@ import { BufferCodec } from "./buffer-codec.js";
 import { mirrorRun } from "./mirror-run.test.js";
 
 mirrorRun(function (ascending, toBuffer, toValue) {
-  suite(`BufferCoder (${ascending ? "asc" : "desc"})`, function () {
+  describe(`BufferCoder (${ascending ? "asc" : "desc"})`, function () {
     let coder: BufferCodec;
-    setup(async function () {
+    beforeEach(async function () {
       coder = new BufferCodec(CodeTable);
     });
 
-    suite("#decode(binary)", function () {
-      suite("when given buffer binary", function () {
-        test("should returns buffer value", async function () {
+    describe("#decode(binary)", function () {
+      context("when given buffer binary", function () {
+        it("should returns buffer value", async function () {
           const hex = "1a7465737403";
           const binary = toBuffer(hex);
           const decoded = coder.decode(binary);
@@ -21,8 +21,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(decoded).to.deep.equals(decodedBinary);
         });
       });
-      suite("when given special buffer binary", function () {
-        test("should returns buffer value", async function () {
+      context("when given special buffer binary", function () {
+        it("should returns buffer value", async function () {
           const hex = "1a037Ffc8003";
           const binary = toBuffer(hex);
           const decoded = coder.decode(binary);
@@ -33,9 +33,9 @@ mirrorRun(function (ascending, toBuffer, toValue) {
       });
     });
 
-    suite("#encode(binaries, meta)", function () {
-      suite("when given buffer value", function () {
-        test("should returns buffer binary", async function () {
+    describe("#encode(binaries, meta)", function () {
+      context("when given buffer value", function () {
+        it("should returns buffer binary", async function () {
           const value = Buffer.from([116, 101, 115, 116]);
           const meta = toValue(value);
           const encoded = coder.encode([], meta) as Buffer[];
@@ -46,8 +46,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(Buffer.concat(encoded)).to.deep.equals(encodedBinary);
         });
       });
-      suite("when given special buffer value", function () {
-        test("should returns buffer binary", async function () {
+      context("when given special buffer value", function () {
+        it("should returns buffer binary", async function () {
           const value = Buffer.from([3, 252]);
           const meta = toValue(value);
           const encoded = coder.encode([], meta) as Buffer[];

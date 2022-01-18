@@ -4,23 +4,23 @@ import { mirrorRun } from "./mirror-run.test.js";
 import { StringCodec } from "./string-codec.js";
 
 mirrorRun(function (ascending, toBuffer, toValue) {
-  suite(`StringCodec (${ascending ? "asc" : "desc"})`, function () {
+  describe(`StringCodec (${ascending ? "asc" : "desc"})`, function () {
     let codec: StringCodec;
-    setup(async function () {
+    beforeEach(async function () {
       codec = new StringCodec(CodeTable);
     });
 
-    suite("#decode(binary)", function () {
-      suite("when given string binary", function () {
-        test("should returns string value", async function () {
+    describe("#decode(binary)", function () {
+      context("when given string binary", function () {
+        it("should returns string value", async function () {
           const hex = "1b7465737402";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
           expect(decoded).to.equals("test");
         });
       });
-      suite("when given special string binary", function () {
-        test("should returns string value", async function () {
+      context("when given special string binary", function () {
+        it("should returns string value", async function () {
           const hex = "1b027fc3bd02";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
@@ -29,9 +29,9 @@ mirrorRun(function (ascending, toBuffer, toValue) {
       });
     });
 
-    suite("#encode(binaries, meta)", function () {
-      suite("when given string value", function () {
-        test("should returns string binary", async function () {
+    describe("#encode(binaries, meta)", function () {
+      context("when given string value", function () {
+        it("should returns string binary", async function () {
           const value = "test";
           const meta = toValue(value);
           const encoded = codec.encode([], meta) as Buffer[];
@@ -42,8 +42,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(Buffer.concat(encoded)).to.deep.equals(encodedBinary);
         });
       });
-      suite("when given special string value", function () {
-        test("should returns string binary", async function () {
+      context("when given special string value", function () {
+        it("should returns string binary", async function () {
           const value = "\x02\xfd";
           const meta = toValue(value);
           const encoded = codec.encode([], meta) as Buffer[];

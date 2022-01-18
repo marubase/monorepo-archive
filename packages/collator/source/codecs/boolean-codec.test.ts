@@ -4,23 +4,23 @@ import { BooleanCodec } from "./boolean-codec.js";
 import { mirrorRun } from "./mirror-run.test.js";
 
 mirrorRun(function (ascending, toBuffer, toValue) {
-  suite(`BooleanCodec (${ascending ? "asc" : "desc"})`, function () {
+  describe(`BooleanCodec (${ascending ? "asc" : "desc"})`, function () {
     let codec: BooleanCodec;
-    setup(async function () {
+    beforeEach(async function () {
       codec = new BooleanCodec(CodeTable);
     });
 
-    suite("#decode(binary)", function () {
-      suite("when given false binary", function () {
-        test("should returns false value", async function () {
+    describe("#decode(binary)", function () {
+      context("when given false binary", function () {
+        it("should returns false value", async function () {
           const hex = "05";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
           expect(decoded).to.be.false;
         });
       });
-      suite("when given true binary", function () {
-        test("should returns true value", async function () {
+      context("when given true binary", function () {
+        it("should returns true value", async function () {
           const hex = "06";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
@@ -29,9 +29,9 @@ mirrorRun(function (ascending, toBuffer, toValue) {
       });
     });
 
-    suite("#encode(binaries, meta)", function () {
-      suite("when given false value", function () {
-        test("should returns false binary", async function () {
+    describe("#encode(binaries, meta)", function () {
+      context("when given false value", function () {
+        it("should returns false binary", async function () {
           const value = false;
           const meta = toValue(value);
           const encoded = codec.encode([], meta) as Buffer[];
@@ -42,8 +42,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(Buffer.concat(encoded)).to.deep.equals(encodedBinary);
         });
       });
-      suite("when given true value", function () {
-        test("should returns true binary", async function () {
+      context("when given true value", function () {
+        it("should returns true binary", async function () {
           const value = true;
           const meta = toValue(value);
           const encoded = codec.encode([], meta) as Buffer[];

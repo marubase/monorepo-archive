@@ -5,55 +5,55 @@ import { FloatCodec } from "./float-codec.js";
 import { mirrorRun } from "./mirror-run.test.js";
 
 mirrorRun(function (ascending, toBuffer, toValue) {
-  suite(`FloatCodec (${ascending ? "asc" : "desc"})`, function () {
+  describe(`FloatCodec (${ascending ? "asc" : "desc"})`, function () {
     let codec: FloatCodec;
-    setup(async function () {
+    beforeEach(async function () {
       codec = new FloatCodec(CodeTable);
     });
 
-    suite("#decode(binary)", function () {
-      suite("when given -float32 binary", function () {
-        test("should returns -float32 value", async function () {
+    describe("#decode(binary)", function () {
+      context("when given -float32 binary", function () {
+        it("should returns -float32 value", async function () {
           const hex = "13c07fffff";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
           expect(decoded).to.equals(-1);
         });
       });
-      suite("when given float32 binary", function () {
-        test("should returns float32 value", async function () {
+      context("when given float32 binary", function () {
+        it("should returns float32 value", async function () {
           const hex = "143f800000";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
           expect(decoded).to.equals(1);
         });
       });
-      suite("when given -float64 binary", function () {
-        test("should returns -float64 value", async function () {
+      context("when given -float64 binary", function () {
+        it("should returns -float64 value", async function () {
           const hex = "15c00fffffffffffff";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
           expect(decoded).to.equals(-1);
         });
       });
-      suite("when given float64 binary", function () {
-        test("should returns float64 value", async function () {
+      context("when given float64 binary", function () {
+        it("should returns float64 value", async function () {
           const hex = "163ff0000000000000";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
           expect(decoded).to.equals(1);
         });
       });
-      suite("when given -Infinity binary", function () {
-        test("should returns -Infinity value", async function () {
+      context("when given -Infinity binary", function () {
+        it("should returns -Infinity value", async function () {
           const hex = "15800fffffffffffff";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
           expect(decoded).to.equals(-Infinity);
         });
       });
-      suite("when given Infinity binary", function () {
-        test("should returns Infinity value", async function () {
+      context("when given Infinity binary", function () {
+        it("should returns Infinity value", async function () {
           const hex = "167ff0000000000000";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
@@ -62,9 +62,9 @@ mirrorRun(function (ascending, toBuffer, toValue) {
       });
     });
 
-    suite("#encode(binaries, meta)", function () {
-      suite("when given -float32 value", function () {
-        test("should returns -float32 binary", async function () {
+    describe("#encode(binaries, meta)", function () {
+      context("when given -float32 value", function () {
+        it("should returns -float32 binary", async function () {
           const value = new FloatValue(-1, "float32");
           const meta = toValue(value);
           const encoded = codec.encode([], meta) as Buffer[];
@@ -75,8 +75,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(Buffer.concat(encoded)).to.deep.equals(encodedBinary);
         });
       });
-      suite("when given float32 value", function () {
-        test("should returns float32 binary", async function () {
+      context("when given float32 value", function () {
+        it("should returns float32 binary", async function () {
           const value = new FloatValue(1, "float32");
           const meta = toValue(value);
           const encoded = codec.encode([], meta) as Buffer[];
@@ -87,8 +87,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(Buffer.concat(encoded)).to.deep.equals(encodedBinary);
         });
       });
-      suite("when given -float64 value", function () {
-        test("should returns -float64 binary", async function () {
+      context("when given -float64 value", function () {
+        it("should returns -float64 binary", async function () {
           const value = new FloatValue(-1, "float64");
           const meta = toValue(value);
           const encoded = codec.encode([], meta) as Buffer[];
@@ -99,8 +99,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(Buffer.concat(encoded)).to.deep.equals(encodedBinary);
         });
       });
-      suite("when given float64 value", function () {
-        test("should returns float64 binary", async function () {
+      context("when given float64 value", function () {
+        it("should returns float64 binary", async function () {
           const value = new FloatValue(1, "float64");
           const meta = toValue(value);
           const encoded = codec.encode([], meta) as Buffer[];
@@ -111,8 +111,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(Buffer.concat(encoded)).to.deep.equals(encodedBinary);
         });
       });
-      suite("when given -Infinity value", function () {
-        test("should returns -Infinity binary", async function () {
+      context("when given -Infinity value", function () {
+        it("should returns -Infinity binary", async function () {
           const value = -Infinity;
           const meta = toValue(value);
           const encoded = codec.encode([], meta) as Buffer[];
@@ -123,8 +123,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(Buffer.concat(encoded)).to.deep.equals(encodedBinary);
         });
       });
-      suite("when given Infinity value", function () {
-        test("should returns Infinity binary", async function () {
+      context("when given Infinity value", function () {
+        it("should returns Infinity binary", async function () {
           const value = Infinity;
           const meta = toValue(value);
           const encoded = codec.encode([], meta) as Buffer[];

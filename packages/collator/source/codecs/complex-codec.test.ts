@@ -12,9 +12,9 @@ import { StringCodec } from "./string-codec.js";
 import { VersionCodec } from "./version-codec.js";
 
 mirrorRun(function (ascending, toBuffer, toValue) {
-  suite(`ComplexCodec (${ascending ? "asc" : "desc"})`, function () {
+  describe(`ComplexCodec (${ascending ? "asc" : "desc"})`, function () {
     let codec: ComplexCodec;
-    setup(async function () {
+    beforeEach(async function () {
       codec = new ComplexCodec(CodeTable);
       codec.register(BooleanCodec.service);
       codec.register(IntegerCodec.service);
@@ -25,9 +25,9 @@ mirrorRun(function (ascending, toBuffer, toValue) {
       codec.register(VersionCodec.service);
     });
 
-    suite("#decode(binary)", function () {
-      suite("when given [] binary", function () {
-        test("should returns [] value", async function () {
+    describe("#decode(binary)", function () {
+      context("when given [] binary", function () {
+        it("should returns [] value", async function () {
           const hex = "1c01";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
@@ -36,8 +36,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(decoded).to.deep.equals(decodedValue);
         });
       });
-      suite("when given [true] binary", function () {
-        test("should returns [true] value", async function () {
+      context("when given [true] binary", function () {
+        it("should returns [true] value", async function () {
           const hex = "1c0601";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
@@ -46,8 +46,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(decoded).to.deep.equals(decodedValue);
         });
       });
-      suite("when given [false, true] binary", function () {
-        test("should returns [false, true] value", async function () {
+      context("when given [false, true] binary", function () {
+        it("should returns [false, true] value", async function () {
           const hex = "1c057c0601";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
@@ -56,8 +56,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(decoded).to.deep.equals(decodedValue);
         });
       });
-      suite("when given [[false, true],[false, true]] binary", function () {
-        test("should returns [[false, true],[false, true]] value", async function () {
+      context("when given [[false, true],[false, true]] binary", function () {
+        it("should returns [[false, true],[false, true]] value", async function () {
           const hex = "1c1c057c06017c1c057c060101";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
@@ -69,8 +69,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(decoded).to.deep.equals(decodedValue);
         });
       });
-      suite("when given {} binary", function () {
-        test("should returns {} value", async function () {
+      context("when given {} binary", function () {
+        it("should returns {} value", async function () {
           const hex = "1d00";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
@@ -79,8 +79,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(decoded).to.deep.equals(decodedValue);
         });
       });
-      suite("when given {a:false} binary", function () {
-        test("should returns {a:false} value", async function () {
+      context("when given {a:false} binary", function () {
+        it("should returns {a:false} value", async function () {
           const hex = "1d1b61027d0500";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
@@ -89,8 +89,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(decoded).to.deep.equals(decodedValue);
         });
       });
-      suite("when given {a:false,b:true} binary", function () {
-        test("should returns {a:false,b:true} value", async function () {
+      context("when given {a:false,b:true} binary", function () {
+        it("should returns {a:false,b:true} value", async function () {
           const hex = "1d1b61027d057e1b62027d0600";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
@@ -99,10 +99,10 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(decoded).to.deep.equals(decodedValue);
         });
       });
-      suite(
+      context(
         "when given {a:{a:false,b:true},b:{a:false,b:true}} binary",
         function () {
-          test("should returns {a:{a:false,b:true},b:{a:false,b:true}} value", async function () {
+          it("should returns {a:{a:false,b:true},b:{a:false,b:true}} value", async function () {
             const hex =
               "1d1b61027d1d1b61027d057e1b62027d06007e1b62027d1d1b61027d057e1b62027d060000";
             const binary = toBuffer(hex);
@@ -116,10 +116,10 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           });
         },
       );
-      suite(
+      context(
         "when given [{a:false,b:true},{a:false,b:true}] binary",
         function () {
-          test("should returns [{a:false,b:true},{a:false,b:true}] value", async function () {
+          it("should returns [{a:false,b:true},{a:false,b:true}] value", async function () {
             const hex =
               "1c1d1b61027d057e1b62027d06007c1d1b61027d057e1b62027d060001";
             const binary = toBuffer(hex);
@@ -133,8 +133,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           });
         },
       );
-      suite("when given {a:[false,true],b:[false,true]} binary", function () {
-        test("should returns {a:[false,true],b:[false,true]} value", async function () {
+      context("when given {a:[false,true],b:[false,true]} binary", function () {
+        it("should returns {a:[false,true],b:[false,true]} value", async function () {
           const hex = "1d1b61027d1c057c06017e1b62027d1c057c060100";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
@@ -147,16 +147,16 @@ mirrorRun(function (ascending, toBuffer, toValue) {
         });
       });
 
-      suite("when given [null] binary", function () {
-        test("should returns [null] value", async function () {
+      context("when given [null] binary", function () {
+        it("should returns [null] value", async function () {
           const hex = "1c0401";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
           expect(decoded).to.deep.equals([null]);
         });
       });
-      suite("when given {a:null} binary", function () {
-        test("should returns {a:null} value", async function () {
+      context("when given {a:null} binary", function () {
+        it("should returns {a:null} value", async function () {
           const hex = "1d1b61027d0400";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
@@ -164,16 +164,16 @@ mirrorRun(function (ascending, toBuffer, toValue) {
         });
       });
 
-      suite("when given [undefined] binary", function () {
-        test("should returns [undefined] value", async function () {
+      context("when given [undefined] binary", function () {
+        it("should returns [undefined] value", async function () {
           const hex = "1c1e01";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
           expect(decoded).to.deep.equals([undefined]);
         });
       });
-      suite("when given {a:undefined} binary", function () {
-        test("should returns {a:undefined} value", async function () {
+      context("when given {a:undefined} binary", function () {
+        it("should returns {a:undefined} value", async function () {
           const hex = "1d1b61027d1e00";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
@@ -181,16 +181,16 @@ mirrorRun(function (ascending, toBuffer, toValue) {
         });
       });
 
-      suite("when given [int8] binary", function () {
-        test("should returns [int8] value", async function () {
+      context("when given [int8] binary", function () {
+        it("should returns [int8] value", async function () {
           const hex = "1c080101";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
           expect(decoded).to.deep.equals([1]);
         });
       });
-      suite("when given {a:int8} binary", function () {
-        test("should returns {a:int8} value", async function () {
+      context("when given {a:int8} binary", function () {
+        it("should returns {a:int8} value", async function () {
           const hex = "1d1b61027d080100";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
@@ -198,16 +198,16 @@ mirrorRun(function (ascending, toBuffer, toValue) {
         });
       });
 
-      suite("when given [int16] binary", function () {
-        test("should returns [int16] value", async function () {
+      context("when given [int16] binary", function () {
+        it("should returns [int16] value", async function () {
           const hex = "1c0b000101";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
           expect(decoded).to.deep.equals([1]);
         });
       });
-      suite("when given {a:int16} binary", function () {
-        test("should returns {a:int16} value", async function () {
+      context("when given {a:int16} binary", function () {
+        it("should returns {a:int16} value", async function () {
           const hex = "1d1b61027d0b000100";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
@@ -215,16 +215,16 @@ mirrorRun(function (ascending, toBuffer, toValue) {
         });
       });
 
-      suite("when given [int32] binary", function () {
-        test("should returns [int32] value", async function () {
+      context("when given [int32] binary", function () {
+        it("should returns [int32] value", async function () {
           const hex = "1c0e0000000101";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
           expect(decoded).to.deep.equals([1]);
         });
       });
-      suite("when given {a:int32} binary", function () {
-        test("should returns {a:int32} value", async function () {
+      context("when given {a:int32} binary", function () {
+        it("should returns {a:int32} value", async function () {
           const hex = "1d1b61027d0e0000000100";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
@@ -232,16 +232,16 @@ mirrorRun(function (ascending, toBuffer, toValue) {
         });
       });
 
-      suite("when given [int64] binary", function () {
-        test("should returns [int64] value", async function () {
+      context("when given [int64] binary", function () {
+        it("should returns [int64] value", async function () {
           const hex = "1c11000000000000000101";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
           expect(decoded).to.deep.equals([1n]);
         });
       });
-      suite("when given {a:int64} binary", function () {
-        test("should returns {a:int64} value", async function () {
+      context("when given {a:int64} binary", function () {
+        it("should returns {a:int64} value", async function () {
           const hex = "1d1b61027d11000000000000000100";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
@@ -249,16 +249,16 @@ mirrorRun(function (ascending, toBuffer, toValue) {
         });
       });
 
-      suite("when given [float32] binary", function () {
-        test("should returns [float32] value", async function () {
+      context("when given [float32] binary", function () {
+        it("should returns [float32] value", async function () {
           const hex = "1c143f80000001";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
           expect(decoded).to.deep.equals([1]);
         });
       });
-      suite("when given {a:float32} binary", function () {
-        test("should returns {a:float32} value", async function () {
+      context("when given {a:float32} binary", function () {
+        it("should returns {a:float32} value", async function () {
           const hex = "1d1b61027d143f80000000";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
@@ -266,16 +266,16 @@ mirrorRun(function (ascending, toBuffer, toValue) {
         });
       });
 
-      suite("when given [float64] binary", function () {
-        test("should returns [float64] value", async function () {
+      context("when given [float64] binary", function () {
+        it("should returns [float64] value", async function () {
           const hex = "1c163ff000000000000001";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
           expect(decoded).to.deep.equals([1]);
         });
       });
-      suite("when given {a:float64} binary", function () {
-        test("should returns {a:float64} value", async function () {
+      context("when given {a:float64} binary", function () {
+        it("should returns {a:float64} value", async function () {
           const hex = "1d1b61027d163ff000000000000000";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
@@ -283,16 +283,16 @@ mirrorRun(function (ascending, toBuffer, toValue) {
         });
       });
 
-      suite("when given [date] binary", function () {
-        test("should returns [date] value", async function () {
+      context("when given [date] binary", function () {
+        it("should returns [date] value", async function () {
           const hex = "1c183ff000000000000001";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
           expect(decoded).to.deep.equals([new Date(1)]);
         });
       });
-      suite("when given {a:date} binary", function () {
-        test("should returns {a:date} value", async function () {
+      context("when given {a:date} binary", function () {
+        it("should returns {a:date} value", async function () {
           const hex = "1d1b61027d183ff000000000000000";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
@@ -300,16 +300,16 @@ mirrorRun(function (ascending, toBuffer, toValue) {
         });
       });
 
-      suite("when given [buffer] binary", function () {
-        test("should returns [buffer] value", async function () {
+      context("when given [buffer] binary", function () {
+        it("should returns [buffer] value", async function () {
           const hex = "1c1a037Ffc800301";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
           expect(decoded).to.deep.equals([Buffer.from([3, 252])]);
         });
       });
-      suite("when given {a:buffer} binary", function () {
-        test("should returns {a:buffer} value", async function () {
+      context("when given {a:buffer} binary", function () {
+        it("should returns {a:buffer} value", async function () {
           const hex = "1d1b61027d1a037Ffc800300";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
@@ -319,24 +319,24 @@ mirrorRun(function (ascending, toBuffer, toValue) {
         });
       });
 
-      suite("when given [string] binary", function () {
-        test("should returns [string] value", async function () {
+      context("when given [string] binary", function () {
+        it("should returns [string] value", async function () {
           const hex = "1c1b027fc3bd0201";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
           expect(decoded).to.deep.equals(["\x02\xfd"]);
         });
       });
-      suite("when given {a:string} binary", function () {
-        test("should returns {a:string} value", async function () {
+      context("when given {a:string} binary", function () {
+        it("should returns {a:string} value", async function () {
           const hex = "1d1b61027d1b027fc3bd0200";
           const binary = toBuffer(hex);
           const decoded = codec.decode(binary);
           expect(decoded).to.deep.equals({ a: "\x02\xfd" });
         });
       });
-      suite("when given versionstamp binary", function () {
-        test("should returns versionstamp value", async function () {
+      context("when given versionstamp binary", function () {
+        it("should returns versionstamp value", async function () {
           const prefixHex = "19";
           const prefixBinary = toBuffer(prefixHex);
           const valueBinary = Buffer.from("ffffffffffffffffffff00ff", "hex");
@@ -349,8 +349,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(decoded.value).to.deep.equals(expectedValue);
         });
       });
-      suite("when given versionstamp binary as object value", function () {
-        test("should returns versionstamp value", async function () {
+      context("when given versionstamp binary as object value", function () {
+        it("should returns versionstamp value", async function () {
           const prefixHex = "1d1b61027d19";
           const prefixBinary = toBuffer(prefixHex);
           const suffixHex = "00";
@@ -371,9 +371,9 @@ mirrorRun(function (ascending, toBuffer, toValue) {
       });
     });
 
-    suite("#encode(binary, meta)", function () {
-      suite("when given [] value", function () {
-        test("should returns [] binary", async function () {
+    describe("#encode(binary, meta)", function () {
+      context("when given [] value", function () {
+        it("should returns [] binary", async function () {
           const value: unknown[] = [];
           const meta = toValue(value);
           const encoded = codec.encode([], meta) as Buffer[];
@@ -384,8 +384,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(Buffer.concat(encoded)).to.deep.equals(encodedBinary);
         });
       });
-      suite("when given [false] value", function () {
-        test("should returns [false] binary", async function () {
+      context("when given [false] value", function () {
+        it("should returns [false] binary", async function () {
           const value = [false];
           const meta = toValue(value);
           const encoded = codec.encode([], meta) as Buffer[];
@@ -396,8 +396,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(Buffer.concat(encoded)).to.deep.equals(encodedBinary);
         });
       });
-      suite("when given [false, true] value", function () {
-        test("should returns [false, true] binary", async function () {
+      context("when given [false, true] value", function () {
+        it("should returns [false, true] binary", async function () {
           const value = [false, true];
           const meta = toValue(value);
           const encoded = codec.encode([], meta) as Buffer[];
@@ -408,8 +408,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(Buffer.concat(encoded)).to.deep.equals(encodedBinary);
         });
       });
-      suite("when given [[false, true],[false, true]] value", function () {
-        test("should returns [[false, true],[false, true]] binary", async function () {
+      context("when given [[false, true],[false, true]] value", function () {
+        it("should returns [[false, true],[false, true]] binary", async function () {
           const value = [
             [false, true],
             [false, true],
@@ -423,8 +423,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(Buffer.concat(encoded)).to.deep.equals(encodedBinary);
         });
       });
-      suite("when given {} value", function () {
-        test("should returns {} binary", async function () {
+      context("when given {} value", function () {
+        it("should returns {} binary", async function () {
           const value = {};
           const meta = toValue(value);
           const encoded = codec.encode([], meta) as Buffer[];
@@ -435,8 +435,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(Buffer.concat(encoded)).to.deep.equals(encodedBinary);
         });
       });
-      suite("when given {a:false} value", function () {
-        test("should returns {a:false} binary", async function () {
+      context("when given {a:false} value", function () {
+        it("should returns {a:false} binary", async function () {
           const value = { a: false };
           const meta = toValue(value);
           const encoded = codec.encode([], meta) as Buffer[];
@@ -447,8 +447,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(Buffer.concat(encoded)).to.deep.equals(encodedBinary);
         });
       });
-      suite("when given {a:false,b:true} value", function () {
-        test("should returns {a:false,b:true} binary", async function () {
+      context("when given {a:false,b:true} value", function () {
+        it("should returns {a:false,b:true} binary", async function () {
           const value = { a: false, b: true };
           const meta = toValue(value);
           const encoded = codec.encode([], meta) as Buffer[];
@@ -459,10 +459,10 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(Buffer.concat(encoded)).to.deep.equals(encodedBinary);
         });
       });
-      suite(
+      context(
         "when given {a:{a:false,b:true},b:{a:false,b:true}} value",
         function () {
-          test("should returns {a:{a:false,b:true},b:{a:false,b:true}} binary", async function () {
+          it("should returns {a:{a:false,b:true},b:{a:false,b:true}} binary", async function () {
             const value = {
               a: { a: false, b: true },
               b: { a: false, b: true },
@@ -478,10 +478,10 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           });
         },
       );
-      suite(
+      context(
         "when given [{a:false,b:true},{a:false,b:true}] value",
         function () {
-          test("should returns [{a:false,b:true},{a:false,b:true}] binary", async function () {
+          it("should returns [{a:false,b:true},{a:false,b:true}] binary", async function () {
             const value = [
               { a: false, b: true },
               { a: false, b: true },
@@ -497,8 +497,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           });
         },
       );
-      suite("when given {a:[false,true],b:[false,true]} value", function () {
-        test("should returns {a:[false,true],b:[false,true]} binary", async function () {
+      context("when given {a:[false,true],b:[false,true]} value", function () {
+        it("should returns {a:[false,true],b:[false,true]} binary", async function () {
           const value = {
             a: [false, true],
             b: [false, true],
@@ -512,8 +512,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(Buffer.concat(encoded)).to.deep.equals(encodedBinary);
         });
       });
-      suite("when given null value", function () {
-        test("should returns null binary", async function () {
+      context("when given null value", function () {
+        it("should returns null binary", async function () {
           const value = null;
           const meta = toValue(value);
           const encoded = codec.encode([], meta) as Buffer[];
@@ -524,8 +524,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(Buffer.concat(encoded)).to.deep.equals(encodedBinary);
         });
       });
-      suite("when given undefined value", function () {
-        test("should returns undefined binary", async function () {
+      context("when given undefined value", function () {
+        it("should returns undefined binary", async function () {
           const value = undefined;
           const meta = toValue(value);
           const encoded = codec.encode([], meta) as Buffer[];
@@ -536,8 +536,8 @@ mirrorRun(function (ascending, toBuffer, toValue) {
           expect(Buffer.concat(encoded)).to.deep.equals(encodedBinary);
         });
       });
-      suite("when given versionstamp value", function () {
-        test("should returns versionstamp binary", async function () {
+      context("when given versionstamp value", function () {
+        it("should returns versionstamp binary", async function () {
           const value = VersionstampValue.create(127);
           const meta = toValue(value);
           const encoded = codec.encode([], meta) as {
