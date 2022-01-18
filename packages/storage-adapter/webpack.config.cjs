@@ -5,7 +5,10 @@ module.exports = Object.assign(require("../../webpack.config.js"), {
   mode: "production",
   output: {
     filename: "bundle.js",
-    library: { name: ["Marubase", "Storage"], type: "assign-properties" },
+    library: {
+      name: ["Marubase", "StorageAdapter"],
+      type: "assign-properties",
+    },
     path: path.join(process.cwd(), "build"),
   },
 });
