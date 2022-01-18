@@ -51,7 +51,10 @@
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
+  "devDependencies": {
+    "@marubase/storage-adapter": "workspace:^0.0.0"
+  },
+  "peerDependencies": {
     "@marubase/storage-adapter": "workspace:^0.0.0"
   }
 }
