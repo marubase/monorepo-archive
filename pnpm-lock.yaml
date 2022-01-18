@@ -97,7 +97,10 @@ importers:
 
   packages/storage-adapter-idb:
     specifiers:
+      '@marubase/collator': workspace:^0.0.0
       '@marubase/storage-adapter': workspace:^0.0.0
+    dependencies:
+      '@marubase/collator': link:../collator
     devDependencies:
       '@marubase/storage-adapter': link:../storage-adapter
 
