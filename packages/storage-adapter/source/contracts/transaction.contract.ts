@@ -6,8 +6,6 @@ export interface ReadBucketContract {
     endKey: unknown,
     options?: RangeOptions,
   ): AsyncIterable<[unknown, unknown]>;
-
-  watch(key: unknown): Watch;
 }
 
 export interface ReadTransactionContract {
@@ -28,8 +26,6 @@ export interface WriteBucketContract {
   ): AsyncIterable<[unknown, unknown]>;
 
   set(key: unknown, value: unknown): void;
-
-  watch(key: unknown): Watch;
 }
 
 export interface WriteTransactionContract {
@@ -43,9 +39,4 @@ export interface WriteTransactionContract {
 export type RangeOptions = {
   limit?: number;
   reverse?: boolean;
-};
-
-export type Watch = {
-  readonly promise: Promise<boolean>;
-  cancel(): void;
 };
