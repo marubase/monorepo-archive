@@ -7,7 +7,13 @@ import {
   WriteTransactionContract,
 } from "@marubase/storage-adapter";
 import { ReadBucketContract } from "@marubase/storage-adapter/source";
-import { Database, DatabaseOptions, open, Transaction } from "foundationdb";
+import {
+  Database,
+  DatabaseOptions,
+  open,
+  setAPIVersion,
+  Transaction,
+} from "foundationdb";
 import { RangeIterable } from "./range-iterable.js";
 import { ReadBucket } from "./read-bucket.js";
 import { ReadTransaction } from "./read-transaction.js";
@@ -20,6 +26,7 @@ export class Storage implements StorageContract {
     options?: DatabaseOptions,
     factory = DefaultStorageFactory,
   ): Promise<Storage> {
+    setAPIVersion(620);
     const fdbDatabase = open(clusterFile, options);
     return new Storage(fdbDatabase, factory);
   }
