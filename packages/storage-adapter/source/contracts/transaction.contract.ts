@@ -25,23 +25,9 @@ export interface ReadBucketContract {
 }
 
 export interface ReadTransactionContract {
-  readonly cast: {
-    float32: typeof float32;
-    float64: typeof float64;
-    int16: typeof int16;
-    int32: typeof int32;
-    int64: typeof int64;
-    int8: typeof int8;
-    uint16: typeof uint16;
-    uint32: typeof uint32;
-    uint64: typeof uint64;
-    uint8: typeof uint8;
-  };
+  readonly cast: CastHelper;
 
-  readonly order: {
-    asc: typeof asc;
-    desc: typeof desc;
-  };
+  readonly order: OrderHelper;
 
   bucket(bucketName: string): ReadBucketContract;
 }
@@ -63,6 +49,10 @@ export interface WriteBucketContract {
 }
 
 export interface WriteTransactionContract {
+  readonly cast: CastHelper;
+
+  readonly order: OrderHelper;
+
   readonly versionstamp: typeof versionstamp;
 
   bucket(bucketName: string): WriteBucketContract;
@@ -71,6 +61,24 @@ export interface WriteTransactionContract {
 
   snapshot(): ReadTransactionContract;
 }
+
+export type CastHelper = {
+  float32: typeof float32;
+  float64: typeof float64;
+  int16: typeof int16;
+  int32: typeof int32;
+  int64: typeof int64;
+  int8: typeof int8;
+  uint16: typeof uint16;
+  uint32: typeof uint32;
+  uint64: typeof uint64;
+  uint8: typeof uint8;
+};
+
+export type OrderHelper = {
+  asc: typeof asc;
+  desc: typeof desc;
+};
 
 export type RangeOptions = {
   limit?: number;
