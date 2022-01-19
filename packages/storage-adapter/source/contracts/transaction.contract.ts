@@ -2,8 +2,8 @@ export interface ReadBucketContract {
   get(key: unknown): Promise<unknown>;
 
   getRange(
-    startKey: unknown,
-    endKey: unknown,
+    start: unknown,
+    end: unknown,
     options?: RangeOptions,
   ): AsyncIterable<[unknown, unknown]>;
 }
@@ -15,13 +15,13 @@ export interface ReadTransactionContract {
 export interface WriteBucketContract {
   clear(key: unknown): void;
 
-  clearRange(startKey: unknown, endKey: unknown): void;
+  clearRange(start: unknown, end: unknown): void;
 
   get(key: unknown): Promise<unknown>;
 
   getRange(
-    startKey: unknown,
-    endKey: unknown,
+    start: unknown,
+    end: unknown,
     options?: RangeOptions,
   ): AsyncIterable<[unknown, unknown]>;
 
