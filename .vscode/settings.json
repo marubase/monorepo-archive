@@ -16,6 +16,7 @@
 
   "files.exclude": {
     "packages/*/build/**": true,
-    "packages/*/coverage/**": true
+    "packages/*/coverage/**": true,
+    "packages/*/report/**": true
   }
 }
