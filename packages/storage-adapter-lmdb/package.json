@@ -35,7 +35,7 @@
     "coverage:json:browser": "KARMA_BROWSER=Chromium,Firefox,WebKit KARMA_REPORT=json karma start ../../karma.conf.js",
     "coverage:json:chromium": "KARMA_BROWSER=Chromium KARMA_REPORT=json karma start ../../karma.conf.js",
     "coverage:json:firefox": "KARMA_BROWSER=Chromium KARMA_REPORT=json karma start ../../karma.conf.js",
-    "coverage:json:nodejs": "c8 --reporter=json --report-dir=./coverage/NodeJS mocha --recursive ./source",
+    "coverage:json:nodejs": "c8 --reporter=json --report-dir=./coverage/NodeJS mocha ./source/**/*.test.*",
     "coverage:json:webkit": "KARMA_BROWSER=Chromium KARMA_REPORT=json karma start ../../karma.conf.js",
     "coverage:json:merge": "istanbul-merge ./coverage/**/coverage-final.json ./coverage/coverage-final.json",
     "coverage:text": "nyc report --reporter=text --temp-dir=./coverage",
@@ -45,7 +45,7 @@
     "test:browser": "KARMA_BROWSER=Chromium,Firefox,WebKit KARMA_REPORT_COMBINE=1 karma start ../../karma.conf.js",
     "test:chromium": "KARMA_BROWSER=Chromium karma start ../../karma.conf.js",
     "test:firefox": "KARMA_BROWSER=Firefox karma start ../../karma.conf.js",
-    "test:nodejs": "c8 --reporter=text mocha --recursive ./source",
+    "test:nodejs": "c8 --reporter=text mocha ./source/**/*.test.*",
     "test:webkit": "KARMA_BROWSER=WebKit karma start ../../karma.conf.js"
   },
   "publishConfig": {
