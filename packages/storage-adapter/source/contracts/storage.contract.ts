@@ -20,6 +20,9 @@ export interface StorageContract {
 }
 
 export type StorageFactory = {
+  createRangeIterable: (
+    ...args: unknown[]
+  ) => AsyncIterable<[unknown, unknown]>;
   createReadBucket: (...args: unknown[]) => ReadBucketContract;
   createReadTransaction: (...args: unknown[]) => ReadTransactionContract;
   createWriteBucket: (...args: unknown[]) => WriteBucketContract;
