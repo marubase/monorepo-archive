@@ -14,6 +14,7 @@
     "@typescript-eslint/explicit-member-accessibility": "error",
     "@typescript-eslint/no-var-requires": "off",
     "mocha/no-exports": "off",
+    "mocha/no-setup-in-describe": "off",
     "tsdoc/syntax": "error",
     "@typescript-eslint/explicit-function-return-type": [
       "error",
