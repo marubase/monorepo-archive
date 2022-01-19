@@ -31,13 +31,13 @@
     "clean:vendor": "rm -rf ./node_modules",
     "coverage:html": "pnpm clean:report && nyc report --reporter=html --report-dir=./report --temp-dir=./coverage",
     "coverage:json": "pnpm coverage:json:nodejs && pnpm coverage:json:merge",
-    "coverage:json:nodejs": "c8 --reporter=json --report-dir=./coverage/NodeJS mocha ./source/**/*.test.*",
-    "coverage:json:merge": "istanbul-merge ./coverage/**/coverage-final.json ./coverage/coverage-final.json",
+    "coverage:json:nodejs": "c8 --reporter=json --report-dir=./coverage/NodeJS mocha --recursive ./source",
+    "coverage:json:merge": "istanbul-merge ./coverage/*/coverage-final.json ./coverage/coverage-final.json",
     "coverage:text": "nyc report --reporter=text --temp-dir=./coverage",
     "lint": "eslint --ext .cjs,.cts,.js,.jsx,.mjs,.mts,.ts,.tsx ./source",
     "prepare": "pnpm lint && pnpm test && pnpm build",
     "test": "pnpm clean:coverage && pnpm coverage:json && pnpm coverage:text",
-    "test:nodejs": "c8 --reporter=text mocha ./source/**/*.test.*"
+    "test:nodejs": "c8 --reporter=text mocha --recursive ./source"
   },
   "publishConfig": {
     "access": "public"

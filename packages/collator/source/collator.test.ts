@@ -57,14 +57,14 @@ describe("Collator", function () {
   });
 
   describe("#encode(value)", function () {
-    describe("when encode primitive value", function () {
+    context("when encode primitive value", function () {
       it("should returns key value", async function () {
         const value = [false];
         const encoded = collator.encode(collator.asc(value));
         expect(encoded).to.deep.equals(Buffer.from([28, 5, 1]));
       });
     });
-    describe("when encode value with versionstamp", function () {
+    context("when encode value with versionstamp", function () {
       it("should returns versionstamp value", async function () {
         const value = collator.versionstamp(127);
         const encoded = collator.encode(value);
@@ -76,7 +76,7 @@ describe("Collator", function () {
         expect(encoded).to.deep.equals(expectedEncoded);
       });
     });
-    describe("when encode value with multiple versionstamp", function () {
+    context("when encode value with multiple versionstamp", function () {
       it("should throws error", async function () {
         const value = [collator.versionstamp(), collator.versionstamp()];
         expect(function () {
@@ -157,21 +157,21 @@ describe("Collator", function () {
   });
 
   describe("#versionstamp(code)", function () {
-    describe("when no code is given", function () {
+    context("when no code is given", function () {
       it("should returns versionstamp with code '0'", async function () {
         const versionstamp = collator.versionstamp();
         expect(versionstamp).to.be.an.instanceOf(VersionstampValue);
         expect(versionstamp.code).to.equals(0);
       });
     });
-    describe("when code '127' is given", function () {
+    context("when code '127' is given", function () {
       it("should returns versionstamp with code '127'", async function () {
         const versionstamp = collator.versionstamp(127);
         expect(versionstamp).to.be.an.instanceOf(VersionstampValue);
         expect(versionstamp.code).to.equals(127);
       });
     });
-    describe("when code Buffer is given", function () {
+    context("when code Buffer is given", function () {
       it("should returns versionstamp with code '127'", async function () {
         const buffer = Buffer.from("00010203040506070809007f", "hex");
         const versionstamp = collator.versionstamp(buffer);
