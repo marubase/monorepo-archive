@@ -10,6 +10,8 @@ import { ReadBucketContract } from "@marubase/storage-adapter/source";
 import {
   Database,
   DatabaseOptions,
+  directory,
+  Directory,
   open,
   setAPIVersion,
   Transaction,
@@ -35,6 +37,8 @@ export class Storage implements StorageContract {
 
   protected _fdbDatabase: Database;
 
+  protected _fdbDirectories: Record<string, Directory> = {};
+
   public constructor(fdbDatabase: Database, factory: StorageFactory) {
     this._factory = factory;
     this._fdbDatabase = fdbDatabase;
@@ -48,10 +52,20 @@ export class Storage implements StorageContract {
     bucketNames: string[],
     transactionFn: TransactionFn<ReadTransactionContract, Result>,
   ): Promise<Result> {
+    const fdbDirectories: Record<string, Directory> = {};
+    for (const bucketName of bucketNames) {
+      if (!(bucketName in this._fdbDirectories)) {
+        this._fdbDirectories[bucketName] = await directory.createOrOpen(
+          this._fdbDatabase,
+          bucketName,
+        );
+      }
+      fdbDirectories[bucketName] = this._fdbDirectories[bucketName];
+    }
     return this._fdbDatabase.doTransaction<Result>(async (fdbTransaction) => {
       const transaction = this._factory.createReadTransaction(
         fdbTransaction.snapshot(),
-        bucketNames,
+        fdbDirectories,
         this._factory,
       );
       return transactionFn(transaction);
@@ -62,10 +76,20 @@ export class Storage implements StorageContract {
     bucketNames: string[],
     transactionFn: TransactionFn<WriteTransactionContract, Result>,
   ): Promise<Result> {
+    const fdbDirectories: Record<string, Directory> = {};
+    for (const bucketName of bucketNames) {
+      if (!(bucketName in this._fdbDirectories)) {
+        this._fdbDirectories[bucketName] = await directory.createOrOpen(
+          this._fdbDatabase,
+          bucketName,
+        );
+      }
+      fdbDirectories[bucketName] = this._fdbDirectories[bucketName];
+    }
     return this._fdbDatabase.doTransaction<Result>(async (fdbTransaction) => {
       const transaction = this._factory.createWriteTransaction(
         fdbTransaction,
-        bucketNames,
+        fdbDirectories,
         this._factory,
       );
       return transactionFn(transaction);
@@ -81,30 +105,28 @@ export const DefaultStorageFactory = {
   },
   createReadBucket(
     fdbTransaction: Transaction,
-    bucketName: string,
     factory: StorageFactory,
   ): ReadBucketContract {
-    return new ReadBucket(fdbTransaction, bucketName, factory);
+    return new ReadBucket(fdbTransaction, factory);
   },
   createReadTransaction(
     fdbTransaction: Transaction,
-    bucketNames: string[],
+    fdbDirectories: Record<string, Directory>,
     factory: StorageFactory,
   ): ReadTransactionContract {
-    return new ReadTransaction(fdbTransaction, bucketNames, factory);
+    return new ReadTransaction(fdbTransaction, fdbDirectories, factory);
   },
   createWriteBucket(
     fdbTransaction: Transaction,
-    bucketName: string,
     factory: StorageFactory,
   ): WriteBucketContract {
-    return new WriteBucket(fdbTransaction, bucketName, factory);
+    return new WriteBucket(fdbTransaction, factory);
   },
   createWriteTransaction(
     fdbTransaction: Transaction,
-    bucketNames: string[],
+    fdbdirectories: Record<string, Directory>,
     factory: StorageFactory,
   ): WriteTransactionContract {
-    return new WriteTransaction(fdbTransaction, bucketNames, factory);
+    return new WriteTransaction(fdbTransaction, fdbdirectories, factory);
   },
 } as StorageFactory;

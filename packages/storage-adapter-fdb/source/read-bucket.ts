@@ -7,24 +7,17 @@ import {
 import { keySelector, Transaction } from "foundationdb";
 
 export class ReadBucket implements ReadBucketContract {
-  protected _bucketName: string;
-
   protected _factory: StorageFactory;
 
   protected _fdbTransaction: Transaction;
 
-  public constructor(
-    fdbTransaction: Transaction,
-    bucketName: string,
-    factory: StorageFactory,
-  ) {
+  public constructor(fdbTransaction: Transaction, factory: StorageFactory) {
     this._fdbTransaction = fdbTransaction;
-    this._bucketName = bucketName;
     this._factory = factory;
   }
 
   public async get(key: unknown): Promise<unknown> {
-    const encodedKey = encode([this._bucketName, key]);
+    const encodedKey = encode(key);
     const fdbKey = !Buffer.isBuffer(encodedKey)
       ? encodedKey.buffer
       : encodedKey;
@@ -41,8 +34,8 @@ export class ReadBucket implements ReadBucketContract {
     if (typeof fdbOptions.limit !== "number") fdbOptions.limit = Infinity;
     if (typeof fdbOptions.reverse !== "boolean") fdbOptions.reverse = false;
 
-    const encodedStart = encode([this._bucketName, start]);
-    const encodedEnd = encode([this._bucketName, end]);
+    const encodedStart = encode(start);
+    const encodedEnd = encode(end);
     if (!fdbOptions.reverse) {
       const fdbStart = !Buffer.isBuffer(encodedStart)
         ? encodedStart.buffer

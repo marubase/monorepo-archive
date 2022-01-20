@@ -16,7 +16,7 @@ export class RangeIterable implements AsyncIterable<[unknown, unknown]> {
     if (fdbCursor.done) return { done: true, value: undefined };
 
     const [fdbKey, fdbValue] = fdbCursor.value;
-    const [, key] = decode(fdbKey) as [string, unknown];
+    const key = decode(fdbKey);
     const value = decode(fdbValue);
     return { done: false, value: [key, value] };
   }

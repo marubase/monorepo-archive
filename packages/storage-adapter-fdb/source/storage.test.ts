@@ -3,10 +3,10 @@ import { Storage } from "./storage.js";
 
 describe("Storage", function () {
   let storage: Storage;
-  before(async function () {
+  beforeEach(async function () {
     storage = await Storage.open();
   });
-  after(async function () {
+  afterEach(async function () {
     await storage.close();
   });
 

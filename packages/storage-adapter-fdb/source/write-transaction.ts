@@ -14,16 +14,15 @@ export class WriteTransaction
   public readonly versionstamp = versionstamp;
 
   public bucket(bucketName: string): WriteBucketContract {
-    if (this._bucketNames.indexOf(bucketName) < 0) {
-      const scopes = this._bucketNames.join(", ");
-      const context = `Running read transaction in "${bucketName}".`;
+    if (!(bucketName in this._fdbDirectories)) {
+      const scopes = Object.keys(this._fdbDirectories).join(", ");
+      const context = `Running write transaction in "${bucketName}".`;
       const problem = `Transaction out of scope.`;
       const solution = `Please run transaction in ${scopes}.`;
       throw new StorageError(`${context} ${problem} ${solution}`);
     }
     return this._factory.createWriteBucket(
-      this._fdbTransaction,
-      bucketName,
+      this._fdbTransaction.at(this._fdbDirectories[bucketName]),
       this._factory,
     );
   }
@@ -35,7 +34,7 @@ export class WriteTransaction
   public snapshot(): ReadTransactionContract {
     return this._factory.createReadTransaction(
       this._fdbTransaction.snapshot(),
-      this._bucketNames,
+      this._fdbDirectories,
       this._factory,
     );
   }

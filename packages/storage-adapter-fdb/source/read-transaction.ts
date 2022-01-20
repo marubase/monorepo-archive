@@ -18,7 +18,7 @@ import {
   StorageError,
   StorageFactory,
 } from "@marubase/storage-adapter";
-import { Transaction } from "foundationdb";
+import { Directory, Transaction } from "foundationdb";
 
 export class ReadTransaction implements ReadTransactionContract {
   public readonly cast = {
@@ -36,33 +36,32 @@ export class ReadTransaction implements ReadTransactionContract {
 
   public readonly order = { asc, desc };
 
-  protected _bucketNames: string[];
-
   protected _factory: StorageFactory;
+
+  protected _fdbDirectories: Record<string, Directory>;
 
   protected _fdbTransaction: Transaction;
 
   public constructor(
     fdbTransaction: Transaction,
-    bucketNames: string[],
+    fdbDirectories: Record<string, Directory>,
     factory: StorageFactory,
   ) {
     this._fdbTransaction = fdbTransaction;
-    this._bucketNames = bucketNames;
+    this._fdbDirectories = fdbDirectories;
     this._factory = factory;
   }
 
   public bucket(bucketName: string): ReadBucketContract {
-    if (this._bucketNames.indexOf(bucketName) < 0) {
-      const scopes = this._bucketNames.join(", ");
+    if (!(bucketName in this._fdbDirectories)) {
+      const scopes = Object.keys(this._fdbDirectories).join(", ");
       const context = `Running read transaction in "${bucketName}".`;
       const problem = `Transaction out of scope.`;
       const solution = `Please run transaction in ${scopes}.`;
       throw new StorageError(`${context} ${problem} ${solution}`);
     }
     return this._factory.createReadBucket(
-      this._fdbTransaction,
-      bucketName,
+      this._fdbTransaction.at(this._fdbDirectories[bucketName]),
       this._factory,
     );
   }

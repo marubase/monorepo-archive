@@ -4,7 +4,7 @@ import { ReadBucket } from "./read-bucket.js";
 
 export class WriteBucket extends ReadBucket implements WriteBucketContract {
   public clear(key: unknown): void {
-    const encodedKey = encode([this._bucketName, key]);
+    const encodedKey = encode(key);
     const fdbKey = !Buffer.isBuffer(encodedKey)
       ? encodedKey.buffer
       : encodedKey;
@@ -12,8 +12,8 @@ export class WriteBucket extends ReadBucket implements WriteBucketContract {
   }
 
   public clearRange(start: unknown, end: unknown): void {
-    const encodedStart = encode([this._bucketName, start]);
-    const encodedEnd = encode([this._bucketName, end]);
+    const encodedStart = encode(start);
+    const encodedEnd = encode(end);
     const fdbStart = !Buffer.isBuffer(encodedStart)
       ? encodedStart.buffer
       : encodedStart;
@@ -24,7 +24,7 @@ export class WriteBucket extends ReadBucket implements WriteBucketContract {
   }
 
   public set(key: unknown, value: unknown): void {
-    const encodedKey = encode([this._bucketName, key]);
+    const encodedKey = encode(key);
     const encodedValue = encode(value);
     if (!Buffer.isBuffer(encodedKey) && !Buffer.isBuffer(encodedValue)) {
       const context = `Inserting key and value entry.`;
