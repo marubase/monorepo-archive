@@ -31,4 +31,4 @@ export type StorageFactory = {
 
 export type TransactionFn<Transaction, Result> = (
   transaction: Transaction,
-) => Result;
+) => Promise<Result>;
