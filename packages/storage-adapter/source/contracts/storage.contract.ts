@@ -9,12 +9,12 @@ export interface StorageContract {
   close(): Promise<void>;
 
   read<Result>(
-    bucketNames: string[],
+    bucketNames: string | string[],
     transactionFn: TransactionFn<ReadTransactionContract, Result>,
   ): Promise<Result>;
 
   write<Result>(
-    bucketNames: string[],
+    bucketNames: string | string[],
     transactionFn: TransactionFn<WriteTransactionContract, Result>,
   ): Promise<Result>;
 }
