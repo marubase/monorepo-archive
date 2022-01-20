@@ -21,7 +21,11 @@ export class WriteTransaction
       const solution = `Please run transaction in ${scopes}.`;
       throw new StorageError(`${context} ${problem} ${solution}`);
     }
-    return this._factory.createWriteBucket(this._fdbTransaction, bucketName);
+    return this._factory.createWriteBucket(
+      this._fdbTransaction,
+      bucketName,
+      this._factory,
+    );
   }
 
   public nextID(): number {
