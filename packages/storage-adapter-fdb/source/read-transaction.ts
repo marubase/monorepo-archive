@@ -60,6 +60,10 @@ export class ReadTransaction implements ReadTransactionContract {
       const solution = `Please run transaction in ${scopes}.`;
       throw new StorageError(`${context} ${problem} ${solution}`);
     }
-    return this._factory.createReadBucket(this._fdbTransaction, bucketName);
+    return this._factory.createReadBucket(
+      this._fdbTransaction,
+      bucketName,
+      this._factory,
+    );
   }
 }
