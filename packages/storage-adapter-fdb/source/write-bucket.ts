@@ -35,7 +35,7 @@ export class WriteBucket extends ReadBucket implements WriteBucketContract {
     if (!Buffer.isBuffer(encodedKey)) {
       const { buffer, position } = encodedKey;
       const { prefix } = this._fdbTransaction.subspace;
-      const fdbKey = Buffer.allocUnsafe(prefix.length + buffer.length + 4);
+      const fdbKey = Buffer.alloc(prefix.length + buffer.length + 4);
       prefix.copy(fdbKey);
       buffer.copy(fdbKey, prefix.length);
       fdbKey.writeUInt16LE(position + prefix.length, fdbKey.length - 4);
@@ -45,7 +45,7 @@ export class WriteBucket extends ReadBucket implements WriteBucketContract {
     if (!Buffer.isBuffer(encodedValue)) {
       const { buffer, position } = encodedValue;
       const fdbKey = encodedKey as Buffer;
-      const fdbValue = Buffer.allocUnsafe(buffer.length + 4);
+      const fdbValue = Buffer.alloc(buffer.length + 4);
       buffer.copy(fdbValue);
       fdbValue.writeUInt16LE(position, fdbValue.length - 4);
       return this._fdbTransaction.setVersionstampedValueRaw(fdbKey, fdbValue);
