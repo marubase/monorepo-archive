@@ -49,9 +49,11 @@ export class Storage implements StorageContract {
   }
 
   public async read<Result>(
-    bucketNames: string[],
+    bucketNames: string | string[],
     transactionFn: TransactionFn<ReadTransactionContract, Result>,
   ): Promise<Result> {
+    if (!Array.isArray(bucketNames)) bucketNames = [bucketNames] as string[];
+
     const fdbDirectories: Record<string, Directory> = {};
     for (const bucketName of bucketNames) {
       if (!(bucketName in this._fdbDirectories)) {
@@ -73,9 +75,11 @@ export class Storage implements StorageContract {
   }
 
   public async write<Result>(
-    bucketNames: string[],
+    bucketNames: string | string[],
     transactionFn: TransactionFn<WriteTransactionContract, Result>,
   ): Promise<Result> {
+    if (!Array.isArray(bucketNames)) bucketNames = [bucketNames] as string[];
+
     const fdbDirectories: Record<string, Directory> = {};
     for (const bucketName of bucketNames) {
       if (!(bucketName in this._fdbDirectories)) {
