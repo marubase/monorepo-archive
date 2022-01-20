@@ -40,7 +40,7 @@ export const uint64 = collator.uint64.bind(collator);
 export const versionstamp = collator.versionstamp.bind(collator);
 
 export * from "./code-table.js";
-export * as codecs from "./codecs/index.js";
+export * from "./codecs/index.js";
 export * from "./collator.js";
-export * as errors from "./errors/index.js";
-export * as values from "./values/index.js";
+export * from "./errors/index.js";
+export * from "./values/index.js";
