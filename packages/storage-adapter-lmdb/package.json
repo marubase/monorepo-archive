@@ -19,7 +19,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "pnpm clean:build && pnpm build:commonjs && pnpm build:module && pnpm build:types && pnpm build:bundle",
+    "build": "pnpm clean:build && pnpm build:commonjs && pnpm build:module && pnpm build:types",
     "build:commonjs": "tsc --project ./tsconfig.commonjs.json && echo '{\"type\":\"commonjs\"}' > ./build/commonjs/package.json",
     "build:module": "tsc --project ./tsconfig.module.json && echo '{\"type\":\"module\"}' > ./build/module/package.json",
     "build:types": "tsc --project ./tsconfig.types.json",
