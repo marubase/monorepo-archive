@@ -1,10 +1,11 @@
-import { versionstamp } from "@marubase/collator";
+import { decode, encode, versionstamp } from "@marubase/collator";
 import {
   ReadTransactionContract,
   StorageError,
   WriteBucketContract,
   WriteTransactionContract,
 } from "@marubase/storage-adapter";
+import { MutationCounter } from "./mutation-counter.js";
 import { ReadTransaction } from "./read-transaction.js";
 
 export class WriteTransaction
@@ -12,6 +13,8 @@ export class WriteTransaction
   implements WriteTransactionContract
 {
   public readonly versionstamp = versionstamp;
+
+  protected _mutationCounter?: Buffer;
 
   protected _transactionID = 0;
 
@@ -27,6 +30,7 @@ export class WriteTransaction
       this._lmdbDatabase,
       bucketName,
       this._factory,
+      this._versionstampFn.bind(this),
     );
   }
 
@@ -40,5 +44,21 @@ export class WriteTransaction
       this._bucketNames,
       this._factory,
     );
+  }
+
+  protected _versionstampFn(): Buffer {
+    if (!Buffer.isBuffer(this._mutationCounter)) {
+      const encodedCounterBinary =
+        this._lmdbDatabase.get(MutationCounter.key) ||
+        Buffer.from("1a0000000000000000000003", "hex");
+      const counterBinary = decode(encodedCounterBinary) as Buffer;
+      const counter = MutationCounter.toBigInt(counterBinary) + 1n;
+
+      const reCounterBinary = MutationCounter.toBinary(counter);
+      const reEncodedCounterBinary = encode(reCounterBinary) as Buffer;
+      this._lmdbDatabase.put(MutationCounter.key, reEncodedCounterBinary);
+      this._mutationCounter = reCounterBinary;
+    }
+    return this._mutationCounter as Buffer;
   }
 }
