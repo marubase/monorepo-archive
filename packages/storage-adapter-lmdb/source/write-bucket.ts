@@ -1,33 +1,23 @@
-import { decode, encode } from "@marubase/collator";
+import { encode } from "@marubase/collator";
 import {
   StorageError,
   StorageFactory,
   WriteBucketContract,
 } from "@marubase/storage-adapter";
 import { Database, RangeOptions } from "lmdb";
-import { MutationCounter } from "./mutation-counter.js";
 import { ReadBucket } from "./read-bucket.js";
 
 export class WriteBucket extends ReadBucket implements WriteBucketContract {
-  protected _mutationCounter: Buffer;
+  protected _versionstampFn: () => Buffer;
 
   public constructor(
     lmdbDatabase: Database<Buffer, Buffer>,
     bucketName: string,
     factory: StorageFactory,
+    versionstampFn: () => Buffer,
   ) {
     super(lmdbDatabase, bucketName, factory);
-
-    const encodedCounterBinary =
-      this._lmdbDatabase.get(MutationCounter.key) ||
-      Buffer.from("1a0000000000000000000003", "hex");
-    const counterBinary = decode(encodedCounterBinary) as Buffer;
-    const counter = MutationCounter.toBigInt(counterBinary) + 1n;
-
-    const reCounterBinary = MutationCounter.toBinary(counter);
-    const reEncodedCounterBinary = encode(reCounterBinary) as Buffer;
-    this._lmdbDatabase.put(MutationCounter.key, reEncodedCounterBinary);
-    this._mutationCounter = reCounterBinary;
+    this._versionstampFn = versionstampFn;
   }
 
   public clear(key: unknown): void {
@@ -65,14 +55,14 @@ export class WriteBucket extends ReadBucket implements WriteBucketContract {
     }
     if (!Buffer.isBuffer(encodedKey)) {
       const { buffer: lmdbKey, position } = encodedKey;
-      lmdbKey.set(this._mutationCounter, position);
+      lmdbKey.set(this._versionstampFn(), position);
       const lmdbValue = encodedValue as Buffer;
       this._lmdbDatabase.put(lmdbKey, lmdbValue);
       return;
     }
     if (!Buffer.isBuffer(encodedValue)) {
       const { buffer: lmdbValue, position } = encodedValue;
-      lmdbValue.set(this._mutationCounter, position);
+      lmdbValue.set(this._versionstampFn(), position);
       const lmdbKey = encodedKey as Buffer;
       this._lmdbDatabase.put(lmdbKey, lmdbValue);
       return;
