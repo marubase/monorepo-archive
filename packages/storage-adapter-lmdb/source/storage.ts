@@ -105,8 +105,9 @@ export const DefaultStorageFactory = {
     lmdbDatabase: Database<Buffer, Buffer>,
     bucketName: string,
     factory: StorageFactory,
+    versionstampFn: () => Buffer,
   ): WriteBucketContract {
-    return new WriteBucket(lmdbDatabase, bucketName, factory);
+    return new WriteBucket(lmdbDatabase, bucketName, factory, versionstampFn);
   },
   createWriteTransaction(
     lmdbDatabase: Database<Buffer, Buffer>,
