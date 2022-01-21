@@ -4,8 +4,6 @@ import { WriteBucketContract } from "./write-bucket.js";
 import { WriteTransactionContract } from "./write-transaction.js";
 
 export interface StorageContract {
-  readonly factory: StorageFactory;
-
   bucket(name: string): StorageBucket;
 
   close(): Promise<void>;
