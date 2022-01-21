@@ -1,9 +1,6 @@
 import { ReadTransactionContract } from "./read-transaction.js";
-import { StorageFactory } from "./storage.contract.js";
 
 export interface ReadBucketContract {
-  readonly factory: StorageFactory;
-
   readonly name: string;
 
   readonly transaction: ReadTransactionContract;
