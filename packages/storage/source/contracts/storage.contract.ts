@@ -1,9 +1,18 @@
+import { versionstamp } from "@marubase/collator";
 import { RangeOptions, ReadBucketContract } from "./read-bucket.js";
 import { ReadTransactionContract } from "./read-transaction.js";
+import { TransactionCast } from "./transaction-cast.js";
+import { TransactionOrder } from "./transaction-order.js";
 import { WriteBucketContract } from "./write-bucket.js";
 import { WriteTransactionContract } from "./write-transaction.js";
 
 export interface StorageContract {
+  readonly cast: TransactionCast;
+
+  readonly order: TransactionOrder;
+
+  readonly versionstamp: typeof versionstamp;
+
   bucket(name: string): StorageBucket;
 
   close(): Promise<void>;
