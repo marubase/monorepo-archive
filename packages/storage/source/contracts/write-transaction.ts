@@ -10,4 +10,6 @@ export interface WriteTransactionContract extends ReadTransactionContract {
   commitID?(): Buffer;
 
   nextID(): number;
+
+  snapshot(): ReadTransactionContract;
 }
