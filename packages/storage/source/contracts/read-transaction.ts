@@ -1,10 +1,12 @@
 import { ReadBucketContract } from "./read-bucket.js";
-import { StorageContract } from "./storage.contract.js";
+import { StorageContract, StorageFactory } from "./storage.contract.js";
 import { TransactionCast } from "./transaction-cast.js";
 import { TransactionOrder } from "./transaction-order.js";
 
 export interface ReadTransactionContract {
   readonly cast: TransactionCast;
+
+  readonly factory: StorageFactory;
 
   readonly order: TransactionOrder;
 
