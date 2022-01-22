@@ -10,9 +10,7 @@ export class WriteTransaction
   extends ReadTransaction
   implements WriteTransactionContract
 {
-  public get versionstamp(): typeof versionstamp {
-    return versionstamp;
-  }
+  public readonly versionstamp: typeof versionstamp = versionstamp;
 
   public bucket(name: string): WriteBucketContract {
     if (!(name in this._fdbDirectories)) {
@@ -22,8 +20,8 @@ export class WriteTransaction
       const solution = `Please run transaction in ${scopes}.`;
       throw new StorageError(`${context} ${problem} ${solution}`);
     }
-    return this._factory.createWriteBucket(
-      this._factory,
+    return this.factory.createWriteBucket(
+      this.factory,
       this,
       name,
       this._fdbTransaction,
