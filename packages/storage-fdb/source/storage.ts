@@ -118,6 +118,7 @@ export class Storage implements StorageContract {
         this,
         scope as string[],
         fdbTransaction,
+        fdbDirectories,
       );
       return transactionFn(transaction);
     });
@@ -146,6 +147,7 @@ export class Storage implements StorageContract {
         this,
         scope as string[],
         fdbTransaction,
+        fdbDirectories,
       );
       return transactionFn(transaction);
     });
