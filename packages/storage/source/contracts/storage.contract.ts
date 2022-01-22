@@ -15,7 +15,7 @@ export interface StorageContract {
 
   readonly versionstamp: typeof versionstamp;
 
-  bucket(name: string): StorageBucket;
+  bucket<Key, Value>(name: string): StorageBucket<Key, Value>;
 
   close(): Promise<void>;
 
@@ -30,31 +30,33 @@ export interface StorageContract {
   ): Promise<Result>;
 }
 
-export type StorageBucket = {
-  clear(key: unknown): Promise<void>;
+export type StorageBucket<Key, Value> = {
+  clear(key: Key): Promise<void>;
 
-  clearRange(start: unknown, end: unknown): Promise<void>;
+  clearRange(start: Key, end: Key): Promise<void>;
 
-  get(key: unknown): Promise<unknown>;
+  get(key: Key, defaultValue?: Value): Promise<Value | undefined>;
 
   getRange(
-    start: unknown,
-    end: unknown,
+    start: Key,
+    end: Key,
     options?: RangeOptions,
-  ): Promise<[unknown, unknown][]>;
+  ): Promise<[Key, Value][]>;
 
-  set(key: unknown, value: unknown): Promise<void>;
+  set(key: Key, value: Value): Promise<void>;
 };
 
 export type StorageFactory = {
-  createRangeIterable(...args: unknown[]): AsyncIterable<[unknown, unknown]>;
+  createRangeIterable<Key, Value>(
+    ...args: unknown[]
+  ): AsyncIterable<[Key, Value]>;
 
-  createReadBucket(
+  createReadBucket<Key, Value>(
     factory: StorageFactory,
     transaction: ReadTransactionContract,
     name: string,
     ...args: unknown[]
-  ): ReadBucketContract;
+  ): ReadBucketContract<Key, Value>;
 
   createReadTransaction(
     factory: StorageFactory,
@@ -63,12 +65,12 @@ export type StorageFactory = {
     ...args: unknown[]
   ): ReadTransactionContract;
 
-  createWriteBucket(
+  createWriteBucket<Key, Value>(
     factory: StorageFactory,
     transaction: WriteTransactionContract,
     name: string,
     ...args: unknown[]
-  ): WriteBucketContract;
+  ): WriteBucketContract<Key, Value>;
 
   createWriteTransaction(
     factory: StorageFactory,
