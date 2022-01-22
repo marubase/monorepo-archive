@@ -12,7 +12,7 @@ export class WriteTransaction
 {
   public readonly versionstamp: typeof versionstamp = versionstamp;
 
-  public bucket(name: string): WriteBucketContract {
+  public bucket<Key, Value>(name: string): WriteBucketContract<Key, Value> {
     if (!(name in this._fdbDirectories)) {
       const scopes = Object.keys(this._fdbDirectories).join(", ");
       const context = `Running read transaction in "${name}".`;
