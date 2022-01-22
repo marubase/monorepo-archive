@@ -158,7 +158,7 @@ export const DefaultStorageFactory = {
   createRangeIterable<Key, Value>(
     fdbRange: AsyncGenerator<[Buffer, Buffer]>,
   ): AsyncIterable<[Key, Value]> {
-    return new RangeIterable<Key, Value>(fdbRange);
+    return new RangeIterable(fdbRange);
   },
 
   createReadBucket<Key, Value>(
@@ -167,12 +167,7 @@ export const DefaultStorageFactory = {
     name: string,
     fdbTransaction: Transaction,
   ): ReadBucketContract<Key, Value> {
-    return new ReadBucket<Key, Value>(
-      factory,
-      transaction,
-      name,
-      fdbTransaction,
-    );
+    return new ReadBucket(factory, transaction, name, fdbTransaction);
   },
 
   createReadTransaction(
@@ -197,12 +192,7 @@ export const DefaultStorageFactory = {
     name: string,
     fdbTransaction: Transaction,
   ): WriteBucketContract<Key, Value> {
-    return new WriteBucket<Key, Value>(
-      factory,
-      transaction,
-      name,
-      fdbTransaction,
-    );
+    return new WriteBucket(factory, transaction, name, fdbTransaction);
   },
 
   createWriteTransaction(
