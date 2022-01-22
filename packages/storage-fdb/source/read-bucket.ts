@@ -8,13 +8,13 @@ import {
 import { keySelector, Transaction } from "foundationdb";
 
 export class ReadBucket implements ReadBucketContract {
-  protected _factory: StorageFactory;
+  public readonly factory: StorageFactory;
+
+  public readonly name: string;
+
+  public readonly transaction: ReadTransactionContract;
 
   protected _fdbTransaction: Transaction;
-
-  protected _name: string;
-
-  protected _transaction: ReadTransactionContract;
 
   public constructor(
     factory: StorageFactory,
@@ -22,18 +22,10 @@ export class ReadBucket implements ReadBucketContract {
     name: string,
     fdbTransaction: Transaction,
   ) {
-    this._factory = factory;
-    this._transaction = transaction;
-    this._name = name;
+    this.factory = factory;
+    this.transaction = transaction;
+    this.name = name;
     this._fdbTransaction = fdbTransaction;
-  }
-
-  public get name(): string {
-    return this._name;
-  }
-
-  public get transaction(): ReadTransactionContract {
-    return this._transaction;
   }
 
   public async get(key: unknown): Promise<unknown> {
@@ -68,7 +60,7 @@ export class ReadBucket implements ReadBucketContract {
         fdbEnd,
         fdbOptions,
       );
-      return this._factory.createRangeIterable(fdbRange);
+      return this.factory.createRangeIterable(fdbRange);
     } else {
       const fdbStart = !Buffer.isBuffer(encodedEnd)
         ? keySelector.firstGreaterThan(encodedEnd.buffer)
@@ -81,7 +73,7 @@ export class ReadBucket implements ReadBucketContract {
         fdbEnd,
         fdbOptions,
       );
-      return this._factory.createRangeIterable(fdbRange);
+      return this.factory.createRangeIterable(fdbRange);
     }
   }
 }
