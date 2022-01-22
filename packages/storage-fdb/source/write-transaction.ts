@@ -15,7 +15,7 @@ export class WriteTransaction
   public bucket<Key, Value>(name: string): WriteBucketContract<Key, Value> {
     if (!(name in this._fdbDirectories)) {
       const scopes = Object.keys(this._fdbDirectories).join(", ");
-      const context = `Running read transaction in "${name}".`;
+      const context = `Running write transaction in "${name}".`;
       const problem = `Transaction out of scope.`;
       const solution = `Please run transaction in ${scopes}.`;
       throw new StorageError(`${context} ${problem} ${solution}`);
