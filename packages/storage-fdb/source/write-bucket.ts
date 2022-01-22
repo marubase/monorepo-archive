@@ -9,7 +9,7 @@ import { Transaction } from "foundationdb";
 import { ReadBucket } from "./read-bucket.js";
 
 export class WriteBucket extends ReadBucket implements WriteBucketContract {
-  protected _transaction: WriteTransactionContract;
+  public readonly transaction: WriteTransactionContract;
 
   public constructor(
     factory: StorageFactory,
@@ -18,11 +18,7 @@ export class WriteBucket extends ReadBucket implements WriteBucketContract {
     fdbTransaction: Transaction,
   ) {
     super(factory, transaction, name, fdbTransaction);
-    this._transaction = transaction;
-  }
-
-  public get transaction(): WriteTransactionContract {
-    return this._transaction;
+    this.transaction = transaction;
   }
 
   public clear(key: unknown): void {
