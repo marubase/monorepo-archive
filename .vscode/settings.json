@@ -12,11 +12,5 @@
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
   "javascript.preferences.importModuleSpecifierEnding": "js",
-  "typescript.preferences.importModuleSpecifierEnding": "js",
-
-  "files.exclude": {
-    "packages/*/build/**": true,
-    "packages/*/coverage/**": true,
-    "packages/*/report/**": true
-  }
+  "typescript.preferences.importModuleSpecifierEnding": "js"
 }
