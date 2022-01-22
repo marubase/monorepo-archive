@@ -1,5 +1,6 @@
 import { versionstamp } from "@marubase/collator";
 import {
+  ReadTransactionContract,
   StorageError,
   WriteBucketContract,
   WriteTransactionContract,
@@ -30,5 +31,15 @@ export class WriteTransaction
 
   public nextID(): number {
     return this._fdbTransaction.getNextTransactionID();
+  }
+
+  public snapshot(): ReadTransactionContract {
+    return this.factory.createReadTransaction(
+      this.factory,
+      this.storage,
+      this.scope,
+      this._fdbTransaction.snapshot(),
+      this._fdbDirectories,
+    );
   }
 }
