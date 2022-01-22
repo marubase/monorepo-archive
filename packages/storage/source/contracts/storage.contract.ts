@@ -9,6 +9,8 @@ import { WriteTransactionContract } from "./write-transaction.js";
 export interface StorageContract {
   readonly cast: TransactionCast;
 
+  readonly factory: StorageFactory;
+
   readonly order: TransactionOrder;
 
   readonly versionstamp: typeof versionstamp;
