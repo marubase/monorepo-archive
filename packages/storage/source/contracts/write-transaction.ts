@@ -5,7 +5,7 @@ import { WriteBucketContract } from "./write-bucket.js";
 export interface WriteTransactionContract extends ReadTransactionContract {
   readonly versionstamp: typeof versionstamp;
 
-  bucket(name: string): WriteBucketContract;
+  bucket<Key, Value>(name: string): WriteBucketContract<Key, Value>;
 
   commitID?(): Buffer;
 
