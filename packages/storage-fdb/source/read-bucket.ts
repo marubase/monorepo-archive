@@ -28,13 +28,13 @@ export class ReadBucket implements ReadBucketContract {
     this._fdbTransaction = fdbTransaction;
   }
 
-  public async get(key: unknown): Promise<unknown> {
+  public async get(key: unknown, defaultValue?: unknown): Promise<unknown> {
     const encodedKey = encode(key);
     const fdbKey = !Buffer.isBuffer(encodedKey)
       ? encodedKey.buffer
       : encodedKey;
     const fdbValue = await this._fdbTransaction.get(fdbKey);
-    return typeof fdbValue !== "undefined" ? decode(fdbValue) : fdbValue;
+    return typeof fdbValue !== "undefined" ? decode(fdbValue) : defaultValue;
   }
 
   public getRange(
