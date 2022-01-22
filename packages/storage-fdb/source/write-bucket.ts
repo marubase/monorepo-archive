@@ -8,7 +8,10 @@ import {
 import { Transaction } from "foundationdb";
 import { ReadBucket } from "./read-bucket.js";
 
-export class WriteBucket extends ReadBucket implements WriteBucketContract {
+export class WriteBucket<Key, Value>
+  extends ReadBucket<Key, Value>
+  implements WriteBucketContract<Key, Value>
+{
   public readonly transaction: WriteTransactionContract;
 
   public constructor(
@@ -21,7 +24,7 @@ export class WriteBucket extends ReadBucket implements WriteBucketContract {
     this.transaction = transaction;
   }
 
-  public clear(key: unknown): void {
+  public clear(key: Key): void {
     const encodedKey = encode(key);
     const fdbKey = !Buffer.isBuffer(encodedKey)
       ? encodedKey.buffer
@@ -29,7 +32,7 @@ export class WriteBucket extends ReadBucket implements WriteBucketContract {
     this._fdbTransaction.clear(fdbKey);
   }
 
-  public clearRange(start: unknown, end: unknown): void {
+  public clearRange(start: Key, end: Key): void {
     const encodedStart = encode(start);
     const encodedEnd = encode(end);
     const fdbStart = !Buffer.isBuffer(encodedStart)
@@ -41,7 +44,7 @@ export class WriteBucket extends ReadBucket implements WriteBucketContract {
     return this._fdbTransaction.clearRange(fdbStart, fdbEnd);
   }
 
-  public set(key: unknown, value: unknown): void {
+  public set(key: Key, value: Value): void {
     const encodedKey = encode(key);
     const encodedValue = encode(value);
     if (!Buffer.isBuffer(encodedKey) && !Buffer.isBuffer(encodedValue)) {
