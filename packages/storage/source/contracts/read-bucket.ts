@@ -1,20 +1,20 @@
 import { ReadTransactionContract } from "./read-transaction.js";
 import { StorageFactory } from "./storage.contract.js";
 
-export interface ReadBucketContract {
+export interface ReadBucketContract<Key, Value> {
   readonly factory: StorageFactory;
 
   readonly name: string;
 
   readonly transaction: ReadTransactionContract;
 
-  get(key: unknown, defaultValue?: unknown): Promise<unknown>;
+  get(key: Key, defaultValue?: Value): Promise<Value | undefined>;
 
   getRange(
-    start: unknown,
-    end: unknown,
+    start: Key,
+    end: Key,
     options?: RangeOptions,
-  ): AsyncIterable<[unknown, unknown]>;
+  ): AsyncIterable<[Key, Value]>;
 }
 
 export type RangeOptions = {
