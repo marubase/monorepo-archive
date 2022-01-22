@@ -186,5 +186,15 @@ export function transactionTest(storageFn: () => StorageContract): void {
         });
       });
     });
+
+    describe("#snapshot()", function () {
+      it("should return snapshot", async function () {
+        const result = await storage.write("test", async (transaction) => {
+          transaction.snapshot();
+          return true;
+        });
+        expect(result).to.be.true;
+      });
+    });
   });
 }
