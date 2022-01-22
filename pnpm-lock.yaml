@@ -91,18 +91,6 @@ importers:
     dependencies:
       '@marubase/collator': link:../collator
 
-  packages/storage-adapter:
-    specifiers:
-      '@marubase/collator': workspace:^0.0.0
-    dependencies:
-      '@marubase/collator': link:../collator
-
-  packages/storage-adapter/build/commonjs:
-    specifiers: {}
-
-  packages/storage-adapter/build/module:
-    specifiers: {}
-
   packages/storage-fdb:
     specifiers:
       '@marubase/collator': workspace:^0.0.0
