@@ -57,36 +57,36 @@ export class Storage implements StorageContract {
     this._fdbDatabase = fdbDatabase;
   }
 
-  public bucket(name: string): StorageBucket {
+  public bucket<Key, Value>(name: string): StorageBucket<Key, Value> {
     return {
-      clear: (key: unknown) =>
+      clear: (key: Key) =>
         this.write(name, async (transaction) => {
-          return transaction.bucket(name).clear(key);
+          return transaction.bucket<Key, Value>(name).clear(key);
         }),
 
-      clearRange: (start: unknown, end: unknown) =>
+      clearRange: (start: Key, end: Key) =>
         this.write(name, async (transaction) => {
-          return transaction.bucket(name).clearRange(start, end);
+          return transaction.bucket<Key, Value>(name).clearRange(start, end);
         }),
 
-      get: (key: unknown) =>
+      get: (key: Key, defaultValue?: Value) =>
         this.read(name, async (transaction) => {
-          return transaction.bucket(name).get(key);
+          return transaction.bucket<Key, Value>(name).get(key, defaultValue);
         }),
 
-      getRange: (start: unknown, end: unknown, options?: RangeOptions) =>
+      getRange: (start: Key, end: Key, options?: RangeOptions) =>
         this.read(name, async (transaction) => {
-          const collection: [unknown, unknown][] = [];
+          const collection: [Key, Value][] = [];
           for await (const entry of transaction
-            .bucket(name)
+            .bucket<Key, Value>(name)
             .getRange(start, end, options))
             collection.push(entry);
           return collection;
         }),
 
-      set: (key: unknown, value: unknown) =>
+      set: (key: Key, value: Value) =>
         this.write(name, async (transaction) => {
-          return transaction.bucket(name).set(key, value);
+          return transaction.bucket<Key, Value>(name).set(key, value);
         }),
     };
   }
@@ -155,19 +155,24 @@ export class Storage implements StorageContract {
 }
 
 export const DefaultStorageFactory = {
-  createRangeIterable(
+  createRangeIterable<Key, Value>(
     fdbRange: AsyncGenerator<[Buffer, Buffer]>,
-  ): AsyncIterable<[unknown, unknown]> {
-    return new RangeIterable(fdbRange);
+  ): AsyncIterable<[Key, Value]> {
+    return new RangeIterable<Key, Value>(fdbRange);
   },
 
-  createReadBucket(
+  createReadBucket<Key, Value>(
     factory: StorageFactory,
     transaction: ReadTransactionContract,
     name: string,
     fdbTransaction: Transaction,
-  ): ReadBucketContract {
-    return new ReadBucket(factory, transaction, name, fdbTransaction);
+  ): ReadBucketContract<Key, Value> {
+    return new ReadBucket<Key, Value>(
+      factory,
+      transaction,
+      name,
+      fdbTransaction,
+    );
   },
 
   createReadTransaction(
@@ -186,13 +191,18 @@ export const DefaultStorageFactory = {
     );
   },
 
-  createWriteBucket(
+  createWriteBucket<Key, Value>(
     factory: StorageFactory,
     transaction: WriteTransactionContract,
     name: string,
     fdbTransaction: Transaction,
-  ): WriteBucketContract {
-    return new WriteBucket(factory, transaction, name, fdbTransaction);
+  ): WriteBucketContract<Key, Value> {
+    return new WriteBucket<Key, Value>(
+      factory,
+      transaction,
+      name,
+      fdbTransaction,
+    );
   },
 
   createWriteTransaction(
