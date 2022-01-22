@@ -8,7 +8,7 @@ export interface ReadBucketContract {
 
   readonly transaction: ReadTransactionContract;
 
-  get(key: unknown): Promise<unknown>;
+  get(key: unknown, defaultValue?: unknown): Promise<unknown>;
 
   getRange(
     start: unknown,
