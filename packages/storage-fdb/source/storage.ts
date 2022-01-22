@@ -117,7 +117,7 @@ export class Storage implements StorageContract {
         this.factory,
         this,
         scope as string[],
-        fdbTransaction,
+        fdbTransaction.snapshot(),
         fdbDirectories,
       );
       return transactionFn(transaction);
