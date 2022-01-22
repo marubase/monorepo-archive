@@ -7,7 +7,7 @@ import {
 } from "@marubase/storage";
 import { keySelector, Transaction } from "foundationdb";
 
-export class ReadBucket implements ReadBucketContract {
+export class ReadBucket<Key, Value> implements ReadBucketContract<Key, Value> {
   public readonly factory: StorageFactory;
 
   public readonly name: string;
@@ -28,20 +28,22 @@ export class ReadBucket implements ReadBucketContract {
     this._fdbTransaction = fdbTransaction;
   }
 
-  public async get(key: unknown, defaultValue?: unknown): Promise<unknown> {
+  public async get(key: Key, defaultValue?: Value): Promise<Value | undefined> {
     const encodedKey = encode(key);
     const fdbKey = !Buffer.isBuffer(encodedKey)
       ? encodedKey.buffer
       : encodedKey;
     const fdbValue = await this._fdbTransaction.get(fdbKey);
-    return typeof fdbValue !== "undefined" ? decode(fdbValue) : defaultValue;
+    return typeof fdbValue !== "undefined"
+      ? (decode(fdbValue) as Value)
+      : defaultValue;
   }
 
   public getRange(
-    start: unknown,
-    end: unknown,
+    start: Key,
+    end: Key,
     options?: RangeOptions,
-  ): AsyncIterable<[unknown, unknown]> {
+  ): AsyncIterable<[Key, Value]> {
     const fdbOptions = Object.assign({}, options) as Required<RangeOptions>;
     if (typeof fdbOptions.limit !== "number") fdbOptions.limit = Infinity;
     if (typeof fdbOptions.reverse !== "boolean") fdbOptions.reverse = false;
@@ -60,7 +62,7 @@ export class ReadBucket implements ReadBucketContract {
         fdbEnd,
         fdbOptions,
       );
-      return this.factory.createRangeIterable(fdbRange);
+      return this.factory.createRangeIterable<Key, Value>(fdbRange);
     } else {
       const fdbStart = !Buffer.isBuffer(encodedEnd)
         ? keySelector.firstGreaterThan(encodedEnd.buffer)
@@ -73,7 +75,7 @@ export class ReadBucket implements ReadBucketContract {
         fdbEnd,
         fdbOptions,
       );
-      return this.factory.createRangeIterable(fdbRange);
+      return this.factory.createRangeIterable<Key, Value>(fdbRange);
     }
   }
 }
