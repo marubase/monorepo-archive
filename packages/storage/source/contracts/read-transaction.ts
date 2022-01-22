@@ -14,5 +14,5 @@ export interface ReadTransactionContract {
 
   readonly storage: StorageContract;
 
-  bucket(name: string): ReadBucketContract;
+  bucket<Key, Value>(name: string): ReadBucketContract<Key, Value>;
 }
