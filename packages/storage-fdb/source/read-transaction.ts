@@ -1,18 +1,4 @@
 import {
-  asc,
-  desc,
-  float32,
-  float64,
-  int16,
-  int32,
-  int64,
-  int8,
-  uint16,
-  uint32,
-  uint64,
-  uint8,
-} from "@marubase/collator";
-import {
   ReadBucketContract,
   ReadTransactionContract,
   StorageContract,
@@ -22,17 +8,23 @@ import {
   TransactionOrder,
 } from "@marubase/storage";
 import { Directory, Transaction } from "foundationdb";
+import { cast } from "./transaction-cast.js";
+import { order } from "./transaction-order.js";
 
 export class ReadTransaction implements ReadTransactionContract {
-  protected _factory: StorageFactory;
+  public readonly cast: TransactionCast = cast;
+
+  public readonly factory: StorageFactory;
+
+  public readonly order: TransactionOrder = order;
+
+  public readonly scope: string[];
+
+  public readonly storage: StorageContract;
 
   protected _fdbDirectories: Record<string, Directory>;
 
   protected _fdbTransaction: Transaction;
-
-  protected _scope: string[];
-
-  protected _storage: StorageContract;
 
   public constructor(
     factory: StorageFactory,
@@ -41,38 +33,11 @@ export class ReadTransaction implements ReadTransactionContract {
     fdbTransaction: Transaction,
     fdbDirectories: Record<string, Directory>,
   ) {
-    this._factory = factory;
-    this._storage = storage;
-    this._scope = scope;
+    this.factory = factory;
+    this.storage = storage;
+    this.scope = scope;
     this._fdbTransaction = fdbTransaction;
     this._fdbDirectories = fdbDirectories;
-  }
-
-  public get cast(): TransactionCast {
-    return {
-      float32,
-      float64,
-      int16,
-      int32,
-      int64,
-      int8,
-      uint16,
-      uint32,
-      uint64,
-      uint8,
-    };
-  }
-
-  public get order(): TransactionOrder {
-    return { asc, desc };
-  }
-
-  public get scope(): string[] {
-    return this._scope;
-  }
-
-  public get storage(): StorageContract {
-    return this._storage;
   }
 
   public bucket(name: string): ReadBucketContract {
@@ -83,8 +48,8 @@ export class ReadTransaction implements ReadTransactionContract {
       const solution = `Please run transaction in ${scopes}.`;
       throw new StorageError(`${context} ${problem} ${solution}`);
     }
-    return this._factory.createReadBucket(
-      this._factory,
+    return this.factory.createReadBucket(
+      this.factory,
       this,
       name,
       this._fdbTransaction,
