@@ -40,7 +40,7 @@ export class ReadTransaction implements ReadTransactionContract {
     this._fdbDirectories = fdbDirectories;
   }
 
-  public bucket(name: string): ReadBucketContract {
+  public bucket<Key, Value>(name: string): ReadBucketContract<Key, Value> {
     if (!(name in this._fdbDirectories)) {
       const scopes = Object.keys(this._fdbDirectories).join(", ");
       const context = `Running read transaction in "${name}".`;
