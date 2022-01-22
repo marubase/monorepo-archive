@@ -157,6 +157,19 @@ importers:
       '@marubase/storage': link:../storage
       '@marubase/storage-tester': link:../storage-tester
 
+  packages/storage-lmdb:
+    specifiers:
+      '@marubase/collator': workspace:^0.0.0
+      '@marubase/storage': workspace:^0.0.0
+      '@marubase/storage-tester': workspace:^0.0.0
+      lmdb: ^2.1.5
+    dependencies:
+      '@marubase/collator': link:../collator
+      lmdb: 2.1.5
+    devDependencies:
+      '@marubase/storage': link:../storage
+      '@marubase/storage-tester': link:../storage-tester
+
   packages/storage-tester:
     specifiers:
       '@marubase/storage': workspace:^0.0.0
