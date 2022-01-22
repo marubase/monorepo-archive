@@ -1,3 +1,4 @@
+import { versionstamp } from "@marubase/collator";
 import {
   RangeOptions,
   ReadBucketContract,
@@ -5,7 +6,9 @@ import {
   StorageBucket,
   StorageContract,
   StorageFactory,
+  TransactionCast,
   TransactionFn,
+  TransactionOrder,
   WriteBucketContract,
   WriteTransactionContract,
 } from "@marubase/storage";
@@ -21,6 +24,8 @@ import {
 import { RangeIterable } from "./range-iterable.js";
 import { ReadBucket } from "./read-bucket.js";
 import { ReadTransaction } from "./read-transaction.js";
+import { cast } from "./transaction-cast.js";
+import { order } from "./transaction-order.js";
 import { WriteBucket } from "./write-bucket.js";
 import { WriteTransaction } from "./write-transaction.js";
 
@@ -35,14 +40,20 @@ export class Storage implements StorageContract {
     return new Storage(factory, fdbDatabase);
   }
 
-  protected _factory: StorageFactory;
+  public readonly cast: TransactionCast = cast;
+
+  public readonly factory: StorageFactory;
+
+  public readonly order: TransactionOrder = order;
+
+  public readonly versionstamp: typeof versionstamp = versionstamp;
 
   protected _fdbDatabase: Database;
 
   protected _fdbDirectories: Record<string, Directory> = {};
 
   public constructor(factory: StorageFactory, fdbDatabase: Database) {
-    this._factory = factory;
+    this.factory = factory;
     this._fdbDatabase = fdbDatabase;
   }
 
@@ -102,8 +113,8 @@ export class Storage implements StorageContract {
     }
 
     return this._fdbDatabase.doTransaction((fdbTransaction) => {
-      const transaction = this._factory.createReadTransaction(
-        this._factory,
+      const transaction = this.factory.createReadTransaction(
+        this.factory,
         this,
         scope as string[],
         fdbTransaction,
@@ -130,8 +141,8 @@ export class Storage implements StorageContract {
     }
 
     return this._fdbDatabase.doTransaction((fdbTransaction) => {
-      const transaction = this._factory.createWriteTransaction(
-        this._factory,
+      const transaction = this.factory.createWriteTransaction(
+        this.factory,
         this,
         scope as string[],
         fdbTransaction,
