@@ -110,23 +110,6 @@ importers:
       '@marubase/storage-adapter': link:../storage-adapter
       fake-indexeddb: 3.1.7
 
-  packages/storage-adapter-lmdb:
-    specifiers:
-      '@marubase/collator': workspace:^0.0.0
-      '@marubase/storage-adapter': workspace:^0.0.0
-      lmdb: ^2.1.5
-    dependencies:
-      '@marubase/collator': link:../collator
-      lmdb: 2.1.5
-    devDependencies:
-      '@marubase/storage-adapter': link:../storage-adapter
-
-  packages/storage-adapter-lmdb/build/commonjs:
-    specifiers: {}
-
-  packages/storage-adapter-lmdb/build/module:
-    specifiers: {}
-
   packages/storage-adapter/build/commonjs:
     specifiers: {}
 
