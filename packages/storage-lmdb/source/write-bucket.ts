@@ -104,15 +104,13 @@ export class WriteBucket<Key, Value>
       lmdbKey.set(this.transaction.commitID!(), position);
       const lmdbValue = encodedValue as Buffer;
       this._lmdbDatabase.put(lmdbKey, lmdbValue);
-      return;
-    }
-    if (!Buffer.isBuffer(encodedValue)) {
+    } else if (!Buffer.isBuffer(encodedValue)) {
       const { buffer: lmdbValue, position } = encodedValue;
       lmdbValue.set(this.transaction.commitID!(), position);
       const lmdbKey = encodedKey as Buffer;
       this._lmdbDatabase.put(lmdbKey, lmdbValue);
-      return;
+    } else {
+      this._lmdbDatabase.put(encodedKey, encodedValue);
     }
-    this._lmdbDatabase.put(encodedKey, encodedValue);
   }
 }
