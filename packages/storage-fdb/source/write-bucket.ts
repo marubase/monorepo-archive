@@ -1,18 +1,23 @@
-import { encode } from "@marubase/collator";
+import { decode, encode } from "@marubase/collator";
 import {
+  RangeOptions,
   StorageError,
   StorageFactory,
   WriteBucketContract,
   WriteTransactionContract,
 } from "@marubase/storage";
-import { Transaction } from "foundationdb";
-import { ReadBucket } from "./read-bucket.js";
+import { keySelector, Transaction } from "foundationdb";
 
 export class WriteBucket<Key, Value>
-  extends ReadBucket<Key, Value>
   implements WriteBucketContract<Key, Value>
 {
+  public readonly factory: StorageFactory;
+
+  public readonly name: string;
+
   public readonly transaction: WriteTransactionContract;
+
+  protected _fdbTransaction: Transaction;
 
   public constructor(
     factory: StorageFactory,
@@ -20,8 +25,10 @@ export class WriteBucket<Key, Value>
     name: string,
     fdbTransaction: Transaction,
   ) {
-    super(factory, transaction, name, fdbTransaction);
+    this.factory = factory;
     this.transaction = transaction;
+    this.name = name;
+    this._fdbTransaction = fdbTransaction;
   }
 
   public clear(key: Key): void {
@@ -42,6 +49,57 @@ export class WriteBucket<Key, Value>
       ? encodedEnd.buffer
       : encodedEnd;
     return this._fdbTransaction.clearRange(fdbStart, fdbEnd);
+  }
+
+  public async get(key: Key, defaultValue?: Value): Promise<Value | undefined> {
+    const encodedKey = encode(key);
+    const fdbKey = !Buffer.isBuffer(encodedKey)
+      ? encodedKey.buffer
+      : encodedKey;
+    const fdbValue = await this._fdbTransaction.get(fdbKey);
+    return typeof fdbValue !== "undefined"
+      ? (decode(fdbValue) as Value)
+      : defaultValue;
+  }
+
+  public getRange(
+    start: Key,
+    end: Key,
+    options?: RangeOptions,
+  ): AsyncIterable<[Key, Value]> {
+    const fdbOptions = Object.assign({}, options) as Required<RangeOptions>;
+    if (typeof fdbOptions.limit !== "number") fdbOptions.limit = Infinity;
+    if (typeof fdbOptions.reverse !== "boolean") fdbOptions.reverse = false;
+
+    const encodedStart = encode(start);
+    const encodedEnd = encode(end);
+    if (!fdbOptions.reverse) {
+      const fdbStart = !Buffer.isBuffer(encodedStart)
+        ? encodedStart.buffer
+        : encodedStart;
+      const fdbEnd = !Buffer.isBuffer(encodedEnd)
+        ? encodedEnd.buffer
+        : encodedEnd;
+      const fdbRange = this._fdbTransaction.getRange(
+        fdbStart,
+        fdbEnd,
+        fdbOptions,
+      );
+      return this.factory.createRangeIterable<Key, Value>(fdbRange);
+    } else {
+      const fdbStart = !Buffer.isBuffer(encodedEnd)
+        ? keySelector.firstGreaterThan(encodedEnd.buffer)
+        : keySelector.firstGreaterThan(encodedEnd);
+      const fdbEnd = !Buffer.isBuffer(encodedStart)
+        ? keySelector.firstGreaterThan(encodedStart.buffer)
+        : keySelector.firstGreaterThan(encodedStart);
+      const fdbRange = this._fdbTransaction.getRange(
+        fdbStart,
+        fdbEnd,
+        fdbOptions,
+      );
+      return this.factory.createRangeIterable<Key, Value>(fdbRange);
+    }
   }
 
   public set(key: Key, value: Value): void {
