@@ -29,7 +29,7 @@ export class WriteTransaction implements WriteTransactionContract {
 
   protected _lmdbDatabase: Database<Buffer, Buffer>;
 
-  protected _mutationCounter?: Buffer;
+  protected _mutationCounter: Buffer;
 
   protected _transactionID = 0;
 
@@ -43,6 +43,17 @@ export class WriteTransaction implements WriteTransactionContract {
     this.storage = storage;
     this.scope = scope;
     this._lmdbDatabase = lmdbDatabase;
+
+    const encodedCounterBinary =
+      this._lmdbDatabase.get(MutationCounter.key) ||
+      Buffer.from("1a0000000000000000000003", "hex");
+    const counterBinary = decode(encodedCounterBinary) as Buffer;
+    const counter = MutationCounter.toBigInt(counterBinary) + 1n;
+
+    const reCounterBinary = MutationCounter.toBinary(counter);
+    const reEncodedCounterBinary = encode(reCounterBinary) as Buffer;
+    this._lmdbDatabase.put(MutationCounter.key, reEncodedCounterBinary);
+    this._mutationCounter = reCounterBinary;
   }
 
   public bucket<Key, Value>(name: string): WriteBucketContract<Key, Value> {
@@ -62,19 +73,7 @@ export class WriteTransaction implements WriteTransactionContract {
   }
 
   public commitIDSync(): Buffer {
-    if (!Buffer.isBuffer(this._mutationCounter)) {
-      const encodedCounterBinary =
-        this._lmdbDatabase.get(MutationCounter.key) ||
-        Buffer.from("1a0000000000000000000003", "hex");
-      const counterBinary = decode(encodedCounterBinary) as Buffer;
-      const counter = MutationCounter.toBigInt(counterBinary) + 1n;
-
-      const reCounterBinary = MutationCounter.toBinary(counter);
-      const reEncodedCounterBinary = encode(reCounterBinary) as Buffer;
-      this._lmdbDatabase.put(MutationCounter.key, reEncodedCounterBinary);
-      this._mutationCounter = reCounterBinary;
-    }
-    return this._mutationCounter as Buffer;
+    return this._mutationCounter;
   }
 
   public nextID(): number {
