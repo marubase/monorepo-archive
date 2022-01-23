@@ -7,7 +7,9 @@ export interface WriteTransactionContract extends ReadTransactionContract {
 
   bucket<Key, Value>(name: string): WriteBucketContract<Key, Value>;
 
-  commitID?(): Buffer;
+  commitID?(): Promise<Buffer>;
+
+  commitIDSync?(): Buffer;
 
   nextID(): number;
 
