@@ -61,7 +61,7 @@ export class WriteTransaction implements WriteTransactionContract {
     );
   }
 
-  public commitID(): Buffer {
+  public commitIDSync(): Buffer {
     if (!Buffer.isBuffer(this._mutationCounter)) {
       const encodedCounterBinary =
         this._lmdbDatabase.get(MutationCounter.key) ||
