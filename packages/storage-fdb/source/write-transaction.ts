@@ -1,17 +1,48 @@
 import { versionstamp } from "@marubase/collator";
 import {
   ReadTransactionContract,
+  StorageContract,
   StorageError,
+  StorageFactory,
+  TransactionCast,
+  TransactionOrder,
   WriteBucketContract,
   WriteTransactionContract,
 } from "@marubase/storage";
-import { ReadTransaction } from "./read-transaction.js";
+import { Directory, Transaction } from "foundationdb";
+import { cast } from "./transaction-cast.js";
+import { order } from "./transaction-order.js";
 
-export class WriteTransaction
-  extends ReadTransaction
-  implements WriteTransactionContract
-{
+export class WriteTransaction implements WriteTransactionContract {
+  public readonly cast: TransactionCast = cast;
+
+  public readonly factory: StorageFactory;
+
+  public readonly order: TransactionOrder = order;
+
+  public readonly scope: string[];
+
+  public readonly storage: StorageContract;
+
   public readonly versionstamp: typeof versionstamp = versionstamp;
+
+  protected _fdbDirectories: Record<string, Directory>;
+
+  protected _fdbTransaction: Transaction;
+
+  public constructor(
+    factory: StorageFactory,
+    storage: StorageContract,
+    scope: string[],
+    fdbTransaction: Transaction,
+    fdbDirectories: Record<string, Directory>,
+  ) {
+    this.factory = factory;
+    this.storage = storage;
+    this.scope = scope;
+    this._fdbTransaction = fdbTransaction;
+    this._fdbDirectories = fdbDirectories;
+  }
 
   public bucket<Key, Value>(name: string): WriteBucketContract<Key, Value> {
     if (!(name in this._fdbDirectories)) {
