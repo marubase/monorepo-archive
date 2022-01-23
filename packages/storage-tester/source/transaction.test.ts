@@ -15,31 +15,43 @@ export function transactionTest(storageFn: () => StorageContract): void {
     describe("#clear(key)", function () {
       context("when there is value", function () {
         it("should clear value", async function () {
-          await storage.bucket("test").set("key", "value");
+          await storage.write("test", async (transaction) => {
+            transaction.bucket("test").set("key", "value");
+          });
 
-          const value0 = await storage.bucket("test").get("key");
+          const value0 = await storage.write("test", async (transaction) => {
+            return transaction.bucket("test").get("key");
+          });
           expect(value0).to.equal("value");
 
           await storage.write("test", async (transaction) => {
             transaction.bucket("test").clear("key");
           });
 
-          const value1 = await storage.bucket("test").get("key");
+          const value1 = await storage.write("test", async (transaction) => {
+            return transaction.bucket("test").get("key");
+          });
           expect(value1).to.be.undefined;
         });
       });
       context("when there is no value", function () {
         it("should clear value", async function () {
-          await storage.bucket("test").set("key", "value");
+          await storage.write("test", async (transaction) => {
+            transaction.bucket("test").set("key", "value");
+          });
 
-          const value0 = await storage.bucket("test").get("key");
+          const value0 = await storage.write("test", async (transaction) => {
+            return transaction.bucket("test").get("key");
+          });
           expect(value0).to.equal("value");
 
           await storage.write("test", async (transaction) => {
             transaction.bucket("test").clear("key");
           });
 
-          const value1 = await storage.bucket("test").get("key");
+          const value1 = await storage.write("test", async (transaction) => {
+            return transaction.bucket("test").get("key");
+          });
           expect(value1).to.be.undefined;
         });
       });
@@ -54,7 +66,14 @@ export function transactionTest(storageFn: () => StorageContract): void {
 
           const start = storage.order.asc(null);
           const end = storage.order.desc(null);
-          const values0 = await storage.bucket("test").getRange(start, end);
+          const values0 = await storage.write("test", async (transaction) => {
+            const collection: [unknown, unknown][] = [];
+            for await (const entry of transaction
+              .bucket("test")
+              .getRange(start, end))
+              collection.push(entry);
+            return collection;
+          });
           expect(values0).to.deep.equal([
             [0, 0],
             [1, 1],
@@ -72,7 +91,14 @@ export function transactionTest(storageFn: () => StorageContract): void {
             transaction.bucket("test").clearRange(start, end);
           });
 
-          const values1 = await storage.bucket("test").getRange(start, end);
+          const values1 = await storage.write("test", async (transaction) => {
+            const collection: [unknown, unknown][] = [];
+            for await (const entry of transaction
+              .bucket("test")
+              .getRange(start, end))
+              collection.push(entry);
+            return collection;
+          });
           expect(values1).to.deep.equal([]);
         });
       });
@@ -84,8 +110,15 @@ export function transactionTest(storageFn: () => StorageContract): void {
             transaction.bucket("test").clearRange(start, end);
           });
 
-          const values1 = await storage.bucket("test").getRange(start, end);
-          expect(values1).to.deep.equal([]);
+          const values = await storage.write("test", async (transaction) => {
+            const collection: [unknown, unknown][] = [];
+            for await (const entry of transaction
+              .bucket("test")
+              .getRange(start, end))
+              collection.push(entry);
+            return collection;
+          });
+          expect(values).to.deep.equal([]);
         });
       });
     });
@@ -93,7 +126,9 @@ export function transactionTest(storageFn: () => StorageContract): void {
     describe("#get(key)", function () {
       context("when there is value", function () {
         it("should return value", async function () {
-          await storage.bucket("test").set("key", "value");
+          await storage.write("test", async (transaction) => {
+            transaction.bucket("test").set("key", "value");
+          });
 
           const value = await storage.read("test", (transaction) => {
             return transaction.bucket("test").get("key");
@@ -162,16 +197,22 @@ export function transactionTest(storageFn: () => StorageContract): void {
     describe("#set(key, value)", function () {
       context("when there is value", function () {
         it("should set value", async function () {
-          await storage.bucket("test").set("key", "value");
+          await storage.write("test", async (transaction) => {
+            transaction.bucket("test").set("key", "value");
+          });
 
-          const values = await storage.bucket("test").get("key");
-          expect(values).to.equal("value");
+          const values0 = await storage.write("test", async (transaction) => {
+            return transaction.bucket("test").get("key");
+          });
+          expect(values0).to.equal("value");
 
           await storage.write("test", async (transaction) => {
             transaction.bucket("test").set("key", "update");
           });
 
-          const value1 = await storage.bucket("test").get("key");
+          const value1 = await storage.write("test", async (transaction) => {
+            return transaction.bucket("test").get("key");
+          });
           expect(value1).to.equal("update");
         });
       });
@@ -181,7 +222,9 @@ export function transactionTest(storageFn: () => StorageContract): void {
             transaction.bucket("test").set("key", "value");
           });
 
-          const values = await storage.bucket("test").get("key");
+          const values = await storage.write("test", async (transaction) => {
+            return transaction.bucket("test").get("key");
+          });
           expect(values).to.equal("value");
         });
       });
