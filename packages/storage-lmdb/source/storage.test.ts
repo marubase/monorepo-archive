@@ -2,6 +2,7 @@ import { StorageContract } from "@marubase/storage";
 import {
   basicTest,
   bucketTest,
+  collationTest,
   concurrencyTest,
   rangeTest,
   transactionTest,
@@ -23,6 +24,7 @@ describe("Storage", function () {
   });
 
   basicTest(() => storage);
+  collationTest(() => storage);
   bucketTest(() => storage);
   transactionTest(() => storage);
   rangeTest(() => storage);
