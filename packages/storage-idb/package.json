@@ -58,8 +58,7 @@
   },
   "devDependencies": {
     "@marubase/storage": "workspace:^0.0.0",
-    "@marubase/storage-tester": "workspace:^0.0.0",
-    "fake-indexeddb": "^3.1.7"
+    "@marubase/storage-tester": "workspace:^0.0.0"
   },
   "peerDependencies": {
     "@marubase/storage": "workspace:^0.0.0"
