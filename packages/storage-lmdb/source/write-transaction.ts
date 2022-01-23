@@ -1,22 +1,49 @@
 import { decode, encode, versionstamp } from "@marubase/collator";
 import {
   ReadTransactionContract,
+  StorageContract,
   StorageError,
+  StorageFactory,
+  TransactionCast,
+  TransactionOrder,
   WriteBucketContract,
   WriteTransactionContract,
 } from "@marubase/storage";
+import { Database } from "lmdb";
 import { MutationCounter } from "./mutation-counter.js";
-import { ReadTransaction } from "./read-transaction.js";
+import { cast } from "./transaction-cast.js";
+import { order } from "./transaction-order.js";
 
-export class WriteTransaction
-  extends ReadTransaction
-  implements WriteTransactionContract
-{
+export class WriteTransaction implements WriteTransactionContract {
+  public readonly cast: TransactionCast = cast;
+
+  public readonly factory: StorageFactory;
+
+  public readonly order: TransactionOrder = order;
+
+  public readonly scope: string[];
+
+  public readonly storage: StorageContract;
+
   public readonly versionstamp: typeof versionstamp = versionstamp;
+
+  protected _lmdbDatabase: Database<Buffer, Buffer>;
 
   protected _mutationCounter?: Buffer;
 
   protected _transactionID = 0;
+
+  public constructor(
+    factory: StorageFactory,
+    storage: StorageContract,
+    scope: string[],
+    lmdbDatabase: Database<Buffer, Buffer>,
+  ) {
+    this.factory = factory;
+    this.storage = storage;
+    this.scope = scope;
+    this._lmdbDatabase = lmdbDatabase;
+  }
 
   public bucket<Key, Value>(name: string): WriteBucketContract<Key, Value> {
     if (this.scope.indexOf(name) < 0) {
