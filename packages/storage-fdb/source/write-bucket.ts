@@ -120,15 +120,15 @@ export class WriteBucket<Key, Value>
       fdbKey.writeUInt16LE(position + prefix.length, fdbKey.length - 4);
       const fdbValue = encodedValue as Buffer;
       return this._fdbTransaction.setVersionstampedKeyRaw(fdbKey, fdbValue);
-    }
-    if (!Buffer.isBuffer(encodedValue)) {
+    } else if (!Buffer.isBuffer(encodedValue)) {
       const { buffer, position } = encodedValue;
       const fdbKey = encodedKey as Buffer;
       const fdbValue = Buffer.alloc(buffer.length + 4);
       buffer.copy(fdbValue);
       fdbValue.writeUInt16LE(position, fdbValue.length - 4);
       return this._fdbTransaction.setVersionstampedValueRaw(fdbKey, fdbValue);
+    } else {
+      this._fdbTransaction.set(encodedKey, encodedValue);
     }
-    this._fdbTransaction.set(encodedKey, encodedValue);
   }
 }
