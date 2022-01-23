@@ -54,8 +54,8 @@ export function versionstampTest(storageFn: () => StorageContract): void {
 
     describe("#getRange(start, end)", function () {
       it("should return no values", async function () {
-        const start = storage.order.asc(storage.versionstamp(0));
-        const end = storage.order.desc(storage.versionstamp(10));
+        const start = storage.versionstamp(0);
+        const end = storage.versionstamp(10);
         const values = await storage.bucket("test").getRange(start, end);
         expect(values).to.have.lengthOf(0);
       });
@@ -63,8 +63,8 @@ export function versionstampTest(storageFn: () => StorageContract): void {
 
     describe("#getRange(start, end, { limit })", function () {
       it("should return no values", async function () {
-        const start = storage.order.asc(storage.versionstamp(0));
-        const end = storage.order.desc(storage.versionstamp(10));
+        const start = storage.versionstamp(0);
+        const end = storage.versionstamp(10);
         const options = { limit: 5 };
         const values = await storage
           .bucket("test")
@@ -75,32 +75,32 @@ export function versionstampTest(storageFn: () => StorageContract): void {
 
     describe("#getRange(start, end, { reverse })", function () {
       it("should return no values", async function () {
-        const start = storage.order.asc(storage.versionstamp(0));
-        const end = storage.order.desc(storage.versionstamp(10));
+        const start = storage.versionstamp(10);
+        const end = storage.versionstamp(0);
         const options = { reverse: true };
         const values = await storage
           .bucket("test")
-          .getRange(end, start, options);
+          .getRange(start, end, options);
         expect(values).to.have.lengthOf(0);
       });
     });
 
     describe("#getRange(start, end, { limit, reverse })", function () {
       it("should return no values", async function () {
-        const start = storage.order.asc(storage.versionstamp(0));
-        const end = storage.order.desc(storage.versionstamp(10));
-        const options = { limit: 5 };
+        const start = storage.versionstamp(10);
+        const end = storage.versionstamp(0);
+        const options = { limit: 5, reverse: true };
         const values = await storage
           .bucket("test")
-          .getRange(end, start, options);
+          .getRange(start, end, options);
         expect(values).to.have.lengthOf(0);
       });
     });
 
     describe("#getRange(start, end) - Write transaction", function () {
       it("should return no values", async function () {
-        const start = storage.order.asc(storage.versionstamp(0));
-        const end = storage.order.desc(storage.versionstamp(10));
+        const start = storage.versionstamp(0);
+        const end = storage.versionstamp(10);
         const values = await storage.write("test", async (transaction) => {
           const collection: [unknown, unknown][] = [];
           for await (const entry of transaction
@@ -115,8 +115,8 @@ export function versionstampTest(storageFn: () => StorageContract): void {
 
     describe("#getRange(start, end, { limit }) - Write transaction", function () {
       it("should return no values", async function () {
-        const start = storage.order.asc(storage.versionstamp(0));
-        const end = storage.order.desc(storage.versionstamp(10));
+        const start = storage.versionstamp(0);
+        const end = storage.versionstamp(10);
         const options = { limit: 5 };
         const values = await storage.write("test", async (transaction) => {
           const collection: [unknown, unknown][] = [];
@@ -132,14 +132,14 @@ export function versionstampTest(storageFn: () => StorageContract): void {
 
     describe("#getRange(start, end, { reverse }) - Write transaction", function () {
       it("should return no values", async function () {
-        const start = storage.order.asc(storage.versionstamp(0));
-        const end = storage.order.desc(storage.versionstamp(10));
+        const start = storage.versionstamp(10);
+        const end = storage.versionstamp(0);
         const options = { reverse: true };
         const values = await storage.write("test", async (transaction) => {
           const collection: [unknown, unknown][] = [];
           for await (const entry of transaction
             .bucket("test")
-            .getRange(end, start, options))
+            .getRange(start, end, options))
             collection.push(entry);
           return collection;
         });
@@ -149,14 +149,14 @@ export function versionstampTest(storageFn: () => StorageContract): void {
 
     describe("#getRange(start, end, { limit, reverse }) - Write transaction", function () {
       it("should return no values", async function () {
-        const start = storage.order.asc(storage.versionstamp(0));
-        const end = storage.order.desc(storage.versionstamp(10));
-        const options = { limit: 5 };
+        const start = storage.versionstamp(10);
+        const end = storage.versionstamp(0);
+        const options = { limit: 5, reverse: true };
         const values = await storage.write("test", async (transaction) => {
           const collection: [unknown, unknown][] = [];
           for await (const entry of transaction
             .bucket("test")
-            .getRange(end, start, options))
+            .getRange(start, end, options))
             collection.push(entry);
           return collection;
         });
@@ -167,27 +167,30 @@ export function versionstampTest(storageFn: () => StorageContract): void {
     describe("#set(versionstamp, value)", function () {
       it("should set value", async function () {
         await storage.write("test", async (transaction) => {
-          const txnID = transaction.nextID();
-          transaction
-            .bucket("test")
-            .set(transaction.versionstamp(txnID), "value");
+          const bucket = transaction.bucket("test");
+          bucket.set(transaction.versionstamp(transaction.nextID()), "value");
+          bucket.set(transaction.versionstamp(transaction.nextID()), "value");
         });
 
         const start = storage.order.asc(null);
         const end = storage.order.desc(null);
         const values = await storage.bucket("test").getRange(start, end);
-        expect(values).to.have.lengthOf(1);
+        expect(values).to.have.lengthOf(2);
       });
     });
 
     describe("#set(key, versionstamp)", function () {
       it("should set versionstamp", async function () {
-        await storage.bucket("test").set("key", storage.versionstamp());
+        await storage.write("test", async (transaction) => {
+          const bucket = transaction.bucket("test");
+          bucket.set("key0", transaction.versionstamp(transaction.nextID()));
+          bucket.set("key1", transaction.versionstamp(transaction.nextID()));
+        });
 
         const start = storage.order.asc(null);
         const end = storage.order.desc(null);
         const values = await storage.bucket("test").getRange(start, end);
-        expect(values).to.have.lengthOf(1);
+        expect(values).to.have.lengthOf(2);
       });
     });
 
