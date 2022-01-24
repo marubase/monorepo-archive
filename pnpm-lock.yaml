@@ -99,9 +99,9 @@ importers:
       foundationdb: ^1.1.3
     dependencies:
       '@marubase/collator': link:../collator
+      '@marubase/storage': link:../storage
       foundationdb: 1.1.3
     devDependencies:
-      '@marubase/storage': link:../storage
       '@marubase/storage-tester': link:../storage-tester
 
   packages/storage-idb:
@@ -112,9 +112,9 @@ importers:
       idb: ^7.0.0
     dependencies:
       '@marubase/collator': link:../collator
+      '@marubase/storage': link:../storage
       idb: 7.0.0
     devDependencies:
-      '@marubase/storage': link:../storage
       '@marubase/storage-tester': link:../storage-tester
 
   packages/storage-lmdb:
@@ -125,9 +125,9 @@ importers:
       lmdb: ^2.1.5
     dependencies:
       '@marubase/collator': link:../collator
+      '@marubase/storage': link:../storage
       lmdb: 2.1.5
     devDependencies:
-      '@marubase/storage': link:../storage
       '@marubase/storage-tester': link:../storage-tester
 
   packages/storage-lmdb/build/commonjs:
