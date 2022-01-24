@@ -10,11 +10,11 @@ import { IDBPObjectStore } from "idb/with-async-ittr";
 export class ReadBucket<Key, Value> implements ReadBucketContract<Key, Value> {
   public readonly factory: StorageFactory;
 
+  public readonly mutations: Promise<void>[] = [];
+
   public readonly name: string;
 
   public readonly transaction: ReadTransactionContract;
-
-  protected _idbMutations: Promise<void>[] = [];
 
   protected _idbStore: IDBPObjectStore<unknown, string[], string, "readonly">;
 
@@ -64,7 +64,7 @@ export class ReadBucket<Key, Value> implements ReadBucketContract<Key, Value> {
       return this.factory.createRangeIterable(
         idbRange,
         idbOptions,
-        this._idbMutations,
+        this.mutations,
       );
     } else {
       const idbStart = !Buffer.isBuffer(encodedEnd)
@@ -78,7 +78,7 @@ export class ReadBucket<Key, Value> implements ReadBucketContract<Key, Value> {
       return this.factory.createRangeIterable(
         idbRange,
         idbOptions,
-        this._idbMutations,
+        this.mutations,
       );
     }
   }
