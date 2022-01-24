@@ -29,14 +29,9 @@ import { WriteTransaction } from "./write-transaction.js";
 
 export class Storage implements StorageContract {
   public static async open(name: string): Promise<Storage> {
-    const idbDatabase = await openDB(name, undefined, {
-      upgrade(database) {
-        database.createObjectStore("_meta");
-        database.createObjectStore("test");
-      },
-    });
-    return new Storage(DefaultStorageFactory, idbDatabase);
+    return new Storage(DefaultStorageFactory, name);
   }
+
   public readonly cast: TransactionCast = cast;
 
   public readonly factory: StorageFactory;
@@ -45,11 +40,11 @@ export class Storage implements StorageContract {
 
   public readonly versionstamp: typeof versionstamp = versionstamp;
 
-  protected _idbDatabase: IDBPDatabase;
+  protected _idbDatabasePromise: Promise<IDBPDatabase>;
 
-  public constructor(factory: StorageFactory, idbDatabase: IDBPDatabase) {
+  public constructor(factory: StorageFactory, name: string) {
     this.factory = factory;
-    this._idbDatabase = idbDatabase;
+    this._idbDatabasePromise = this._openIDB(name, undefined, ["_meta"]);
   }
 
   public bucket<Key, Value>(name: string): StorageBucket<Key, Value> {
@@ -87,7 +82,8 @@ export class Storage implements StorageContract {
   }
 
   public async close(): Promise<void> {
-    this._idbDatabase.close();
+    const idbDatabase = await this._idbDatabasePromise;
+    idbDatabase.close();
   }
 
   public async read<Result>(
@@ -95,11 +91,22 @@ export class Storage implements StorageContract {
     transactionFn: TransactionFn<ReadTransactionContract, Result>,
   ): Promise<Result> {
     if (!Array.isArray(scope)) scope = [scope];
-    const idbTransaction = this._idbDatabase.transaction(scope, "readonly");
+
+    let idbDatabase = await this._idbDatabasePromise;
+    const inStore = (bucketName: string): boolean =>
+      idbDatabase.objectStoreNames.contains(bucketName);
+    if (!scope.every(inStore)) {
+      idbDatabase.close();
+      const { name, version } = idbDatabase;
+      this._idbDatabasePromise = this._openIDB(name, version + 1, scope);
+      idbDatabase = await this._idbDatabasePromise;
+    }
+
+    const idbTransaction = idbDatabase.transaction(scope, "readonly");
     const transaction = this.factory.createReadTransaction(
       this.factory,
       this,
-      scope as string[],
+      scope,
       idbTransaction,
     );
     const result = await transactionFn(transaction);
@@ -112,19 +119,57 @@ export class Storage implements StorageContract {
     transactionFn: TransactionFn<WriteTransactionContract, Result>,
   ): Promise<Result> {
     if (!Array.isArray(scope)) scope = [scope];
-    const idbTransaction = this._idbDatabase.transaction(
-      scope.concat("_meta"),
-      "readwrite",
-    );
+    scope = scope.concat(["_meta"]);
+
+    let idbDatabase = await this._idbDatabasePromise;
+    const inStore = (bucketName: string): boolean =>
+      idbDatabase.objectStoreNames.contains(bucketName);
+    if (!scope.every(inStore)) {
+      idbDatabase.close();
+      const { name, version } = idbDatabase;
+      this._idbDatabasePromise = this._openIDB(name, version + 1, scope);
+      idbDatabase = await this._idbDatabasePromise;
+    }
+
+    const idbTransaction = idbDatabase.transaction(scope, "readwrite");
     const transaction = this.factory.createWriteTransaction(
       this.factory,
       this,
-      scope as string[],
+      scope,
       idbTransaction,
     );
     const result = await transactionFn(transaction);
     await idbTransaction.done;
     return result;
+  }
+
+  protected _openIDB(
+    name: string,
+    version: number | undefined,
+    scope: string[],
+  ): Promise<IDBPDatabase> {
+    /* istanbul ignore next */
+    const closeAndOpenIDB = (idbDatabase: IDBPDatabase): void => {
+      idbDatabase.close();
+      this._idbDatabasePromise = this._openIDB(name, undefined, []);
+    };
+    this._idbDatabasePromise = openDB(name, version, {
+      blocking: (): void => {
+        /* istanbul ignore next */
+        this._idbDatabasePromise.then(closeAndOpenIDB);
+      },
+      terminated: (): void => {
+        /* istanbul ignore next */
+        this._idbDatabasePromise.then(closeAndOpenIDB);
+      },
+      upgrade: (idbDatabase): void => {
+        const byStore = (bucketName: string): boolean =>
+          !idbDatabase.objectStoreNames.contains(bucketName);
+        for (const bucketName of scope.filter(byStore))
+          idbDatabase.createObjectStore(bucketName);
+      },
+    });
+    return this._idbDatabasePromise;
   }
 }
 
