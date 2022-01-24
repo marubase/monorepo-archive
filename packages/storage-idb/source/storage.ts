@@ -110,7 +110,10 @@ export class Storage implements StorageContract {
       idbTransaction,
     );
     const result = await transactionFn(transaction);
-    await idbTransaction.done;
+    await Promise.all([
+      ...(transaction.mutations as Promise<void>[]),
+      idbTransaction.done,
+    ]);
     return result;
   }
 
@@ -139,7 +142,10 @@ export class Storage implements StorageContract {
       idbTransaction,
     );
     const result = await transactionFn(transaction);
-    await idbTransaction.done;
+    await Promise.all([
+      ...(transaction.mutations as Promise<void>[]),
+      idbTransaction.done,
+    ]);
     return result;
   }
 
