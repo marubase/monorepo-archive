@@ -14,11 +14,11 @@ export class WriteBucket<Key, Value>
 {
   public readonly factory: StorageFactory;
 
+  public readonly mutations: Promise<void>[] = [];
+
   public readonly name: string;
 
   public readonly transaction: WriteTransactionContract;
-
-  protected _idbMutations: Promise<void>[] = [];
 
   protected _idbStore: IDBPObjectStore<unknown, string[], string, "readwrite">;
 
@@ -39,7 +39,7 @@ export class WriteBucket<Key, Value>
     const idbKey = !Buffer.isBuffer(encodedKey)
       ? encodedKey.buffer
       : encodedKey;
-    this._idbMutations.push(this._idbStore.delete(idbKey));
+    this.mutations.push(this._idbStore.delete(idbKey));
   }
 
   public clearRange(start: Key, end: Key): void {
@@ -54,11 +54,11 @@ export class WriteBucket<Key, Value>
       : encodedEnd;
 
     const idbQuery = IDBKeyRange.bound(idbStart, idbEnd, false, true);
-    this._idbMutations.push(this._idbStore.delete(idbQuery));
+    this.mutations.push(this._idbStore.delete(idbQuery));
   }
 
   public async get(key: Key, defaultValue?: Value): Promise<Value | undefined> {
-    await Promise.all(this._idbMutations);
+    await Promise.all(this.mutations);
     const encodedKey = encode(key);
     const idbKey = !Buffer.isBuffer(encodedKey)
       ? encodedKey.buffer
@@ -92,7 +92,7 @@ export class WriteBucket<Key, Value>
       return this.factory.createRangeIterable(
         idbRange,
         idbOptions,
-        this._idbMutations,
+        this.mutations,
       );
     } else {
       const idbStart = !Buffer.isBuffer(encodedEnd)
@@ -106,7 +106,7 @@ export class WriteBucket<Key, Value>
       return this.factory.createRangeIterable(
         idbRange,
         idbOptions,
-        this._idbMutations,
+        this.mutations,
       );
     }
   }
@@ -120,7 +120,7 @@ export class WriteBucket<Key, Value>
       const solution = `Please either use key or value as versionstamp and not both in an entry.`;
       throw new StorageError(`${context} ${problem} ${solution}`);
     }
-    this._idbMutations.push(
+    this.mutations.push(
       (async (): Promise<void> => {
         if (!Buffer.isBuffer(encodedKey)) {
           const { buffer: idbKey, position } = encodedKey;
