@@ -1,4 +1,5 @@
 export * from "./basic.test.js";
+export * from "./bound.test.js";
 export * from "./bucket.test.js";
 export * from "./collation.test.js";
 export * from "./concurrency.test.js";
