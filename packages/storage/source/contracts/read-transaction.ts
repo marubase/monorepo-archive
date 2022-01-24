@@ -8,6 +8,8 @@ export interface ReadTransactionContract {
 
   readonly factory: StorageFactory;
 
+  readonly mutations?: Promise<void>[];
+
   readonly order: TransactionOrder;
 
   readonly scope: string[];
