@@ -51,13 +51,10 @@
   },
   "dependencies": {
     "@marubase/collator": "workspace:^0.0.0",
+    "@marubase/storage": "workspace:^0.0.0",
     "idb": "^7.0.0"
   },
   "devDependencies": {
-    "@marubase/storage": "workspace:^0.0.0",
     "@marubase/storage-tester": "workspace:^0.0.0"
-  },
-  "peerDependencies": {
-    "@marubase/storage": "workspace:^0.0.0"
   }
 }
