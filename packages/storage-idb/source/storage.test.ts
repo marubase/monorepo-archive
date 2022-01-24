@@ -8,6 +8,7 @@ import {
   transactionTest,
   versionstampTest,
 } from "@marubase/storage-tester";
+import { expect } from "chai";
 import { Storage } from "./storage.js";
 
 describe("Storage", function () {
@@ -26,4 +27,16 @@ describe("Storage", function () {
   rangeTest(() => storage);
   versionstampTest(() => storage);
   concurrencyTest(() => storage);
+
+  describe("StorageIDB", function () {
+    context("when try to read a new scope", function () {
+      it("should return true", async function () {
+        const result = await storage.read(["test2"], (transaction) => {
+          transaction.bucket("test2");
+          return Promise.resolve(true);
+        });
+        expect(result).to.be.true;
+      });
+    });
+  });
 });
