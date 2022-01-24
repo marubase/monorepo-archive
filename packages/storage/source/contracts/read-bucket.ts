@@ -4,6 +4,8 @@ import { StorageFactory } from "./storage.contract.js";
 export interface ReadBucketContract<Key, Value> {
   readonly factory: StorageFactory;
 
+  readonly mutations?: Promise<void>[];
+
   readonly name: string;
 
   readonly transaction: ReadTransactionContract;
