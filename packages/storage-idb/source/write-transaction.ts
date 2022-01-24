@@ -27,6 +27,8 @@ export class WriteTransaction implements WriteTransactionContract {
 
   public readonly versionstamp: typeof versionstamp = versionstamp;
 
+  protected _buckets: WriteBucketContract<unknown, unknown>[] = [];
+
   protected _idbTransaction: IDBPTransaction<unknown, string[], "readwrite">;
 
   protected _mutationCounter: Promise<Buffer>;
@@ -65,6 +67,15 @@ export class WriteTransaction implements WriteTransactionContract {
       });
   }
 
+  public get mutations(): Promise<void>[] {
+    const toMutations = (
+      mutations: Promise<void>[],
+      bucket: WriteBucketContract<unknown, unknown>,
+    ): Promise<void>[] =>
+      mutations.concat(...(bucket.mutations as Promise<void>[]));
+    return this._buckets.reduce(toMutations, []);
+  }
+
   public bucket<Key, Value>(name: string): WriteBucketContract<Key, Value> {
     if (this.scope.indexOf(name) < 0) {
       const scopes = this.scope.join(", ");
@@ -73,12 +84,14 @@ export class WriteTransaction implements WriteTransactionContract {
       const solution = `Please run transaction in ${scopes}.`;
       throw new StorageError(`${context} ${problem} ${solution}`);
     }
-    return this.factory.createWriteBucket(
+    const bucket = this.factory.createWriteBucket<Key, Value>(
       this.factory,
       this,
       name,
       this._idbTransaction.objectStore(name),
     );
+    this._buckets.push(bucket);
+    return bucket;
   }
 
   public async commitID(): Promise<Buffer> {
