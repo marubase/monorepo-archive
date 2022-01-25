@@ -6,6 +6,7 @@ import {
   StorageFactory,
   TransactionCast,
   TransactionOrder,
+  WatcherFn,
 } from "@marubase/storage";
 import { Database } from "lmdb";
 import { cast } from "./transaction-cast.js";
@@ -22,6 +23,8 @@ export class ReadTransaction implements ReadTransactionContract {
 
   public readonly storage: StorageContract;
 
+  protected _buckets: ReadBucketContract<unknown, unknown>[] = [];
+
   protected _lmdbDatabase: Database<Buffer, Buffer>;
 
   public constructor(
@@ -36,6 +39,14 @@ export class ReadTransaction implements ReadTransactionContract {
     this._lmdbDatabase = lmdbDatabase;
   }
 
+  public get watchers(): WatcherFn[] {
+    const toWatchers = (
+      watchers: WatcherFn[],
+      bucket: ReadBucketContract<unknown, unknown>,
+    ): WatcherFn[] => watchers.concat(...(bucket.watchers as WatcherFn[]));
+    return this._buckets.reduce(toWatchers, []);
+  }
+
   public bucket<Key, Value>(name: string): ReadBucketContract<Key, Value> {
     if (this.scope.indexOf(name) < 0) {
       const scopes = this.scope.join(", ");
@@ -44,11 +55,13 @@ export class ReadTransaction implements ReadTransactionContract {
       const solution = `Please run transaction in ${scopes}.`;
       throw new StorageError(`${context} ${problem} ${solution}`);
     }
-    return this.factory.createReadBucket(
+    const bucket = this.factory.createReadBucket<Key, Value>(
       this.factory,
       this,
       name,
       this._lmdbDatabase,
     );
+    this._buckets.push(bucket);
+    return bucket;
   }
 }
