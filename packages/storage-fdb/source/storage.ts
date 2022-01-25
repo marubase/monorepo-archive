@@ -9,6 +9,7 @@ import {
   TransactionCast,
   TransactionFn,
   TransactionOrder,
+  WatchWithValue,
   WriteBucketContract,
   WriteTransactionContract,
 } from "@marubase/storage";
@@ -64,6 +65,12 @@ export class Storage implements StorageContract {
           return transaction.bucket<Key, Value>(name).clear(key);
         }),
 
+      clearAndWatch: (key: Key) =>
+        this.write(name, async (transaction) => {
+          transaction.bucket(name).clear(key);
+          return transaction.bucket(name).watch(key);
+        }),
+
       clearRange: (start: Key, end: Key) =>
         this.write(name, async (transaction) => {
           return transaction.bucket<Key, Value>(name).clearRange(start, end);
@@ -73,6 +80,26 @@ export class Storage implements StorageContract {
         this.read(name, async (transaction) => {
           return transaction.bucket<Key, Value>(name).get(key, defaultValue);
         }),
+
+      getAndWatch: async (key: Key) => {
+        const [watch, value] = await this.read(name, async (transaction) => {
+          const value = await transaction.bucket<Key, Value>(name).get(key);
+          const watch = transaction.bucket<Key, Value>(name).watch(key);
+          return [watch, value];
+        });
+        const watchWithValue: WatchWithValue<Value> = {
+          cancel: watch.cancel.bind(watch),
+          promise: watch.promise.then((changed) => {
+            if (!changed) return false;
+            return this.bucket<Key, Value>(name)
+              .get(key)
+              .then((value) => (watchWithValue.value = value))
+              .then(() => Promise.resolve(true));
+          }),
+          value,
+        };
+        return watchWithValue;
+      },
 
       getRange: (start: Key, end: Key, options?: RangeOptions) =>
         this.read(name, async (transaction) => {
@@ -87,6 +114,12 @@ export class Storage implements StorageContract {
       set: (key: Key, value: Value) =>
         this.write(name, async (transaction) => {
           return transaction.bucket<Key, Value>(name).set(key, value);
+        }),
+
+      setAndWatch: (key: Key, value: Value) =>
+        this.write(name, async (transaction) => {
+          transaction.bucket(name).set(key, value);
+          return transaction.bucket(name).watch(key);
         }),
     };
   }
