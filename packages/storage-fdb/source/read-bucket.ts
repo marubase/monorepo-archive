@@ -30,14 +30,18 @@ export class ReadBucket<Key, Value> implements ReadBucketContract<Key, Value> {
   }
 
   public async get(key: Key, defaultValue?: Value): Promise<Value | undefined> {
+    const fdbValue = await this.getBinary(key);
+    return typeof fdbValue !== "undefined"
+      ? (decode(fdbValue) as Value)
+      : defaultValue;
+  }
+
+  public async getBinary(key: Key): Promise<Buffer | undefined> {
     const encodedKey = encode(key);
     const fdbKey = !Buffer.isBuffer(encodedKey)
       ? encodedKey.buffer
       : encodedKey;
-    const fdbValue = await this._fdbTransaction.get(fdbKey);
-    return typeof fdbValue !== "undefined"
-      ? (decode(fdbValue) as Value)
-      : defaultValue;
+    return this._fdbTransaction.get(fdbKey);
   }
 
   public getRange(
