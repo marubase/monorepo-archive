@@ -1,5 +1,5 @@
 import { ReadTransactionContract } from "./read-transaction.js";
-import { StorageFactory } from "./storage.contract.js";
+import { StorageContract, StorageFactory } from "./storage.contract.js";
 
 export interface ReadBucketContract<Key, Value> {
   readonly factory: StorageFactory;
@@ -10,7 +10,7 @@ export interface ReadBucketContract<Key, Value> {
 
   readonly transaction: ReadTransactionContract;
 
-  readonly watches?: Watch[];
+  readonly watchers?: WatcherFn[];
 
   get(key: Key, defaultValue?: Value): Promise<Value | undefined>;
 
@@ -32,6 +32,8 @@ export type Watch = {
   promise: Promise<boolean>;
   cancel(): void;
 };
+
+export type WatcherFn = (storage: StorageContract) => Promise<void>;
 
 export type WatchWithValue<Value> = Watch & {
   value: Value | undefined;
