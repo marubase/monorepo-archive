@@ -14,6 +14,8 @@ export interface ReadBucketContract<Key, Value> {
 
   get(key: Key, defaultValue?: Value): Promise<Value | undefined>;
 
+  getBinary(key: Key): Promise<Buffer | undefined>;
+
   getRange(
     start: Key,
     end: Key,
