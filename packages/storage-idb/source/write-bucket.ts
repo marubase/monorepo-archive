@@ -80,7 +80,7 @@ export class WriteBucket<Key, Value>
     options?: RangeOptions,
   ): AsyncIterable<[Key, Value]> {
     const idbOptions = Object.assign({}, options) as Required<RangeOptions>;
-    if (typeof idbOptions.limit !== "number") idbOptions.limit = Infinity;
+    if (typeof idbOptions.limit !== "number") idbOptions.limit = 1000;
     if (typeof idbOptions.reverse !== "boolean") idbOptions.reverse = false;
 
     const encodedStart = encode(start);
