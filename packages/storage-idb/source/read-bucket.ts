@@ -36,14 +36,19 @@ export class ReadBucket<Key, Value> implements ReadBucketContract<Key, Value> {
   }
 
   public async get(key: Key, defaultValue?: Value): Promise<Value | undefined> {
+    const idbValue = await this.getBinary(key);
+    return typeof idbValue !== "undefined"
+      ? (decode(idbValue) as Value)
+      : defaultValue;
+  }
+
+  public async getBinary(key: Key): Promise<Buffer | undefined> {
     const encodedKey = encode(key);
     const idbKey = !Buffer.isBuffer(encodedKey)
       ? encodedKey.buffer
       : encodedKey;
-    const idbValue = (await this._idbStore.get(idbKey)) as Buffer | undefined;
-    return typeof idbValue !== "undefined"
-      ? (decode(idbValue) as Value)
-      : defaultValue;
+    const idbValue = await this._idbStore.get(idbKey);
+    return typeof idbValue !== "undefined" ? Buffer.from(idbValue) : undefined;
   }
 
   public getRange(
@@ -101,9 +106,9 @@ export class ReadBucket<Key, Value> implements ReadBucketContract<Key, Value> {
       _reject = reject;
     });
 
-    let _value: Value | undefined;
+    let _value: Buffer | undefined;
     const watcherFn = async (storage: StorageContract): Promise<void> => {
-      _value = await this.get(key);
+      _value = await this.getBinary(key);
       setTimeout(() => watcherPoll(storage), 16);
     };
 
@@ -111,7 +116,7 @@ export class ReadBucket<Key, Value> implements ReadBucketContract<Key, Value> {
       const poll = async (): Promise<boolean> => {
         while (!_cancelled) {
           await new Promise((resolve) => setTimeout(resolve, 16));
-          const value = await storage.bucket<Key, Value>(this.name).get(key);
+          const value = await storage.bucket(this.name).getBinary(key);
           if (Buffer.isBuffer(value) && Buffer.isBuffer(_value)) {
             /* istanbul ignore else */
             if (value.compare(_value) !== 0) return true;
