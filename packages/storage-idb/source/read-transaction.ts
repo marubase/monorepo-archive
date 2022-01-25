@@ -6,6 +6,7 @@ import {
   StorageFactory,
   TransactionCast,
   TransactionOrder,
+  WatcherFn,
 } from "@marubase/storage";
 import { IDBPTransaction } from "idb/with-async-ittr";
 import { cast } from "./transaction-cast.js";
@@ -45,6 +46,14 @@ export class ReadTransaction implements ReadTransactionContract {
     ): Promise<void>[] =>
       mutations.concat(...(bucket.mutations as Promise<void>[]));
     return this._buckets.reduce(toMutations, []);
+  }
+
+  public get watchers(): WatcherFn[] {
+    const toWatchers = (
+      watchers: WatcherFn[],
+      bucket: ReadBucketContract<unknown, unknown>,
+    ): WatcherFn[] => watchers.concat(...(bucket.watchers as WatcherFn[]));
+    return this._buckets.reduce(toWatchers, []);
   }
 
   public bucket<Key, Value>(name: string): ReadBucketContract<Key, Value> {
