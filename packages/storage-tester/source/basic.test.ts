@@ -41,6 +41,16 @@ export function basicTest(storageFn: () => StorageContract): void {
       });
     });
 
+    describe("#bucket(name).clearAndWatch(key)", function () {
+      it("should resolve true", async function () {
+        const watch = await storage.bucket("test").clearAndWatch("key");
+        storage.bucket("test").set("key", "value");
+
+        const changed = await watch.promise;
+        expect(changed).to.be.true;
+      });
+    });
+
     describe("#bucket(name).clearRange(start, end)", function () {
       context("when there is values", function () {
         it("should clear values", async function () {
@@ -99,6 +109,32 @@ export function basicTest(storageFn: () => StorageContract): void {
       });
     });
 
+    describe("#bucket(name).getAndWatch(key)", function () {
+      it("should resolve true", async function () {
+        const watch = await storage.bucket("test").getAndWatch("key");
+        expect(watch.value).to.be.undefined;
+
+        storage.bucket("test").set("key", "update");
+
+        const changed = await watch.promise;
+        expect(changed).to.be.true;
+        expect(watch.value).to.equal("update");
+      });
+    });
+
+    describe("#bucket(name).getAndWatch(key).cancel()", function () {
+      it("should resolve true", async function () {
+        const watch = await storage.bucket("test").getAndWatch("key");
+        expect(watch.value).to.be.undefined;
+
+        setTimeout(() => watch.cancel(), 10);
+
+        const changed = await watch.promise;
+        expect(changed).to.be.false;
+        expect(watch.value).to.be.undefined;
+      });
+    });
+
     describe("#bucket(name).getRange(start, end, options)", function () {
       context("when there is values", function () {
         it("should return values", async function () {
@@ -154,6 +190,16 @@ export function basicTest(storageFn: () => StorageContract): void {
           const values = await storage.bucket("test").get("key");
           expect(values).to.equal("value");
         });
+      });
+    });
+
+    describe("#bucket(name).setAndWatch(key, value)", function () {
+      it("should resolve true", async function () {
+        const watch = await storage.bucket("test").setAndWatch("key", "value");
+        storage.bucket("test").set("key", "update");
+
+        const changed = await watch.promise;
+        expect(changed).to.be.true;
       });
     });
   });
