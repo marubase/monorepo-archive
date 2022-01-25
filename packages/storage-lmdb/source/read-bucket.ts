@@ -50,7 +50,7 @@ export class ReadBucket<Key, Value> implements ReadBucketContract<Key, Value> {
     options?: RangeOptions,
   ): AsyncIterable<[Key, Value]> {
     const lmdbOptions = Object.assign({}, options) as LMDBRangeOptions;
-    if (typeof lmdbOptions.limit !== "number") lmdbOptions.limit = Infinity;
+    if (typeof lmdbOptions.limit !== "number") lmdbOptions.limit = 1000;
     if (typeof lmdbOptions.reverse !== "boolean") lmdbOptions.reverse = false;
 
     const encodedStart = encode([this.name, start]);
