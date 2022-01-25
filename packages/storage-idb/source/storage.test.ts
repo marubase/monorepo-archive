@@ -8,6 +8,7 @@ import {
   rangeTest,
   transactionTest,
   versionstampTest,
+  watchTest,
 } from "@marubase/storage-tester";
 import { expect } from "chai";
 import { Storage } from "./storage.js";
@@ -29,6 +30,7 @@ describe("Storage", function () {
   boundTest(() => storage);
   versionstampTest(() => storage);
   concurrencyTest(() => storage);
+  watchTest(() => storage);
 
   describe("StorageIDB", function () {
     context("when try to read a new scope", function () {
