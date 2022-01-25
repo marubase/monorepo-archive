@@ -46,7 +46,7 @@ export class ReadBucket<Key, Value> implements ReadBucketContract<Key, Value> {
     options?: RangeOptions,
   ): AsyncIterable<[Key, Value]> {
     const fdbOptions = Object.assign({}, options) as Required<RangeOptions>;
-    if (typeof fdbOptions.limit !== "number") fdbOptions.limit = Infinity;
+    if (typeof fdbOptions.limit !== "number") fdbOptions.limit = 1000;
     if (typeof fdbOptions.reverse !== "boolean") fdbOptions.reverse = false;
 
     const encodedStart = encode(start);
