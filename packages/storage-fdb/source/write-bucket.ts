@@ -3,6 +3,7 @@ import {
   RangeOptions,
   StorageError,
   StorageFactory,
+  Watch,
   WriteBucketContract,
   WriteTransactionContract,
 } from "@marubase/storage";
@@ -130,5 +131,13 @@ export class WriteBucket<Key, Value>
     } else {
       this._fdbTransaction.set(encodedKey, encodedValue);
     }
+  }
+
+  public watch(key: Key): Watch {
+    const encodedKey = encode(key);
+    const fdbKey = !Buffer.isBuffer(encodedKey)
+      ? encodedKey.buffer
+      : encodedKey;
+    return this._fdbTransaction.watch(fdbKey);
   }
 }
