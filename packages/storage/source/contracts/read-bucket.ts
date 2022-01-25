@@ -10,6 +10,8 @@ export interface ReadBucketContract<Key, Value> {
 
   readonly transaction: ReadTransactionContract;
 
+  readonly watches?: Watch[];
+
   get(key: Key, defaultValue?: Value): Promise<Value | undefined>;
 
   getRange(
@@ -17,9 +19,20 @@ export interface ReadBucketContract<Key, Value> {
     end: Key,
     options?: RangeOptions,
   ): AsyncIterable<[Key, Value]>;
+
+  watch(key: Key): Watch;
 }
 
 export type RangeOptions = {
   limit?: number;
   reverse?: boolean;
+};
+
+export type Watch = {
+  promise: Promise<boolean>;
+  cancel(): void;
+};
+
+export type WatchWithValue<Value> = Watch & {
+  value: Value | undefined;
 };
