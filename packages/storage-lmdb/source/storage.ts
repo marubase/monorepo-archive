@@ -100,6 +100,11 @@ export class Storage implements StorageContract {
         return watchWithValue;
       },
 
+      getBinary: (key: Key) =>
+        this.read(name, async (transaction) => {
+          return transaction.bucket(name).getBinary(key);
+        }),
+
       getRange: (start: Key, end: Key, options?: RangeOptions) =>
         this.read(name, async (transaction) => {
           const collection: [Key, Value][] = [];
