@@ -8,6 +8,7 @@ import {
   rangeTest,
   transactionTest,
   versionstampTest,
+  watchTest,
 } from "@marubase/storage-tester";
 import { Storage } from "./storage.js";
 
@@ -28,4 +29,5 @@ describe("Storage", function () {
   boundTest(() => storage);
   versionstampTest(() => storage);
   concurrencyTest(() => storage);
+  watchTest(() => storage);
 });
