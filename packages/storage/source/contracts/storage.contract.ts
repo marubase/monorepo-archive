@@ -1,5 +1,10 @@
 import { versionstamp } from "@marubase/collator";
-import { RangeOptions, ReadBucketContract } from "./read-bucket.js";
+import {
+  RangeOptions,
+  ReadBucketContract,
+  Watch,
+  WatchWithValue,
+} from "./read-bucket.js";
 import { ReadTransactionContract } from "./read-transaction.js";
 import { TransactionCast } from "./transaction-cast.js";
 import { TransactionOrder } from "./transaction-order.js";
@@ -33,9 +38,13 @@ export interface StorageContract {
 export type StorageBucket<Key, Value> = {
   clear(key: Key): Promise<void>;
 
+  clearAndWatch(key: Key): Promise<Watch>;
+
   clearRange(start: Key, end: Key): Promise<void>;
 
   get(key: Key, defaultValue?: Value): Promise<Value | undefined>;
+
+  getAndWatch(key: Key): Promise<WatchWithValue<Value>>;
 
   getRange(
     start: Key,
@@ -44,6 +53,8 @@ export type StorageBucket<Key, Value> = {
   ): Promise<[Key, Value][]>;
 
   set(key: Key, value: Value): Promise<void>;
+
+  setAndWatch(key: Key, value: Value): Promise<Watch>;
 };
 
 export type StorageFactory = {
