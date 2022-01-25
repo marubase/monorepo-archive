@@ -6,6 +6,7 @@ import {
   StorageFactory,
   TransactionCast,
   TransactionOrder,
+  WatcherFn,
   WriteBucketContract,
   WriteTransactionContract,
 } from "@marubase/storage";
@@ -74,6 +75,14 @@ export class WriteTransaction implements WriteTransactionContract {
     ): Promise<void>[] =>
       mutations.concat(...(bucket.mutations as Promise<void>[]));
     return this._buckets.reduce(toMutations, []);
+  }
+
+  public get watchers(): WatcherFn[] {
+    const toWatchers = (
+      watchers: WatcherFn[],
+      bucket: WriteBucketContract<unknown, unknown>,
+    ): WatcherFn[] => watchers.concat(...(bucket.watchers as WatcherFn[]));
+    return this._buckets.reduce(toWatchers, []);
   }
 
   public bucket<Key, Value>(name: string): WriteBucketContract<Key, Value> {
