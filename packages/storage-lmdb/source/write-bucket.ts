@@ -62,14 +62,18 @@ export class WriteBucket<Key, Value>
   }
 
   public async get(key: Key, defaultValue?: Value): Promise<Value | undefined> {
+    const lmdbValue = await this.getBinary(key);
+    return typeof lmdbValue !== "undefined"
+      ? (decode(lmdbValue) as Value)
+      : defaultValue;
+  }
+
+  public async getBinary(key: Key): Promise<Buffer | undefined> {
     const encodedKey = encode([this.name, key]);
     const lmdbKey = !Buffer.isBuffer(encodedKey)
       ? encodedKey.buffer
       : encodedKey;
-    const lmdbValue = this._lmdbDatabase.getBinary(lmdbKey);
-    return typeof lmdbValue !== "undefined"
-      ? (decode(lmdbValue) as Value)
-      : defaultValue;
+    return this._lmdbDatabase.getBinary(lmdbKey);
   }
 
   public getRange(
