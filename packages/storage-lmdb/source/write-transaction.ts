@@ -6,6 +6,7 @@ import {
   StorageFactory,
   TransactionCast,
   TransactionOrder,
+  WatcherFn,
   WriteBucketContract,
   WriteTransactionContract,
 } from "@marubase/storage";
@@ -26,6 +27,8 @@ export class WriteTransaction implements WriteTransactionContract {
   public readonly storage: StorageContract;
 
   public readonly versionstamp: typeof versionstamp = versionstamp;
+
+  protected _buckets: WriteBucketContract<unknown, unknown>[] = [];
 
   protected _lmdbDatabase: Database<Buffer, Buffer>;
 
@@ -56,6 +59,14 @@ export class WriteTransaction implements WriteTransactionContract {
     this._mutationCounter = reCounterBinary;
   }
 
+  public get watchers(): WatcherFn[] {
+    const toWatchers = (
+      watchers: WatcherFn[],
+      bucket: WriteBucketContract<unknown, unknown>,
+    ): WatcherFn[] => watchers.concat(...(bucket.watchers as WatcherFn[]));
+    return this._buckets.reduce(toWatchers, []);
+  }
+
   public bucket<Key, Value>(name: string): WriteBucketContract<Key, Value> {
     if (this.scope.indexOf(name) < 0) {
       const scopes = this.scope.join(", ");
@@ -64,12 +75,14 @@ export class WriteTransaction implements WriteTransactionContract {
       const solution = `Please run transaction in ${scopes}.`;
       throw new StorageError(`${context} ${problem} ${solution}`);
     }
-    return this.factory.createWriteBucket(
+    const bucket = this.factory.createWriteBucket<Key, Value>(
       this.factory,
       this,
       name,
       this._lmdbDatabase,
     );
+    this._buckets.push(bucket);
+    return bucket;
   }
 
   public commitIDSync(): Buffer {
