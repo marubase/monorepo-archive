@@ -2,8 +2,11 @@
 import { decode, encode } from "@marubase/collator";
 import {
   RangeOptions,
+  StorageContract,
   StorageError,
   StorageFactory,
+  Watch,
+  WatcherFn,
   WriteBucketContract,
   WriteTransactionContract,
 } from "@marubase/storage";
@@ -19,6 +22,8 @@ export class WriteBucket<Key, Value>
   public readonly name: string;
 
   public readonly transaction: WriteTransactionContract;
+
+  public readonly watchers: WatcherFn[] = [];
 
   protected _idbStore: IDBPObjectStore<unknown, string[], string, "readwrite">;
 
@@ -137,5 +142,46 @@ export class WriteBucket<Key, Value>
         }
       })(),
     );
+  }
+
+  public watch(key: Key): Watch {
+    let _cancelled = false;
+    const cancel = (): void => {
+      _cancelled = true;
+    };
+
+    let _resolve: (value: PromiseLike<boolean> | boolean) => void;
+    let _reject: (reason?: unknown) => void;
+    const promise = new Promise<boolean>((resolve, reject) => {
+      _resolve = resolve;
+      _reject = reject;
+    });
+
+    let _value: Value | undefined;
+    const watcherFn = async (storage: StorageContract): Promise<void> => {
+      _value = await this.get(key);
+      setTimeout(() => watcherPoll(storage), 16);
+    };
+
+    const watcherPoll = (storage: StorageContract): void => {
+      const poll = async (): Promise<boolean> => {
+        while (!_cancelled) {
+          await new Promise((resolve) => setTimeout(resolve, 16));
+          const value = await storage.bucket<Key, Value>(this.name).get(key);
+          if (Buffer.isBuffer(value) && Buffer.isBuffer(_value)) {
+            /* istanbul ignore else */
+            if (value.compare(_value) !== 0) return true;
+          } else {
+            /* istanbul ignore else */
+            if (value !== _value) return true;
+          }
+        }
+        return false;
+      };
+      poll().then(_resolve).catch(_reject);
+    };
+
+    this.watchers.push(watcherFn);
+    return { cancel, promise };
   }
 }
