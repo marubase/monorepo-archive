@@ -24,6 +24,20 @@ export function watchTest(storageFn: () => StorageContract): void {
       });
     });
 
+    describe("#watch(key) - Buffer", function () {
+      it("should resolve true", async function () {
+        await storage.bucket("test").set("key", Buffer.from([0]));
+
+        const watch = await storage.read("test", async (transaction) => {
+          return transaction.bucket("test").watch("key");
+        });
+        storage.bucket("test").set("key", Buffer.from([255]));
+
+        const changed = await watch.promise;
+        expect(changed).to.be.true;
+      });
+    });
+
     describe("#watch(key).cancel()", function () {
       it("should resolve true", async function () {
         const versionstamp = storage.versionstamp();
@@ -59,6 +73,20 @@ export function watchTest(storageFn: () => StorageContract): void {
 
         const changed = await watch.promise;
         expect(changed).to.be.false;
+      });
+    });
+
+    describe("#watch(key) - Buffer, Write transaction", function () {
+      it("should resolve true", async function () {
+        await storage.bucket("test").set("key", Buffer.from([0]));
+
+        const watch = await storage.write("test", async (transaction) => {
+          return transaction.bucket("test").watch("key");
+        });
+        storage.bucket("test").set("key", Buffer.from([255]));
+
+        const changed = await watch.promise;
+        expect(changed).to.be.true;
       });
     });
   });
