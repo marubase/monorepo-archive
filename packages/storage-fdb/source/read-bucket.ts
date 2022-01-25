@@ -4,6 +4,7 @@ import {
   ReadBucketContract,
   ReadTransactionContract,
   StorageFactory,
+  Watch,
 } from "@marubase/storage";
 import { keySelector, Transaction } from "foundationdb";
 
@@ -77,5 +78,13 @@ export class ReadBucket<Key, Value> implements ReadBucketContract<Key, Value> {
       );
       return this.factory.createRangeIterable<Key, Value>(fdbRange);
     }
+  }
+
+  public watch(key: Key): Watch {
+    const encodedKey = encode(key);
+    const fdbKey = !Buffer.isBuffer(encodedKey)
+      ? encodedKey.buffer
+      : encodedKey;
+    return this._fdbTransaction.watch(fdbKey);
   }
 }
