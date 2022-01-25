@@ -46,6 +46,8 @@ export type StorageBucket<Key, Value> = {
 
   getAndWatch(key: Key): Promise<WatchWithValue<Value>>;
 
+  getBinary(key: Key): Promise<Buffer | undefined>;
+
   getRange(
     start: Key,
     end: Key,
