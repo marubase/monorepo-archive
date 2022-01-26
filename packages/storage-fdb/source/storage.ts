@@ -22,7 +22,7 @@ import {
   setAPIVersion,
   Transaction,
 } from "foundationdb";
-import { RangeIterable } from "./range-iterable.js";
+import { BatchRangeIterable } from "./batch-range-iterable.js";
 import { ReadBucket } from "./read-bucket.js";
 import { ReadTransaction } from "./read-transaction.js";
 import { cast } from "./transaction-cast.js";
@@ -194,9 +194,9 @@ export class Storage implements StorageContract {
 
 export const DefaultStorageFactory = {
   createRangeIterable<Key, Value>(
-    fdbRange: AsyncGenerator<[Buffer, Buffer]>,
+    fdbBatchRange: AsyncGenerator<[Buffer, Buffer][]>,
   ): AsyncIterable<[Key, Value]> {
-    return new RangeIterable(fdbRange);
+    return new BatchRangeIterable(fdbBatchRange);
   },
 
   createReadBucket<Key, Value>(

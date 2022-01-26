@@ -1,6 +1,6 @@
 export * from "@marubase/collator";
 export * from "@marubase/storage";
-export * from "./range-iterable.js";
+export * from "./batch-range-iterable.js";
 export * from "./read-bucket.js";
 export * from "./read-transaction.js";
 export * from "./storage.js";
