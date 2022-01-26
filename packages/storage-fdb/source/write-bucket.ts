@@ -85,12 +85,12 @@ export class WriteBucket<Key, Value>
       const fdbEnd = !Buffer.isBuffer(encodedEnd)
         ? encodedEnd.buffer
         : encodedEnd;
-      const fdbRange = this._fdbTransaction.getRange(
+      const fdbBatchRange = this._fdbTransaction.getRangeBatch(
         fdbStart,
         fdbEnd,
         fdbOptions,
       );
-      return this.factory.createRangeIterable<Key, Value>(fdbRange);
+      return this.factory.createRangeIterable<Key, Value>(fdbBatchRange);
     } else {
       const fdbStart = !Buffer.isBuffer(encodedEnd)
         ? keySelector.firstGreaterThan(encodedEnd.buffer)
@@ -98,12 +98,12 @@ export class WriteBucket<Key, Value>
       const fdbEnd = !Buffer.isBuffer(encodedStart)
         ? keySelector.firstGreaterThan(encodedStart.buffer)
         : keySelector.firstGreaterThan(encodedStart);
-      const fdbRange = this._fdbTransaction.getRange(
+      const fdbBatchRange = this._fdbTransaction.getRangeBatch(
         fdbStart,
         fdbEnd,
         fdbOptions,
       );
-      return this.factory.createRangeIterable<Key, Value>(fdbRange);
+      return this.factory.createRangeIterable<Key, Value>(fdbBatchRange);
     }
   }
 
