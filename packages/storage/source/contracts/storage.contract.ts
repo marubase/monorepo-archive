@@ -60,6 +60,10 @@ export type StorageBucket<Key, Value> = {
 };
 
 export type StorageFactory = {
+  createBatchRangeIterable?<Key, Value>(
+    ...args: unknown[]
+  ): AsyncIterable<[Key, Value]>;
+
   createRangeIterable<Key, Value>(
     ...args: unknown[]
   ): AsyncIterable<[Key, Value]>;
