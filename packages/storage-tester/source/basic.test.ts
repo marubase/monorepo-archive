@@ -122,6 +122,25 @@ export function basicTest(storageFn: () => StorageContract): void {
       });
     });
 
+    describe("#bucket(name).getBinary(key)", function () {
+      context("when there is value", function () {
+        it("should return binary", async function () {
+          await storage.bucket("test").set("key", "value");
+
+          const value = await storage.bucket("test").getBinary("key");
+          expect(value).to.deep.equal(
+            Buffer.from([27, 118, 97, 108, 117, 101, 2]),
+          );
+        });
+      });
+      context("when there is no value", function () {
+        it("should return undefined", async function () {
+          const value = await storage.bucket("test").getBinary("key");
+          expect(value).to.be.undefined;
+        });
+      });
+    });
+
     describe("#bucket(name).getAndWatch(key).cancel()", function () {
       it("should resolve true", async function () {
         const watch = await storage.bucket("test").getAndWatch("key");
