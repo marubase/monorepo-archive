@@ -85,6 +85,12 @@ importers:
   packages/collator/build/module:
     specifiers: {}
 
+  packages/container:
+    specifiers:
+      reflect-metadata: ^0.1.13
+    dependencies:
+      reflect-metadata: 0.1.13
+
   packages/storage:
     specifiers:
       '@marubase/collator': workspace:^0.0.0
@@ -3086,6 +3092,10 @@ packages:
     dependencies:
       resolve: 1.19.0
     dev: true
+
+  /reflect-metadata/0.1.13:
+    resolution: {integrity: sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==}
+    dev: false
 
   /regexpp/3.2.0:
     resolution: {integrity: sha512-pq2bWo9mVD43nbts2wGv17XLiNLya+GklZ8kaDLV2Z08gDCsGpnKn9BFMepvWuHCbyVvY7J5o5+BVvoQbmlJLg==}
