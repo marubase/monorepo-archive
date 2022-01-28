@@ -96,7 +96,7 @@ export class Container implements ContainerContract {
     const registryKey =
       typeof bindable === "function" ? bindable.name : bindable;
     const resolver = this._registry.getResolverByKey(registryKey);
-    if (typeof resolver !== "undefined") resolver.clearKey();
+    if (typeof resolver !== "undefined") resolver.clearBindingKey();
     return this;
   }
 
