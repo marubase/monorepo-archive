@@ -29,14 +29,29 @@ export class Registry implements RegistryContract {
   }
 
   public bind(bindable: Bindable): RegistryBinding {
+    const bindingKey =
+      typeof bindable === "function" ? bindable.name : bindable;
     return {
-      to: (target) => this.createClassResolver(target),
-      toAlias: (alias) => this.createKeyResolver(alias),
-      toClass: (target) => this.createClassResolver(target),
-      toConstant: (constant) => this.createConstantResolver(constant),
-      toFunction: (target) => this.createFunctionResolver(target),
-      toKey: (key) => this.createKeyResolver(key),
-      toMethod: (target, method) => this.createMethodResolver(target, method),
+      to: (target) =>
+        this.createClassResolver(target).setBindingKey(bindingKey),
+
+      toAlias: (alias) =>
+        this.createKeyResolver(alias).setBindingKey(bindingKey),
+
+      toClass: (target) =>
+        this.createClassResolver(target).setBindingKey(bindingKey),
+
+      toConstant: (constant) =>
+        this.createConstantResolver(constant).setBindingKey(bindingKey),
+
+      toFunction: (target) =>
+        this.createFunctionResolver(target).setBindingKey(bindingKey),
+
+      toKey: (key) => this.createKeyResolver(key).setBindingKey(bindingKey),
+
+      toMethod: (target, method) =>
+        this.createMethodResolver(target, method).setBindingKey(bindingKey),
+
       toSelf: () => {
         if (typeof bindable !== "function") {
           const context = `Binding to self.`;
@@ -44,9 +59,10 @@ export class Registry implements RegistryContract {
           const solution = `Please use a class as bindable or use any of the 'to(target)' or 'toClass(target)' method.`;
           throw new ContainerError(`${context} ${problem} ${solution}`);
         }
-        return this.createClassResolver(bindable);
+        return this.createClassResolver(bindable).setBindingKey(bindingKey);
       },
-      toTag: (tag) => this.createTagResolver(tag),
+
+      toTag: (tag) => this.createTagResolver(tag).setBindingKey(bindingKey),
     };
   }
 
