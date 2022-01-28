@@ -26,7 +26,7 @@ export class KeyResolver extends BaseResolver implements ResolverContract {
     if (resolver.scope === "transient") return resolver.resolve(scope, ...args);
 
     const cache = scope[resolver.scope];
-    return cache.has(this._key)
+    return !cache.has(this._key)
       ? (cache
           .set(this._key, resolver.resolve(scope, ...args))
           .get(this._key) as Result)
