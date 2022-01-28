@@ -1,4 +1,3 @@
-import { CacheContract } from "./cache.js";
 import { ProviderContract, ProviderName } from "./provider.js";
 import {
   Bindable,
@@ -6,19 +5,24 @@ import {
   RegistryContract,
   Resolvable,
 } from "./registry.js";
+import { ScopeContract } from "./scope.js";
 
 export interface ContainerContract {
-  readonly context: ContainerContract;
+  readonly booted: boolean;
 
-  readonly parent: ContainerContract;
+  readonly providers: Record<ProviderName, ProviderContract>;
 
   readonly registry: RegistryContract;
+
+  readonly scope: ScopeContract;
 
   bind(bindable: Bindable): RegistryBinding;
 
   boot(): Promise<void>;
 
-  fork(type: ContainerForkType): ContainerContract;
+  bound(bindable: Bindable): boolean;
+
+  fork(): this;
 
   install(name: ProviderName, provider: ProviderContract): this;
 
@@ -28,13 +32,7 @@ export interface ContainerContract {
 
   shutdown(): Promise<void>;
 
+  unbind(bindable: Bindable): this;
+
   uninstall(name: ProviderName): this;
 }
-
-export type ContainerContext = {
-  container: CacheContract;
-  request: CacheContract;
-  singleton: CacheContract;
-};
-
-export type ContainerForkType = "container" | "request";
