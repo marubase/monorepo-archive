@@ -8,9 +8,9 @@ import {
 import { ScopeContract } from "./scope.js";
 
 export interface ResolverContract {
-  readonly dependencies: Resolvable[];
+  readonly bindingKey?: RegistryKey;
 
-  readonly key?: RegistryKey;
+  readonly dependencies: Resolvable[];
 
   readonly registry: RegistryContract;
 
@@ -18,9 +18,9 @@ export interface ResolverContract {
 
   readonly tags: RegistryTags;
 
-  clearDependencies(): this;
+  clearBindingKey(): this;
 
-  clearKey(): this;
+  clearDependencies(): this;
 
   clearTag(tag: RegistryTag): this;
 
@@ -30,9 +30,9 @@ export interface ResolverContract {
 
   resolveDependencies(scope: ScopeContract): unknown[];
 
-  setDependencies(dependencies: Resolvable[]): this;
+  setBindingKey(bindingKey: RegistryKey): this;
 
-  setKey(key: RegistryKey): this;
+  setDependencies(dependencies: Resolvable[]): this;
 
   setScope(scope: ResolverScope): this;
 
