@@ -10,6 +10,12 @@ import {
 import { ResolverContract } from "./contracts/resolver.js";
 import { ScopeContract } from "./contracts/scope.js";
 import { ContainerError } from "./index.js";
+import {
+  getResolverDependencies,
+  getResolverScope,
+  getResolverTags,
+  isResolvable,
+} from "./metadata.js";
 import { ClassResolver } from "./resolvers/class-resolver.js";
 import { ConstantResolver } from "./resolvers/constant-resolver.js";
 import { FunctionResolver } from "./resolvers/function-resolver.js";
@@ -32,14 +38,53 @@ export class Registry implements RegistryContract {
     const bindingKey =
       typeof bindable === "function" ? bindable.name : bindable;
     return {
-      to: (target) =>
-        this.createClassResolver(target).setBindingKey(bindingKey),
+      to: (target) => this.bind(bindingKey).toClass(target),
 
-      toAlias: (alias) =>
-        this.createKeyResolver(alias).setBindingKey(bindingKey),
+      toAlias: (alias) => this.bind(bindingKey).toKey(alias),
 
-      toClass: (target) =>
-        this.createClassResolver(target).setBindingKey(bindingKey),
+      toClass: (target) => {
+        if (!isResolvable(target))
+          return this.createClassResolver(target).setBindingKey(bindingKey);
+
+        const propertyNames = Object.getOwnPropertyNames(target.prototype);
+        for (const property of propertyNames) {
+          if (!isResolvable(target.prototype, property)) continue;
+          const parentKey =
+            typeof bindingKey === "symbol" ? bindingKey.toString() : bindingKey;
+          const deps = getResolverDependencies(target.prototype, property);
+          const scope = getResolverScope(target.prototype, property);
+          const tags = getResolverTags(target.prototype, property);
+          this.bind(`${parentKey}#${property}`)
+            .toMethod(target.prototype, property)
+            .setDependencies(deps)
+            .setScope(scope)
+            .setTags(Array.from(tags));
+        }
+
+        const propertySymbols = Object.getOwnPropertySymbols(target.prototype);
+        for (const property of propertySymbols) {
+          if (!isResolvable(target.prototype, property)) continue;
+          const parentKey =
+            typeof bindingKey === "symbol" ? bindingKey.toString() : bindingKey;
+          const deps = getResolverDependencies(target.prototype, property);
+          const scope = getResolverScope(target.prototype, property);
+          const tags = getResolverTags(target.prototype, property);
+          this.bind(`${parentKey}#${property.toString()}`)
+            .toMethod(target.prototype, property)
+            .setDependencies(deps)
+            .setScope(scope)
+            .setTags(Array.from(tags));
+        }
+
+        const deps = getResolverDependencies(target);
+        const scope = getResolverScope(target);
+        const tags = getResolverTags(target);
+        return this.createClassResolver(target)
+          .setBindingKey(bindingKey)
+          .setDependencies(deps)
+          .setScope(scope)
+          .setTags(Array.from(tags));
+      },
 
       toConstant: (constant) =>
         this.createConstantResolver(constant).setBindingKey(bindingKey),
@@ -59,7 +104,7 @@ export class Registry implements RegistryContract {
           const solution = `Please use a class as bindable or use any of the 'to(target)' or 'toClass(target)' method.`;
           throw new ContainerError(`${context} ${problem} ${solution}`);
         }
-        return this.createClassResolver(bindable).setBindingKey(bindingKey);
+        return this.bind(bindingKey).toClass(bindable);
       },
 
       toTag: (tag) => this.createTagResolver(tag).setBindingKey(bindingKey),
