@@ -1,4 +1,3 @@
-import { ContainerContext } from "./container.js";
 import {
   RegistryContract,
   RegistryKey,
@@ -6,6 +5,7 @@ import {
   RegistryTags,
   Resolvable,
 } from "./registry.js";
+import { ScopeContract } from "./scope.js";
 
 export interface ResolverContract {
   readonly dependencies: Resolvable[];
@@ -13,6 +13,8 @@ export interface ResolverContract {
   readonly key?: RegistryKey;
 
   readonly registry: RegistryContract;
+
+  readonly scope: ResolverScope;
 
   readonly tags: RegistryTags;
 
@@ -24,15 +26,19 @@ export interface ResolverContract {
 
   clearTags(): this;
 
-  resolve<Result>(context: ContainerContext, ...args: unknown[]): Result;
+  resolve<Result>(scope: ScopeContract, ...args: unknown[]): Result;
 
-  resolveDependencies(context: ContainerContext): unknown[];
+  resolveDependencies(scope: ScopeContract): unknown[];
 
   setDependencies(dependencies: Resolvable[]): this;
 
   setKey(key: RegistryKey): this;
 
+  setScope(scope: ResolverScope): this;
+
   setTag(tag: RegistryTag): this;
 
   setTags(tags: RegistryTags): this;
 }
+
+export type ResolverScope = "container" | "request" | "singleton" | "transient";
