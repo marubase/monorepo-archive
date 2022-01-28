@@ -11,9 +11,9 @@ import { ScopeContract } from "../contracts/scope.js";
 import { ContainerError } from "../index.js";
 
 export class BaseResolver implements ResolverContract {
-  protected _dependencies: Resolvable[] = [];
+  protected _bindingKey?: RegistryKey;
 
-  protected _key?: RegistryKey;
+  protected _dependencies: Resolvable[] = [];
 
   protected _registry: RegistryContract;
 
@@ -25,12 +25,12 @@ export class BaseResolver implements ResolverContract {
     this._registry = registry;
   }
 
-  public get dependencies(): Resolvable[] {
-    return this._dependencies;
+  public get bindingKey(): RegistryKey | undefined {
+    return this._bindingKey;
   }
 
-  public get key(): RegistryKey | undefined {
-    return this._key;
+  public get dependencies(): Resolvable[] {
+    return this._dependencies;
   }
 
   public get registry(): RegistryContract {
@@ -45,15 +45,15 @@ export class BaseResolver implements ResolverContract {
     return Array.from(this._tags);
   }
 
-  public clearDependencies(): this {
-    this._dependencies = [];
+  public clearBindingKey(): this {
+    if (typeof this._bindingKey === "undefined") return this;
+    this._registry.clearResolverByKey(this._bindingKey);
+    delete this._bindingKey;
     return this;
   }
 
-  public clearKey(): this {
-    if (typeof this._key === "undefined") return this;
-    this._registry.clearResolverByKey(this._key);
-    delete this._key;
+  public clearDependencies(): this {
+    this._dependencies = [];
     return this;
   }
 
@@ -80,15 +80,15 @@ export class BaseResolver implements ResolverContract {
     return this._dependencies.map(toInstance);
   }
 
-  public setDependencies(dependencies: Resolvable[]): this {
-    this._dependencies = dependencies;
+  public setBindingKey(key: RegistryKey): this {
+    if (typeof this._bindingKey !== "undefined") this.clearBindingKey();
+    this._registry.setResolverByKey(key, this);
+    this._bindingKey = key;
     return this;
   }
 
-  public setKey(key: RegistryKey): this {
-    if (typeof this._key !== "undefined") this.clearKey();
-    this._registry.setResolverByKey(key, this);
-    this._key = key;
+  public setDependencies(dependencies: Resolvable[]): this {
+    this._dependencies = dependencies;
     return this;
   }
 
