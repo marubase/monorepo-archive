@@ -1,13 +1,13 @@
-import { RegistryContract, RegistryKey } from "../contracts/registry.js";
+import { BindingKey, RegistryContract } from "../contracts/registry.js";
 import { ResolverContract } from "../contracts/resolver.js";
 import { ScopeContract } from "../contracts/scope.js";
-import { ContainerError } from "../index.js";
+import { ContainerError } from "../errors/container.error.js";
 import { BaseResolver } from "./base-resolver.js";
 
 export class KeyResolver extends BaseResolver implements ResolverContract {
-  protected _key: RegistryKey;
+  protected _key: BindingKey;
 
-  public constructor(registry: RegistryContract, key: RegistryKey) {
+  public constructor(registry: RegistryContract, key: BindingKey) {
     super(registry);
     this._key = key;
   }
