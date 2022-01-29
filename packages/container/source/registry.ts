@@ -179,6 +179,11 @@ export class Registry implements RegistryContract {
     resolvable: Resolvable,
     ...args: unknown[]
   ): Result {
+    if (typeof resolvable === "string") {
+      const pattern = /^([\p{Alpha}\p{N}]+)#([\p{Alpha}\p{N}]+)$/u;
+      const matched = resolvable.match(pattern);
+      if (matched) resolvable = [matched[1], matched[2]];
+    }
     return this.createKeyResolver(resolvable).resolve(scope, ...args);
   }
 
