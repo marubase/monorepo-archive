@@ -1,4 +1,4 @@
-import { RegistryTag, Resolvable } from "./contracts/registry.js";
+import { BindingTag, Resolvable } from "./contracts/registry.js";
 import { ResolverScope } from "./contracts/resolver.js";
 import {
   getResolverDependencies,
@@ -26,7 +26,7 @@ export function inject(dependency: Resolvable): ParameterDecorator {
   };
 }
 
-export function tag(tag: RegistryTag): ClassDecorator & MethodDecorator {
+export function tag(tag: BindingTag): ClassDecorator & MethodDecorator {
   return (target: Function | Object, property?: string | symbol): void => {
     const tags = getResolverTags(target, property).add(tag);
     setResolverTags(tags, target, property);
