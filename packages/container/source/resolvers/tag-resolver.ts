@@ -1,12 +1,12 @@
-import { RegistryContract, RegistryTag } from "../contracts/registry.js";
+import { BindingTag, RegistryContract } from "../contracts/registry.js";
 import { ResolverContract } from "../contracts/resolver.js";
 import { ScopeContract } from "../contracts/scope.js";
 import { BaseResolver } from "./base-resolver.js";
 
 export class TagResolver extends BaseResolver implements ResolverContract {
-  protected _tag: RegistryTag;
+  protected _tag: BindingTag;
 
-  public constructor(registry: RegistryContract, tag: RegistryTag) {
+  public constructor(registry: RegistryContract, tag: BindingTag) {
     super(registry);
     this._tag = tag;
   }
