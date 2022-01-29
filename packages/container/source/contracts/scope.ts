@@ -1,13 +1,13 @@
+import { CacheContract } from "./cache.js";
+
 export interface ScopeContract {
-  container: Map<ScopeKey, unknown>;
+  container: CacheContract;
 
-  request: Map<ScopeKey, unknown>;
+  request: CacheContract;
 
-  singleton: Map<ScopeKey, unknown>;
+  singleton: CacheContract;
 
   fork(type: ScopeForkType): this;
 }
 
 export type ScopeForkType = "container" | "request";
-
-export type ScopeKey = string | symbol;
