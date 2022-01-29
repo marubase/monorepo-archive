@@ -7,8 +7,8 @@ export function getParamTypes(
 ): Function[] {
   const metadataKey = "design:paramtypes";
   return typeof property !== "undefined"
-    ? Reflect.getMetadata(metadataKey, target, property)
-    : Reflect.getMetadata(metadataKey, target);
+    ? Reflect.getMetadata(metadataKey, target, property) || []
+    : Reflect.getMetadata(metadataKey, target) || [];
 }
 
 export function getResolverDependencies(
