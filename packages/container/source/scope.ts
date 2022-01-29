@@ -1,31 +1,33 @@
-import { ScopeContract, ScopeForkType, ScopeKey } from "./contracts/scope.js";
+import { Cache } from "./cache.js";
+import { CacheContract } from "./contracts/cache.js";
+import { ScopeContract, ScopeForkType } from "./contracts/scope.js";
 
 export class Scope implements ScopeContract {
-  protected _container: Map<ScopeKey, unknown>;
+  protected _container: CacheContract;
 
-  protected _request: Map<ScopeKey, unknown>;
+  protected _request: CacheContract;
 
-  protected _singleton: Map<ScopeKey, unknown>;
+  protected _singleton: CacheContract;
 
   public constructor(
-    singleton?: Map<ScopeKey, unknown>,
-    container?: Map<ScopeKey, unknown>,
-    request?: Map<ScopeKey, unknown>,
+    singleton?: CacheContract,
+    container?: CacheContract,
+    request?: CacheContract,
   ) {
-    this._singleton = singleton || new Map();
-    this._container = container || this.singleton;
-    this._request = request || this.container;
+    this._singleton = singleton || new Cache();
+    this._container = container || this._singleton;
+    this._request = request || this._container;
   }
 
-  public get container(): Map<ScopeKey, unknown> {
+  public get container(): CacheContract {
     return this._container;
   }
 
-  public get request(): Map<ScopeKey, unknown> {
+  public get request(): CacheContract {
     return this._request;
   }
 
-  public get singleton(): Map<ScopeKey, unknown> {
+  public get singleton(): CacheContract {
     return this._singleton;
   }
 
@@ -33,7 +35,7 @@ export class Scope implements ScopeContract {
     const { _container, _singleton } = this;
     const Static = this.constructor as typeof Scope;
     return type === "container"
-      ? (new Static(_singleton, new Map(_container)) as this)
-      : (new Static(_singleton, _container, new Map(_container)) as this);
+      ? (new Static(_singleton, _container.fork()) as this)
+      : (new Static(_singleton, _container, _container.fork()) as this);
   }
 }
