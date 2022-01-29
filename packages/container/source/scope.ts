@@ -15,8 +15,8 @@ export class Scope implements ScopeContract {
     request?: CacheContract,
   ) {
     this._singleton = singleton || new Cache();
-    this._container = container || this._singleton;
-    this._request = request || this._container;
+    this._container = container || new Cache();
+    this._request = request || new Cache();
   }
 
   public get container(): CacheContract {
@@ -35,7 +35,7 @@ export class Scope implements ScopeContract {
     const { _container, _singleton } = this;
     const Static = this.constructor as typeof Scope;
     return type === "container"
-      ? (new Static(_singleton, _container.fork()) as this)
-      : (new Static(_singleton, _container, _container.fork()) as this);
+      ? (new Static(_singleton) as this)
+      : (new Static(_singleton, _container) as this);
   }
 }
