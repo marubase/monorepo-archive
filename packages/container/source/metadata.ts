@@ -1,4 +1,4 @@
-import { RegistryTag, Resolvable } from "./contracts/registry.js";
+import { BindingTag, Resolvable } from "./contracts/registry.js";
 import { ResolverScope } from "./contracts/resolver.js";
 
 export function getParamTypes(
@@ -35,7 +35,7 @@ export function getResolverScope(
 export function getResolverTags(
   target: Function | Object,
   property?: string | symbol,
-): Set<RegistryTag> {
+): Set<BindingTag> {
   const metadataKey = "container:resolver:tags";
   return typeof property !== "undefined"
     ? Reflect.getMetadata(metadataKey, target, property) || new Set()
@@ -85,7 +85,7 @@ export function setResolverScope(
 }
 
 export function setResolverTags(
-  tags: Set<RegistryTag>,
+  tags: Set<BindingTag>,
   target: Function | Object,
   property?: string | symbol,
 ): void {
