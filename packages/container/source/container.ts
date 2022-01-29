@@ -96,7 +96,10 @@ export class Container implements ContainerContract {
 
   public unbind(bindable: Bindable): this {
     const resolver = this._registry.getResolverByKey(bindable);
-    if (typeof resolver !== "undefined") resolver.clearBindingKey();
+    if (typeof resolver !== "undefined") {
+      this._scope.singleton.delete(bindable);
+      resolver.clearBindingKey();
+    }
     return this;
   }
 
