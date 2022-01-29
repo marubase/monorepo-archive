@@ -17,7 +17,7 @@ export interface RegistryContract {
   createKeyResolver(key: BindingKey): ResolverContract;
 
   createMethodResolver(
-    target: Function | Object,
+    target: Bindable | Object,
     method: string | symbol,
   ): ResolverContract;
 
@@ -60,7 +60,7 @@ export type RegistryBinding = {
   toKey(key: BindingKey): ResolverContract;
 
   toMethod(
-    target: Function | Object,
+    target: Bindable | Object,
     method: string | symbol,
   ): ResolverContract;
 
@@ -92,7 +92,7 @@ export type RegistryFactory = {
 
   createMethodResolver(
     registry: RegistryContract,
-    target: Function | Object,
+    target: Bindable | Object,
     method: string | symbol,
   ): ResolverContract;
 
