@@ -16,8 +16,12 @@ export class KeyResolver extends BaseResolver implements ResolverContract {
     const resolver = this._registry.getResolverByKey(this._key);
     if (typeof resolver === "undefined") {
       const contextKey =
-        typeof this._key === "symbol" ? this._key.toString() : this._key;
-      const context = `Resolving instance registered at '${contextKey}'.`;
+        typeof this._key !== "string"
+          ? typeof this._key !== "function"
+            ? this._key.toString()
+            : this._key.name
+          : this._key;
+      const context = `Resolving instance bound at '${contextKey}'.`;
       const problem = `Resolver not found.`;
       const solution = `Please try another key.`;
       throw new ContainerError(`${context} ${problem} ${solution}`);
