@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
+  BindingKey,
+  BindingTag,
   RegistryContract,
-  RegistryKey,
-  RegistryTag,
-  RegistryTags,
   Resolvable,
 } from "../contracts/registry.js";
 import { ResolverContract, ResolverScope } from "../contracts/resolver.js";
 import { ScopeContract } from "../contracts/scope.js";
-import { ContainerError } from "../index.js";
+import { ContainerError } from "../errors/container.error.js";
 
 export class BaseResolver implements ResolverContract {
-  protected _bindingKey?: RegistryKey;
+  protected _bindingKey?: BindingKey;
+
+  protected _bindingTags: Set<BindingTag> = new Set();
 
   protected _dependencies: Resolvable[] = [];
 
@@ -19,14 +20,16 @@ export class BaseResolver implements ResolverContract {
 
   protected _scope: ResolverScope = "transient";
 
-  protected _tags: Set<RegistryTag> = new Set();
-
   public constructor(registry: RegistryContract) {
     this._registry = registry;
   }
 
-  public get bindingKey(): RegistryKey | undefined {
+  public get bindingKey(): BindingKey | undefined {
     return this._bindingKey;
+  }
+
+  public get bindingTags(): BindingTag[] {
+    return Array.from(this._bindingTags);
   }
 
   public get dependencies(): Resolvable[] {
@@ -41,10 +44,6 @@ export class BaseResolver implements ResolverContract {
     return this._scope;
   }
 
-  public get tags(): RegistryTags {
-    return Array.from(this._tags);
-  }
-
   public clearBindingKey(): this {
     if (typeof this._bindingKey === "undefined") return this;
     this._registry.clearResolverByKey(this._bindingKey);
@@ -52,18 +51,20 @@ export class BaseResolver implements ResolverContract {
     return this;
   }
 
+  public clearBindingTag(bindingTag: BindingTag): this {
+    if (this._bindingTags.delete(bindingTag))
+      this._registry.clearResolverByTag(bindingTag, this);
+    return this;
+  }
+
+  public clearBindingTags(): this {
+    for (const bindingTag of this._bindingTags)
+      this.clearBindingTag(bindingTag);
+    return this;
+  }
+
   public clearDependencies(): this {
     this._dependencies = [];
-    return this;
-  }
-
-  public clearTag(tag: RegistryTag): this {
-    if (this._tags.delete(tag)) this._registry.clearResolverByTag(tag, this);
-    return this;
-  }
-
-  public clearTags(): this {
-    for (const tag of this._tags) this.clearTag(tag);
     return this;
   }
 
@@ -80,10 +81,23 @@ export class BaseResolver implements ResolverContract {
     return this._dependencies.map(toInstance);
   }
 
-  public setBindingKey(key: RegistryKey): this {
+  public setBindingKey(bindingKey: BindingKey): this {
     if (typeof this._bindingKey !== "undefined") this.clearBindingKey();
-    this._registry.setResolverByKey(key, this);
-    this._bindingKey = key;
+    this._registry.setResolverByKey(bindingKey, this);
+    this._bindingKey = bindingKey;
+    return this;
+  }
+
+  public setBindingTag(bindingTag: BindingTag): this {
+    if (this._bindingTags.has(bindingTag)) return this;
+    this._registry.setResolverByTag(bindingTag, this);
+    this._bindingTags.add(bindingTag);
+    return this;
+  }
+
+  public setBindingTags(bindingTags: BindingTag[]): this {
+    if (this._bindingTags.size > 0) this.clearBindingTags();
+    for (const bindingTag of bindingTags) this.setBindingTag(bindingTag);
     return this;
   }
 
@@ -94,19 +108,6 @@ export class BaseResolver implements ResolverContract {
 
   public setScope(scope: ResolverScope): this {
     this._scope = scope;
-    return this;
-  }
-
-  public setTag(tag: RegistryTag): this {
-    if (this._tags.has(tag)) return this;
-    this._registry.setResolverByTag(tag, this);
-    this._tags.add(tag);
-    return this;
-  }
-
-  public setTags(tags: RegistryTags): this {
-    if (this._tags.size > 0) this.clearTags();
-    for (const tag of tags) this.setTag(tag);
     return this;
   }
 }
