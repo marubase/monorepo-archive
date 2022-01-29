@@ -1,4 +1,4 @@
-import { RegistryContract } from "../contracts/registry.js";
+import { Bindable, RegistryContract } from "../contracts/registry.js";
 import { ResolverContract } from "../contracts/resolver.js";
 import { ScopeContract } from "../contracts/scope.js";
 import { BaseResolver } from "./base-resolver.js";
@@ -6,11 +6,11 @@ import { BaseResolver } from "./base-resolver.js";
 export class MethodResolver extends BaseResolver implements ResolverContract {
   protected _method: string | symbol;
 
-  protected _target: Function | Object;
+  protected _target: Bindable | Object;
 
   public constructor(
     registry: RegistryContract,
-    target: Function | Object,
+    target: Bindable | Object,
     method: string | symbol,
   ) {
     super(registry);
@@ -19,7 +19,10 @@ export class MethodResolver extends BaseResolver implements ResolverContract {
   }
 
   public resolve<Result>(scope: ScopeContract, ...args: unknown[]): Result {
-    const target = this._target as Instance<Result>;
+    const target =
+      Array.isArray(this._target) || typeof this._target !== "object"
+        ? this._registry.resolve<Instance<Result>>(scope, this._target)
+        : (this._target as Instance<Result>);
     const targetArgs = this.resolveDependencies(scope).concat(...args);
     return target[this._method](...targetArgs);
   }
