@@ -56,7 +56,7 @@ export class Registry implements RegistryContract {
           const scope = getResolverScope(target.prototype, property);
           const tags = getResolverTags(target.prototype, property);
           this.bind([parent, property])
-            .toMethod(target.prototype, property)
+            .toMethod(bindable, property)
             .setBindingTags(Array.from(tags))
             .setDependencies(deps)
             .setScope(scope);
@@ -70,7 +70,7 @@ export class Registry implements RegistryContract {
           const scope = getResolverScope(target.prototype, property);
           const tags = getResolverTags(target.prototype, property);
           this.bind([parent, property])
-            .toMethod(target.prototype, property)
+            .toMethod(bindable, property)
             .setBindingTags(Array.from(tags))
             .setDependencies(deps)
             .setScope(scope);
