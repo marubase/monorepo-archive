@@ -70,7 +70,7 @@ export class BaseResolver implements ResolverContract {
 
   public resolve<Result>(scope: ScopeContract, ...args: unknown[]): Result {
     const context = `Resolving instance.`;
-    const problem = `Method not implemented.`;
+    const problem = `Resolve method not implemented.`;
     const solution = `Please try concrete resolver instance.`;
     throw new ContainerError(`${context} ${problem} ${solution}`);
   }
