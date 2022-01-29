@@ -7,7 +7,8 @@ import {
   Resolvable,
 } from "./contracts/registry.js";
 import { ScopeContract } from "./contracts/scope.js";
-import { ContainerError } from "./index.js";
+import { ContainerError } from "./errors/container.error.js";
+import { ResolverContract } from "./index.js";
 
 export class Container implements ContainerContract {
   protected _booted = false;
@@ -51,10 +52,11 @@ export class Container implements ContainerContract {
   }
 
   public bound(bindable: Bindable): boolean {
-    const registryKey =
-      typeof bindable === "function" ? bindable.name : bindable;
-    const resolver = this._registry.getResolverByKey(registryKey);
-    return typeof resolver !== "undefined";
+    return typeof this._registry.getResolverByKey(bindable) !== "undefined";
+  }
+
+  public fetch(bindable: Bindable): ResolverContract | undefined {
+    return this._registry.getResolverByKey(bindable);
   }
 
   public fork(): this {
@@ -93,9 +95,7 @@ export class Container implements ContainerContract {
   }
 
   public unbind(bindable: Bindable): this {
-    const registryKey =
-      typeof bindable === "function" ? bindable.name : bindable;
-    const resolver = this._registry.getResolverByKey(registryKey);
+    const resolver = this._registry.getResolverByKey(bindable);
     if (typeof resolver !== "undefined") resolver.clearBindingKey();
     return this;
   }
