@@ -5,6 +5,7 @@ import {
   RegistryContract,
   Resolvable,
 } from "./registry.js";
+import { ResolverContract } from "./resolver.js";
 import { ScopeContract } from "./scope.js";
 
 export interface ContainerContract {
@@ -21,6 +22,8 @@ export interface ContainerContract {
   boot(): Promise<void>;
 
   bound(bindable: Bindable): boolean;
+
+  fetch(boundable: Bindable): ResolverContract | undefined;
 
   fork(): this;
 
