@@ -1,4 +1,8 @@
-import { BindingKey, RegistryContract } from "../contracts/registry.js";
+import {
+  BindingKey,
+  BindingToken,
+  RegistryContract,
+} from "../contracts/registry.js";
 import { ResolverContract } from "../contracts/resolver.js";
 import { ScopeContract } from "../contracts/scope.js";
 import { ContainerError } from "../errors/container.error.js";
@@ -15,12 +19,15 @@ export class KeyResolver extends BaseResolver implements ResolverContract {
   public resolve<Result>(scope: ScopeContract, ...args: unknown[]): Result {
     const resolver = this._registry.getResolverByKey(this._key);
     if (typeof resolver === "undefined") {
-      const contextKey =
-        typeof this._key !== "string"
-          ? typeof this._key !== "function"
-            ? this._key.toString()
-            : this._key.name
-          : this._key;
+      const toString = (bindingToken: BindingToken): string =>
+        typeof bindingToken !== "string"
+          ? typeof bindingToken !== "function"
+            ? bindingToken.toString()
+            : bindingToken.name
+          : bindingToken;
+      const contextKey = Array.isArray(this._key)
+        ? this._key.map(toString).join("#")
+        : toString(this._key);
       const context = `Resolving instance bound at '${contextKey}'.`;
       const problem = `Resolver not found.`;
       const solution = `Please try another key.`;
