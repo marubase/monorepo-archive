@@ -39,6 +39,11 @@ export class Registry implements RegistryContract {
   }
 
   public bind(bindable: Bindable): RegistryBinding {
+    if (typeof bindable === "string") {
+      const pattern = /^([\p{Alpha}\p{N}]+)#([\p{Alpha}\p{N}]+)$/u;
+      const matched = bindable.match(pattern);
+      if (matched) bindable = [matched[1], matched[2]];
+    }
     return {
       to: (target) => this.bind(bindable).toClass(target),
 
@@ -112,6 +117,11 @@ export class Registry implements RegistryContract {
   }
 
   public clearResolverByKey(bindingKey: BindingKey): this {
+    if (typeof bindingKey === "string") {
+      const pattern = /^([\p{Alpha}\p{N}]+)#([\p{Alpha}\p{N}]+)$/u;
+      const matched = bindingKey.match(pattern);
+      if (matched) bindingKey = [matched[1], matched[2]];
+    }
     if (!Array.isArray(bindingKey))
       bindingKey = [bindingKey, Symbol.for("undefined")];
     const [primary, secondary] = bindingKey;
@@ -162,6 +172,11 @@ export class Registry implements RegistryContract {
   public getResolverByKey(
     bindingKey: BindingKey,
   ): ResolverContract | undefined {
+    if (typeof bindingKey === "string") {
+      const pattern = /^([\p{Alpha}\p{N}]+)#([\p{Alpha}\p{N}]+)$/u;
+      const matched = bindingKey.match(pattern);
+      if (matched) bindingKey = [matched[1], matched[2]];
+    }
     if (!Array.isArray(bindingKey))
       bindingKey = [bindingKey, Symbol.for("undefined")];
     const [primary, secondary] = bindingKey;
@@ -191,6 +206,11 @@ export class Registry implements RegistryContract {
     bindingKey: BindingKey,
     resolver: ResolverContract,
   ): this {
+    if (typeof bindingKey === "string") {
+      const pattern = /^([\p{Alpha}\p{N}]+)#([\p{Alpha}\p{N}]+)$/u;
+      const matched = bindingKey.match(pattern);
+      if (matched) bindingKey = [matched[1], matched[2]];
+    }
     if (!Array.isArray(bindingKey))
       bindingKey = [bindingKey, Symbol.for("undefined")];
     const [primary, secondary] = bindingKey;
