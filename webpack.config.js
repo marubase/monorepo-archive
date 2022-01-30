@@ -8,7 +8,7 @@ module.exports = {
     rules: [
       {
         exclude:
-          /node_modules|\.contract\.(cts|mts|ts|tsx)|\.error\.(cts|mts|ts|tsx)|\.test\.(cts|mts|ts|tsx)$/,
+          /node_modules|\.contract\.(cts|mts|ts|tsx)|\.error\.(cts|mts|ts|tsx)|\.test\.(cts|mts|ts|tsx)|index.(cts|mts|ts|tsx)$/,
         loader: "@jsdevtools/coverage-istanbul-loader",
         options: { esModules: true, produceSourceMap: true },
         test: /\.(cts|mts|ts|tsx)$/,
