@@ -1,5 +1,8 @@
-import { ContainerContract } from "./contracts/container.js";
-import { ProviderContract, ProviderName } from "./contracts/provider.js";
+import { ContainerContract } from "./contracts/container.contract.js";
+import {
+  ProviderContract,
+  ProviderName,
+} from "./contracts/provider.contract.js";
 import {
   Bindable,
   BindingRoot,
@@ -7,8 +10,8 @@ import {
   RegistryBinding,
   RegistryContract,
   Resolvable,
-} from "./contracts/registry.js";
-import { ScopeContract } from "./contracts/scope.js";
+} from "./contracts/registry.contract.js";
+import { ScopeContract } from "./contracts/scope.contract.js";
 import { ContainerError } from "./errors/container.error.js";
 import { ResolverContract } from "./index.js";
 

@@ -1,5 +1,5 @@
-import { BindingTag, Resolvable } from "./contracts/registry.js";
-import { ResolverScope } from "./contracts/resolver.js";
+import { BindingTag, Resolvable } from "./contracts/registry.contract.js";
+import { ResolverScope } from "./contracts/resolver.contract.js";
 
 export function getParamTypes(
   target: Function | Object,

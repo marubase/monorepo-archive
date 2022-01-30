@@ -1,4 +1,8 @@
-import { CacheContract, CacheKey, CacheToken } from "./contracts/cache.js";
+import {
+  CacheContract,
+  CacheKey,
+  CacheToken,
+} from "./contracts/cache.contract.js";
 
 export class Cache implements CacheContract {
   protected _store = new Map<CacheToken, Map<CacheToken, unknown>>();

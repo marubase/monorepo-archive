@@ -1,9 +1,12 @@
 import { expect } from "chai";
 import { anything, instance, mock, reset, when } from "ts-mockito";
-import { CacheContract } from "../contracts/cache.js";
-import { BindingKey, RegistryContract } from "../contracts/registry.js";
-import { ResolverContract } from "../contracts/resolver.js";
-import { ScopeContract } from "../contracts/scope.js";
+import { CacheContract } from "../contracts/cache.contract.js";
+import {
+  BindingKey,
+  RegistryContract,
+} from "../contracts/registry.contract.js";
+import { ResolverContract } from "../contracts/resolver.contract.js";
+import { ScopeContract } from "../contracts/scope.contract.js";
 import { ContainerError } from "../errors/container.error.js";
 import { KeyResolver } from "./key-resolver.js";
 

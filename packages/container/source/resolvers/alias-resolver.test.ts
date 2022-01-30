@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { anything, instance, mock, reset, when } from "ts-mockito";
-import { RegistryContract } from "../contracts/registry.js";
-import { ScopeContract } from "../contracts/scope.js";
+import { RegistryContract } from "../contracts/registry.contract.js";
+import { ScopeContract } from "../contracts/scope.contract.js";
 import { AliasResolver } from "./alias-resolver.js";
 
 describe("AliasResolver", function () {

@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import "reflect-metadata";
 import { instance, mock, reset } from "ts-mockito";
-import { BindingAlias, BindingRoot } from "./contracts/registry.js";
-import { ScopeContract } from "./contracts/scope.js";
+import { BindingAlias, BindingRoot } from "./contracts/registry.contract.js";
+import { ScopeContract } from "./contracts/scope.contract.js";
 import { setResolvable } from "./metadata.js";
 import { Registry } from "./registry.js";
 import { BaseResolver } from "./resolvers/base-resolver.js";

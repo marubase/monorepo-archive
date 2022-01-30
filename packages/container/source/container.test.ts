@@ -30,6 +30,11 @@ class TestProvider implements ProviderContract {
   public uninstall(): void {}
 }
 
+class ShutdowProvider implements ProviderContract {
+  public async boot(): Promise<void> {}
+  public async shutdown(): Promise<void> {}
+}
+
 class EmptyProvider implements ProviderContract {}
 
 describe("Container", function () {
@@ -217,12 +222,32 @@ describe("Container", function () {
         expect(self).to.equal(container);
       });
     });
+    context(
+      "when uninstalling existing provider with no uninstall",
+      function () {
+        it("should return self", async function () {
+          container.install("empty", new EmptyProvider());
+
+          const self = container.uninstall("empty");
+          expect(self).to.equal(container);
+        });
+      },
+    );
     context("when container already booted", function () {
       it("should return self", async function () {
         container.install("test", new TestProvider());
         await container.boot();
 
         const self = container.uninstall("test");
+        expect(self).to.equal(container);
+      });
+    });
+    context("when container already booted and have no uninstall", function () {
+      it("should return self", async function () {
+        container.install("shutdown", new ShutdowProvider());
+        await container.boot();
+
+        const self = container.uninstall("shutdown");
         expect(self).to.equal(container);
       });
     });

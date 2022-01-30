@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { RegistryContract } from "../contracts/registry.js";
-import { ResolverContract } from "../contracts/resolver.js";
-import { ScopeContract } from "../contracts/scope.js";
+import { RegistryContract } from "../contracts/registry.contract.js";
+import { ResolverContract } from "../contracts/resolver.contract.js";
+import { ScopeContract } from "../contracts/scope.contract.js";
 import { BaseResolver } from "./base-resolver.js";
 
 export class ConstantResolver extends BaseResolver implements ResolverContract {

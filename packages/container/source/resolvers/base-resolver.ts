@@ -4,9 +4,12 @@ import {
   BindingTag,
   RegistryContract,
   Resolvable,
-} from "../contracts/registry.js";
-import { ResolverContract, ResolverScope } from "../contracts/resolver.js";
-import { ScopeContract } from "../contracts/scope.js";
+} from "../contracts/registry.contract.js";
+import {
+  ResolverContract,
+  ResolverScope,
+} from "../contracts/resolver.contract.js";
+import { ScopeContract } from "../contracts/scope.contract.js";
 import { ContainerError } from "../errors/container.error.js";
 
 export class BaseResolver implements ResolverContract {

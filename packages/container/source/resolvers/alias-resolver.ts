@@ -3,9 +3,9 @@ import {
   BindingKey,
   BindingRoot,
   RegistryContract,
-} from "../contracts/registry.js";
-import { ResolverContract } from "../contracts/resolver.js";
-import { ScopeContract } from "../contracts/scope.js";
+} from "../contracts/registry.contract.js";
+import { ResolverContract } from "../contracts/resolver.contract.js";
+import { ScopeContract } from "../contracts/scope.contract.js";
 import { BaseResolver } from "./base-resolver.js";
 
 export class AliasResolver extends BaseResolver implements ResolverContract {

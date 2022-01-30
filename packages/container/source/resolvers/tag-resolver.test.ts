@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import { instance, mock, reset, when } from "ts-mockito";
-import { RegistryContract } from "../contracts/registry.js";
-import { ResolverContract } from "../contracts/resolver.js";
-import { ScopeContract } from "../contracts/scope.js";
+import { RegistryContract } from "../contracts/registry.contract.js";
+import { ResolverContract } from "../contracts/resolver.contract.js";
+import { ScopeContract } from "../contracts/scope.contract.js";
 import { TagResolver } from "./tag-resolver.js";
 
 describe("TagResolver", function () {

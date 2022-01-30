@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { Cache } from "./cache.js";
-import { BindingRoot } from "./contracts/registry.js";
+import { BindingRoot } from "./contracts/registry.contract.js";
 import { Scope } from "./scope.js";
 
 describe("Scope", function () {

@@ -1,7 +1,7 @@
 import { Cache } from "./cache.js";
-import { CacheContract } from "./contracts/cache.js";
-import { BindingRoot, Resolvable } from "./contracts/registry.js";
-import { ScopeContract, ScopeForkType } from "./contracts/scope.js";
+import { CacheContract } from "./contracts/cache.contract.js";
+import { BindingRoot, Resolvable } from "./contracts/registry.contract.js";
+import { ScopeContract, ScopeForkType } from "./contracts/scope.contract.js";
 
 export class Scope implements ScopeContract {
   protected _container: CacheContract;
