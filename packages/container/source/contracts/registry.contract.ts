@@ -1,5 +1,5 @@
-import { ResolverContract } from "./resolver.js";
-import { ScopeContract } from "./scope.js";
+import { ResolverContract } from "./resolver.contract.js";
+import { ScopeContract } from "./scope.contract.js";
 
 export interface RegistryContract {
   bind(bindable: Bindable): RegistryBinding;
