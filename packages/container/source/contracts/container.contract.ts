@@ -1,13 +1,13 @@
-import { ProviderContract, ProviderName } from "./provider.js";
+import { ProviderContract, ProviderName } from "./provider.contract.js";
 import {
   Bindable,
   Callable,
   RegistryBinding,
   RegistryContract,
   Resolvable,
-} from "./registry.js";
-import { ResolverContract } from "./resolver.js";
-import { ScopeContract } from "./scope.js";
+} from "./registry.contract.js";
+import { ResolverContract } from "./resolver.contract.js";
+import { ScopeContract } from "./scope.contract.js";
 
 export interface ContainerContract {
   readonly booted: boolean;
