@@ -1,4 +1,5 @@
 import {
+  BindingAlias,
   BindingKey,
   BindingToken,
   RegistryContract,
@@ -17,7 +18,9 @@ export class KeyResolver extends BaseResolver implements ResolverContract {
   }
 
   public resolve<Result>(scope: ScopeContract, ...args: unknown[]): Result {
-    const resolver = this._registry.getResolverByKey(this._key);
+    const resolver =
+      this._registry.getResolverByKey(this._key) ||
+      this._registry.getResolverByKey([this._key[0], BindingAlias]);
     if (typeof resolver === "undefined") {
       const toString = (bindingToken: BindingToken): string =>
         typeof bindingToken !== "string"
@@ -28,7 +31,7 @@ export class KeyResolver extends BaseResolver implements ResolverContract {
       const contextKey = Array.isArray(this._key)
         ? this._key.map(toString).join("#")
         : toString(this._key);
-      const context = `Resolving instance bound at '${contextKey}'.`;
+      const context = `Resolving instance bound to '${contextKey}'.`;
       const problem = `Resolver not found.`;
       const solution = `Please try another key.`;
       throw new ContainerError(`${context} ${problem} ${solution}`);
