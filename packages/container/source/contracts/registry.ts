@@ -14,7 +14,7 @@ export interface RegistryContract {
 
   createFunctionResolver(target: Function): ResolverContract;
 
-  createKeyResolver(key: Resolvable): ResolverContract;
+  createKeyResolver(key: BindingKey): ResolverContract;
 
   createMethodResolver(
     target: Object | Resolvable,
@@ -55,7 +55,7 @@ export type BindingToken = Function | string | symbol;
 export type RegistryBinding = {
   to(target: Function): ResolverContract;
 
-  toAlias(alias: Resolvable): ResolverContract;
+  toAlias(alias: BindingKey): ResolverContract;
 
   toClass(target: Function): ResolverContract;
 
@@ -63,7 +63,7 @@ export type RegistryBinding = {
 
   toFunction(target: Function): ResolverContract;
 
-  toKey(key: Resolvable): ResolverContract;
+  toKey(key: BindingKey): ResolverContract;
 
   toMethod(
     target: Object | Resolvable,
@@ -93,7 +93,7 @@ export type RegistryFactory = {
 
   createKeyResolver(
     registry: RegistryContract,
-    key: Resolvable,
+    key: BindingKey,
   ): ResolverContract;
 
   createMethodResolver(
