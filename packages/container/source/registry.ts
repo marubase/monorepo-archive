@@ -1,5 +1,6 @@
 import {
   Bindable,
+  BindingAlias,
   BindingKey,
   BindingRoot,
   BindingTag,
@@ -18,6 +19,7 @@ import {
   getResolverTags,
   isResolvable,
 } from "./metadata.js";
+import { AliasResolver } from "./resolvers/alias-resolver.js";
 import { ClassResolver } from "./resolvers/class-resolver.js";
 import { ConstantResolver } from "./resolvers/constant-resolver.js";
 import { FunctionResolver } from "./resolvers/function-resolver.js";
@@ -44,7 +46,8 @@ export class Registry implements RegistryContract {
     return {
       to: (target) => this.bind(bindable).toClass(target),
 
-      toAlias: (alias) => this.bind(bindable).toKey(alias),
+      toAlias: (alias) =>
+        this.createAliasResolver(alias).setBindingKey([bindable, BindingAlias]),
 
       toClass: (target) => {
         if (!isResolvable(target))
@@ -129,6 +132,10 @@ export class Registry implements RegistryContract {
     return this;
   }
 
+  public createAliasResolver(alias: Bindable): ResolverContract {
+    return this._factory.createAliasResolver(this, alias);
+  }
+
   public createClassResolver(target: Function): ResolverContract {
     return this._factory.createClassResolver(this, target);
   }
@@ -165,7 +172,10 @@ export class Registry implements RegistryContract {
       const matched = resolvable.match(pattern);
       if (matched) resolveKey = [matched[1], matched[2]];
     }
-    return this.getResolverByKey(resolveKey);
+    return (
+      this.getResolverByKey(resolveKey) ||
+      this.getResolverByKey([resolveKey[0], BindingAlias])
+    );
   }
 
   public getResolverByKey([primary, secondary]: BindingKey):
@@ -229,6 +239,8 @@ export class Registry implements RegistryContract {
 }
 
 export const DefaultRegistryFactory: RegistryFactory = {
+  createAliasResolver: (registry, alias) => new AliasResolver(registry, alias),
+
   createClassResolver: (registry, target) =>
     new ClassResolver(registry, target),
 
