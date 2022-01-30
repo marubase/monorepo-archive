@@ -1,6 +1,6 @@
 import { versionstamp } from "@marubase/collator";
-import { ReadTransactionContract } from "./read-transaction.js";
-import { WriteBucketContract } from "./write-bucket.js";
+import { ReadTransactionContract } from "./read-transaction.contract.js";
+import { WriteBucketContract } from "./write-bucket.contract.js";
 
 export interface WriteTransactionContract extends ReadTransactionContract {
   readonly versionstamp: typeof versionstamp;
