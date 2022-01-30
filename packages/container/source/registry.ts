@@ -156,6 +156,18 @@ export class Registry implements RegistryContract {
     return this._factory.createTagResolver(this, tag);
   }
 
+  public fetch(resolvable: Resolvable): ResolverContract | undefined {
+    let resolveKey = !Array.isArray(resolvable)
+      ? ([resolvable, BindingRoot] as BindingKey)
+      : (resolvable as BindingKey);
+    if (typeof resolvable === "string") {
+      const pattern = /^([\p{Alpha}\p{N}]+)#([\p{Alpha}\p{N}]+)$/u;
+      const matched = resolvable.match(pattern);
+      if (matched) resolveKey = [matched[1], matched[2]];
+    }
+    return this.getResolverByKey(resolveKey);
+  }
+
   public getResolverByKey([primary, secondary]: BindingKey):
     | ResolverContract
     | undefined {
