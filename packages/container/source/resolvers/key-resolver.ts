@@ -28,9 +28,7 @@ export class KeyResolver extends BaseResolver implements ResolverContract {
             ? bindingToken.toString()
             : bindingToken.name
           : bindingToken;
-      const contextKey = Array.isArray(this._key)
-        ? this._key.map(toString).join("#")
-        : toString(this._key);
+      const contextKey = this._key.map(toString).join("#");
       const context = `Resolving instance bound to '${contextKey}'.`;
       const problem = `Resolver not found.`;
       const solution = `Please try another key.`;
