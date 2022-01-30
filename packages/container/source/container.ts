@@ -2,6 +2,8 @@ import { ContainerContract } from "./contracts/container.js";
 import { ProviderContract, ProviderName } from "./contracts/provider.js";
 import {
   Bindable,
+  BindingKey,
+  BindingRoot,
   RegistryBinding,
   RegistryContract,
   Resolvable,
@@ -51,12 +53,17 @@ export class Container implements ContainerContract {
     this._booted = true;
   }
 
-  public bound(bindable: Bindable): boolean {
-    return typeof this._registry.getResolverByKey(bindable) !== "undefined";
-  }
-
-  public fetch(bindable: Bindable): ResolverContract | undefined {
-    return this._registry.getResolverByKey(bindable);
+  public fetch(resolvable: Resolvable): ResolverContract | undefined {
+    let resolveKey: BindingKey;
+    if (typeof resolvable === "string") {
+      const pattern = /^([\p{Alpha}\p{N}]+)#([\p{Alpha}\p{N}]+)$/u;
+      const matched = resolvable.match(pattern);
+      if (matched) resolveKey = [matched[1], matched[2]];
+    }
+    resolveKey = !Array.isArray(resolvable)
+      ? ([resolvable, BindingRoot] as BindingKey)
+      : (resolvable as BindingKey);
+    return this._registry.getResolverByKey(resolveKey);
   }
 
   public fork(): this {
@@ -95,11 +102,9 @@ export class Container implements ContainerContract {
   }
 
   public unbind(bindable: Bindable): this {
-    const resolver = this._registry.getResolverByKey(bindable);
-    if (typeof resolver !== "undefined") {
-      this._scope.singleton.delete(bindable);
-      resolver.clearBindingKey();
-    }
+    const resolvers = this._registry.unbind(bindable);
+    for (const [method] of resolvers)
+      this._scope.singleton.clear([bindable, method]);
     return this;
   }
 
