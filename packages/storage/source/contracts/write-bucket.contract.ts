@@ -1,5 +1,5 @@
-import { ReadBucketContract } from "./read-bucket.js";
-import { WriteTransactionContract } from "./write-transaction.js";
+import { ReadBucketContract } from "./read-bucket.contract.js";
+import { WriteTransactionContract } from "./write-transaction.contract.js";
 
 export interface WriteBucketContract<Key, Value>
   extends ReadBucketContract<Key, Value> {
