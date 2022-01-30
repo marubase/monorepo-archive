@@ -23,6 +23,7 @@ class Tester {
     return `${this._date.toISOString()}#${random}`;
   }
 }
+
 class RawTester {
   protected _date: Date;
 
