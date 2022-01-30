@@ -3,8 +3,8 @@ import {
   BindingTag,
   RegistryContract,
   Resolvable,
-} from "./registry.js";
-import { ScopeContract } from "./scope.js";
+} from "./registry.contract.js";
+import { ScopeContract } from "./scope.contract.js";
 
 export interface ResolverContract {
   readonly bindingKey?: BindingKey;
