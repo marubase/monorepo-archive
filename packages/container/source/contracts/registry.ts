@@ -4,6 +4,12 @@ import { ScopeContract } from "./scope.js";
 export interface RegistryContract {
   bind(bindable: Bindable): RegistryBinding;
 
+  call<Result>(
+    scope: ScopeContract,
+    callable: Callable,
+    ...args: unknown[]
+  ): Result;
+
   clearResolverByKey(bindingKey: BindingKey): this;
 
   clearResolverByTag(bindingTag: BindingTag, resolver: ResolverContract): this;
@@ -55,6 +61,8 @@ export type BindingKey = [BindingToken, BindingToken];
 export type BindingTag = Function | string | symbol;
 
 export type BindingToken = Function | string | symbol;
+
+export type Callable = [Object, string | symbol];
 
 export type RegistryBinding = {
   to(target: Function): ResolverContract;
