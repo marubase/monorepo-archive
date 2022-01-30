@@ -1,6 +1,7 @@
 import { ProviderContract, ProviderName } from "./provider.js";
 import {
   Bindable,
+  Callable,
   RegistryBinding,
   RegistryContract,
   Resolvable,
@@ -20,6 +21,8 @@ export interface ContainerContract {
   bind(bindable: Bindable): RegistryBinding;
 
   boot(): Promise<void>;
+
+  call<Result>(callable: Callable, ...args: unknown[]): Result;
 
   fetch(resolvable: Resolvable): ResolverContract | undefined;
 
