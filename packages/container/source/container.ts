@@ -79,7 +79,7 @@ export class Container implements ContainerContract {
   }
 
   public resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result {
-    const scope = this._scope.fork("request");
+    const scope = this._scope.fork("request", resolvable);
     return this._registry.resolve(scope, resolvable, ...args);
   }
 
