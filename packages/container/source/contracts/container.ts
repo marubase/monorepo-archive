@@ -21,9 +21,7 @@ export interface ContainerContract {
 
   boot(): Promise<void>;
 
-  bound(bindable: Bindable): boolean;
-
-  fetch(boundable: Bindable): ResolverContract | undefined;
+  fetch(resolvable: Resolvable): ResolverContract | undefined;
 
   fork(): this;
 
