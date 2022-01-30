@@ -35,20 +35,6 @@ class RawTester {
   }
 }
 
-@resolvable("singleton")
-class ScopedTester {
-  protected _date: Date;
-
-  public constructor(date: Date) {
-    this._date = date;
-  }
-
-  @resolvable("singleton")
-  public test(date: Date): string {
-    return `${this._date.toISOString()}#${date.toISOString()}`;
-  }
-}
-
 describe("decorator", function () {
   context("when class is decorated with resolvable", function () {
     it("should be resolvable", async function () {
