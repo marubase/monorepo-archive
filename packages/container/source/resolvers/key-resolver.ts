@@ -1,9 +1,7 @@
 import {
   BindingKey,
-  BindingRoot,
   BindingToken,
   RegistryContract,
-  Resolvable,
 } from "../contracts/registry.js";
 import { ResolverContract } from "../contracts/resolver.js";
 import { ScopeContract } from "../contracts/scope.js";
@@ -11,25 +9,15 @@ import { ContainerError } from "../errors/container.error.js";
 import { BaseResolver } from "./base-resolver.js";
 
 export class KeyResolver extends BaseResolver implements ResolverContract {
-  protected _key: Resolvable;
+  protected _key: BindingKey;
 
-  public constructor(registry: RegistryContract, key: Resolvable) {
+  public constructor(registry: RegistryContract, key: BindingKey) {
     super(registry);
     this._key = key;
   }
 
   public resolve<Result>(scope: ScopeContract, ...args: unknown[]): Result {
-    let resolveKey: BindingKey;
-    if (typeof this._key === "string") {
-      const pattern = /^([\p{Alpha}\p{N}]+)#([\p{Alpha}\p{N}]+)$/u;
-      const matched = this._key.match(pattern);
-      if (matched) resolveKey = [matched[1], matched[2]];
-    }
-    resolveKey = !Array.isArray(this._key)
-      ? ([this._key, BindingRoot] as BindingKey)
-      : (this._key as BindingKey);
-
-    const resolver = this._registry.getResolverByKey(resolveKey);
+    const resolver = this._registry.getResolverByKey(this._key);
     if (typeof resolver === "undefined") {
       const toString = (bindingToken: BindingToken): string =>
         typeof bindingToken !== "string"
@@ -49,10 +37,10 @@ export class KeyResolver extends BaseResolver implements ResolverContract {
     if (resolver.scope === "transient") return resolver.resolve(scope, ...args);
 
     const cache = scope[resolver.scope];
-    return !cache.has(resolveKey)
+    return !cache.has(this._key)
       ? (cache
-          .set(resolveKey, resolver.resolve(scope, ...args))
-          .get(resolveKey) as Result)
-      : (cache.get(resolveKey) as Result);
+          .set(this._key, resolver.resolve(scope, ...args))
+          .get(this._key) as Result)
+      : (cache.get(this._key) as Result);
   }
 }
