@@ -141,7 +141,7 @@ export class Registry implements RegistryContract {
     return this._factory.createFunctionResolver(this, target);
   }
 
-  public createKeyResolver(key: Resolvable): ResolverContract {
+  public createKeyResolver(key: BindingKey): ResolverContract {
     return this._factory.createKeyResolver(this, key);
   }
 
@@ -185,7 +185,15 @@ export class Registry implements RegistryContract {
     resolvable: Resolvable,
     ...args: unknown[]
   ): Result {
-    return this.createKeyResolver(resolvable).resolve(scope, ...args);
+    let resolveKey = !Array.isArray(resolvable)
+      ? ([resolvable, BindingRoot] as BindingKey)
+      : (resolvable as BindingKey);
+    if (typeof resolvable === "string") {
+      const pattern = /^([\p{Alpha}\p{N}]+)#([\p{Alpha}\p{N}]+)$/u;
+      const matched = resolvable.match(pattern);
+      if (matched) resolveKey = [matched[1], matched[2]];
+    }
+    return this.createKeyResolver(resolveKey).resolve(scope, ...args);
   }
 
   public setResolverByKey(
