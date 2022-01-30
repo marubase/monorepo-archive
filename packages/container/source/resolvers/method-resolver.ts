@@ -1,4 +1,4 @@
-import { Bindable, RegistryContract } from "../contracts/registry.js";
+import { RegistryContract, Resolvable } from "../contracts/registry.js";
 import { ResolverContract } from "../contracts/resolver.js";
 import { ScopeContract } from "../contracts/scope.js";
 import { BaseResolver } from "./base-resolver.js";
@@ -6,11 +6,11 @@ import { BaseResolver } from "./base-resolver.js";
 export class MethodResolver extends BaseResolver implements ResolverContract {
   protected _method: string | symbol;
 
-  protected _target: Bindable | Object;
+  protected _target: Object | Resolvable;
 
   public constructor(
     registry: RegistryContract,
-    target: Bindable | Object,
+    target: Object | Resolvable,
     method: string | symbol,
   ) {
     super(registry);
