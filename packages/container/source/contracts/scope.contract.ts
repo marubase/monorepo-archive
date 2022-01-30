@@ -1,5 +1,5 @@
-import { CacheContract } from "./cache.js";
-import { Resolvable } from "./registry.js";
+import { CacheContract } from "./cache.contract.js";
+import { Resolvable } from "./registry.contract.js";
 
 export interface ScopeContract {
   readonly container: CacheContract;
