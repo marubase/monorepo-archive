@@ -2,6 +2,8 @@ import { ContainerContract } from "./contracts/container.js";
 import { ProviderContract, ProviderName } from "./contracts/provider.js";
 import {
   Bindable,
+  BindingRoot,
+  Callable,
   RegistryBinding,
   RegistryContract,
   Resolvable,
@@ -49,6 +51,11 @@ export class Container implements ContainerContract {
     for (const [, provider] of this._providers)
       if (provider.boot) await provider.boot(this);
     this._booted = true;
+  }
+
+  public call<Result>(callable: Callable, ...args: unknown[]): Result {
+    const scope = this._scope.fork("request", [BindingRoot, BindingRoot]);
+    return this._registry.call(scope, callable, ...args);
   }
 
   public fetch(resolvable: Resolvable): ResolverContract | undefined {
