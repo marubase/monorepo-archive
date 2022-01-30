@@ -14,10 +14,10 @@ export interface RegistryContract {
 
   createFunctionResolver(target: Function): ResolverContract;
 
-  createKeyResolver(key: BindingKey): ResolverContract;
+  createKeyResolver(key: Resolvable): ResolverContract;
 
   createMethodResolver(
-    target: Bindable | Object,
+    target: Object | Resolvable,
     method: string | symbol,
   ): ResolverContract;
 
@@ -36,11 +36,15 @@ export interface RegistryContract {
   setResolverByKey(bindingKey: BindingKey, resolver: ResolverContract): this;
 
   setResolverByTag(bindingTag: BindingTag, resolver: ResolverContract): this;
+
+  unbind(bindable: Bindable): Map<BindingToken, ResolverContract>;
 }
 
-export type Bindable = [BindingToken, BindingToken] | BindingToken;
+export const BindingRoot = Symbol("root");
 
-export type BindingKey = [BindingToken, BindingToken] | BindingToken;
+export type Bindable = Function | string | symbol;
+
+export type BindingKey = [BindingToken, BindingToken];
 
 export type BindingTag = Function | string | symbol;
 
@@ -49,7 +53,7 @@ export type BindingToken = Function | string | symbol;
 export type RegistryBinding = {
   to(target: Function): ResolverContract;
 
-  toAlias(alias: BindingKey): ResolverContract;
+  toAlias(alias: Resolvable): ResolverContract;
 
   toClass(target: Function): ResolverContract;
 
@@ -57,10 +61,10 @@ export type RegistryBinding = {
 
   toFunction(target: Function): ResolverContract;
 
-  toKey(key: BindingKey): ResolverContract;
+  toKey(key: Resolvable): ResolverContract;
 
   toMethod(
-    target: Bindable | Object,
+    target: Object | Resolvable,
     method: string | symbol,
   ): ResolverContract;
 
@@ -87,12 +91,12 @@ export type RegistryFactory = {
 
   createKeyResolver(
     registry: RegistryContract,
-    key: BindingKey,
+    key: Resolvable,
   ): ResolverContract;
 
   createMethodResolver(
     registry: RegistryContract,
-    target: Bindable | Object,
+    target: Object | Resolvable,
     method: string | symbol,
   ): ResolverContract;
 
