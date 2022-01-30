@@ -141,9 +141,10 @@ export class Registry implements RegistryContract {
 
   public call<Result>(
     scope: ScopeContract,
-    [target, method]: Callable,
+    callable: Callable,
     ...args: unknown[]
   ): Result {
+    const [target, method] = callable;
     if (!isResolvable(target, method))
       return this.createMethodResolver(target, method).resolve(scope, ...args);
 
@@ -155,7 +156,8 @@ export class Registry implements RegistryContract {
       .resolve(scope, ...args);
   }
 
-  public clearResolverByKey([primary, secondary]: BindingKey): this {
+  public clearResolverByKey(bindingKey: BindingKey): this {
+    const [primary, secondary] = bindingKey;
     const table =
       this._resolverByKey.get(primary) ||
       new Map<BindingToken, ResolverContract>();
@@ -219,9 +221,10 @@ export class Registry implements RegistryContract {
     );
   }
 
-  public getResolverByKey([primary, secondary]: BindingKey):
-    | ResolverContract
-    | undefined {
+  public getResolverByKey(
+    bindingKey: BindingKey,
+  ): ResolverContract | undefined {
+    const [primary, secondary] = bindingKey;
     const table = this._resolverByKey.get(primary);
     return typeof table !== "undefined" ? table.get(secondary) : undefined;
   }
@@ -248,9 +251,10 @@ export class Registry implements RegistryContract {
   }
 
   public setResolverByKey(
-    [primary, secondary]: BindingKey,
+    bindingKey: BindingKey,
     resolver: ResolverContract,
   ): this {
+    const [primary, secondary] = bindingKey;
     const table =
       this._resolverByKey.get(primary) ||
       new Map<BindingToken, ResolverContract>();
