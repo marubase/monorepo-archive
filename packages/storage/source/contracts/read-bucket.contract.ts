@@ -1,4 +1,4 @@
-import { ReadTransactionContract } from "./read-transaction.js";
+import { ReadTransactionContract } from "./read-transaction.contract.js";
 import { StorageContract, StorageFactory } from "./storage.contract.js";
 
 export interface ReadBucketContract<Key, Value> {
