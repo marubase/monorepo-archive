@@ -4,12 +4,12 @@ import {
   ReadBucketContract,
   Watch,
   WatchWithValue,
-} from "./read-bucket.js";
-import { ReadTransactionContract } from "./read-transaction.js";
-import { TransactionCast } from "./transaction-cast.js";
-import { TransactionOrder } from "./transaction-order.js";
-import { WriteBucketContract } from "./write-bucket.js";
-import { WriteTransactionContract } from "./write-transaction.js";
+} from "./read-bucket.contract.js";
+import { ReadTransactionContract } from "./read-transaction.contract.js";
+import { TransactionCast } from "./transaction-cast.contract.js";
+import { TransactionOrder } from "./transaction-order.contract.js";
+import { WriteBucketContract } from "./write-bucket.contract.js";
+import { WriteTransactionContract } from "./write-transaction.contract.js";
 
 export interface StorageContract {
   readonly cast: TransactionCast;
