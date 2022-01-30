@@ -23,6 +23,8 @@ export interface RegistryContract {
 
   createTagResolver(tag: BindingTag): ResolverContract;
 
+  fetch(resolvable: Resolvable): ResolverContract | undefined;
+
   getResolverByKey(bindingKey: BindingKey): ResolverContract | undefined;
 
   getResolverByTag(bindingTag: BindingTag): ResolverContract[];
