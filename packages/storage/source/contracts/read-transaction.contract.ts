@@ -1,7 +1,7 @@
-import { ReadBucketContract, WatcherFn } from "./read-bucket.js";
+import { ReadBucketContract, WatcherFn } from "./read-bucket.contract.js";
 import { StorageContract, StorageFactory } from "./storage.contract.js";
-import { TransactionCast } from "./transaction-cast.js";
-import { TransactionOrder } from "./transaction-order.js";
+import { TransactionCast } from "./transaction-cast.contract.js";
+import { TransactionOrder } from "./transaction-order.contract.js";
 
 export interface ReadTransactionContract {
   readonly cast: TransactionCast;
