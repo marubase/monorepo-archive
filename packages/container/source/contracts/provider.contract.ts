@@ -1,4 +1,4 @@
-import { ContainerContract } from "./container.js";
+import { ContainerContract } from "./container.contract.js";
 
 export interface ProviderContract {
   boot?(container: ContainerContract): Promise<void>;
