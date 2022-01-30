@@ -8,6 +8,8 @@ export interface RegistryContract {
 
   clearResolverByTag(bindingTag: BindingTag, resolver: ResolverContract): this;
 
+  createAliasResolver(alias: Bindable): ResolverContract;
+
   createClassResolver(target: Function): ResolverContract;
 
   createConstantResolver(constant: unknown): ResolverContract;
@@ -42,6 +44,8 @@ export interface RegistryContract {
   unbind(bindable: Bindable): Map<BindingToken, ResolverContract>;
 }
 
+export const BindingAlias = Symbol("alias");
+
 export const BindingRoot = Symbol("root");
 
 export type Bindable = Function | string | symbol;
@@ -55,7 +59,7 @@ export type BindingToken = Function | string | symbol;
 export type RegistryBinding = {
   to(target: Function): ResolverContract;
 
-  toAlias(alias: BindingKey): ResolverContract;
+  toAlias(alias: Bindable): ResolverContract;
 
   toClass(target: Function): ResolverContract;
 
@@ -76,6 +80,11 @@ export type RegistryBinding = {
 };
 
 export type RegistryFactory = {
+  createAliasResolver(
+    registry: RegistryContract,
+    alias: Bindable,
+  ): ResolverContract;
+
   createClassResolver(
     registry: RegistryContract,
     target: Function,
