@@ -5,6 +5,7 @@ import {
   BindingRoot,
   BindingTag,
   BindingToken,
+  Callable,
   RegistryBinding,
   RegistryContract,
   RegistryFactory,
@@ -92,13 +93,37 @@ export class Registry implements RegistryContract {
       toConstant: (constant) =>
         this.createConstantResolver(constant).setBindingKey(bindingKey),
 
-      toFunction: (target) =>
-        this.createFunctionResolver(target).setBindingKey(bindingKey),
+      toFunction: (target) => {
+        if (!isResolvable(target))
+          return this.createFunctionResolver(target).setBindingKey(bindingKey);
+
+        const deps = getResolverDependencies(target);
+        const scope = getResolverScope(target);
+        const tags = getResolverTags(target);
+        return this.createFunctionResolver(target)
+          .setBindingKey(bindingKey)
+          .setBindingTags(Array.from(tags))
+          .setDependencies(deps)
+          .setScope(scope);
+      },
 
       toKey: (key) => this.createKeyResolver(key).setBindingKey(bindingKey),
 
-      toMethod: (target, method) =>
-        this.createMethodResolver(target, method).setBindingKey(bindingKey),
+      toMethod: (target, method) => {
+        if (!isResolvable(target, method))
+          return this.createMethodResolver(target, method).setBindingKey(
+            bindingKey,
+          );
+
+        const deps = getResolverDependencies(target, method);
+        const scope = getResolverScope(target, method);
+        const tags = getResolverTags(target, method);
+        return this.createMethodResolver(target, method)
+          .setBindingKey(bindingKey)
+          .setBindingTags(Array.from(tags))
+          .setDependencies(deps)
+          .setScope(scope);
+      },
 
       toSelf: () => {
         if (typeof bindable !== "function") {
@@ -112,6 +137,22 @@ export class Registry implements RegistryContract {
 
       toTag: (tag) => this.createTagResolver(tag).setBindingKey(bindingKey),
     };
+  }
+
+  public call<Result>(
+    scope: ScopeContract,
+    [target, method]: Callable,
+    ...args: unknown[]
+  ): Result {
+    if (!isResolvable(target, method))
+      return this.createMethodResolver(target, method).resolve(scope, ...args);
+
+    const deps = getResolverDependencies(target, method);
+    const tags = getResolverTags(target, method);
+    return this.createMethodResolver(target, method)
+      .setBindingTags(Array.from(tags))
+      .setDependencies(deps)
+      .resolve(scope, ...args);
   }
 
   public clearResolverByKey([primary, secondary]: BindingKey): this {
