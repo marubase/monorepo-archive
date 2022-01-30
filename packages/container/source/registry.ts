@@ -1,6 +1,7 @@
 import {
   Bindable,
   BindingKey,
+  BindingRoot,
   BindingTag,
   BindingToken,
   RegistryBinding,
@@ -39,11 +40,7 @@ export class Registry implements RegistryContract {
   }
 
   public bind(bindable: Bindable): RegistryBinding {
-    if (typeof bindable === "string") {
-      const pattern = /^([\p{Alpha}\p{N}]+)#([\p{Alpha}\p{N}]+)$/u;
-      const matched = bindable.match(pattern);
-      if (matched) bindable = [matched[1], matched[2]];
-    }
+    const bindingKey = [bindable, BindingRoot] as BindingKey;
     return {
       to: (target) => this.bind(bindable).toClass(target),
 
@@ -51,17 +48,16 @@ export class Registry implements RegistryContract {
 
       toClass: (target) => {
         if (!isResolvable(target))
-          return this.createClassResolver(target).setBindingKey(bindable);
+          return this.createClassResolver(target).setBindingKey(bindingKey);
 
         const propertyNames = Object.getOwnPropertyNames(target.prototype);
         for (const property of propertyNames) {
           if (!isResolvable(target.prototype, property)) continue;
-          const parent = Array.isArray(bindable) ? bindable[0] : bindable;
           const deps = getResolverDependencies(target.prototype, property);
           const scope = getResolverScope(target.prototype, property);
           const tags = getResolverTags(target.prototype, property);
-          this.bind([parent, property])
-            .toMethod(bindable, property)
+          this.createMethodResolver(bindingKey, property)
+            .setBindingKey([bindable, property])
             .setBindingTags(Array.from(tags))
             .setDependencies(deps)
             .setScope(scope);
@@ -70,12 +66,11 @@ export class Registry implements RegistryContract {
         const propertySymbols = Object.getOwnPropertySymbols(target.prototype);
         for (const property of propertySymbols) {
           if (!isResolvable(target.prototype, property)) continue;
-          const parent = Array.isArray(bindable) ? bindable[0] : bindable;
           const deps = getResolverDependencies(target.prototype, property);
           const scope = getResolverScope(target.prototype, property);
           const tags = getResolverTags(target.prototype, property);
-          this.bind([parent, property])
-            .toMethod(bindable, property)
+          this.createMethodResolver(bindingKey, property)
+            .setBindingKey([bindable, property])
             .setBindingTags(Array.from(tags))
             .setDependencies(deps)
             .setScope(scope);
@@ -85,22 +80,22 @@ export class Registry implements RegistryContract {
         const scope = getResolverScope(target);
         const tags = getResolverTags(target);
         return this.createClassResolver(target)
-          .setBindingKey(bindable)
+          .setBindingKey(bindingKey)
           .setBindingTags(Array.from(tags))
           .setDependencies(deps)
           .setScope(scope);
       },
 
       toConstant: (constant) =>
-        this.createConstantResolver(constant).setBindingKey(bindable),
+        this.createConstantResolver(constant).setBindingKey(bindingKey),
 
       toFunction: (target) =>
-        this.createFunctionResolver(target).setBindingKey(bindable),
+        this.createFunctionResolver(target).setBindingKey(bindingKey),
 
-      toKey: (key) => this.createKeyResolver(key).setBindingKey(bindable),
+      toKey: (key) => this.createKeyResolver(key).setBindingKey(bindingKey),
 
       toMethod: (target, method) =>
-        this.createMethodResolver(target, method).setBindingKey(bindable),
+        this.createMethodResolver(target, method).setBindingKey(bindingKey),
 
       toSelf: () => {
         if (typeof bindable !== "function") {
@@ -112,19 +107,11 @@ export class Registry implements RegistryContract {
         return this.bind(bindable).toClass(bindable);
       },
 
-      toTag: (tag) => this.createTagResolver(tag).setBindingKey(bindable),
+      toTag: (tag) => this.createTagResolver(tag).setBindingKey(bindingKey),
     };
   }
 
-  public clearResolverByKey(bindingKey: BindingKey): this {
-    if (typeof bindingKey === "string") {
-      const pattern = /^([\p{Alpha}\p{N}]+)#([\p{Alpha}\p{N}]+)$/u;
-      const matched = bindingKey.match(pattern);
-      if (matched) bindingKey = [matched[1], matched[2]];
-    }
-    if (!Array.isArray(bindingKey))
-      bindingKey = [bindingKey, Symbol.for("undefined")];
-    const [primary, secondary] = bindingKey;
+  public clearResolverByKey([primary, secondary]: BindingKey): this {
     const table =
       this._resolverByKey.get(primary) ||
       new Map<BindingToken, ResolverContract>();
@@ -154,12 +141,12 @@ export class Registry implements RegistryContract {
     return this._factory.createFunctionResolver(this, target);
   }
 
-  public createKeyResolver(key: BindingKey): ResolverContract {
+  public createKeyResolver(key: Resolvable): ResolverContract {
     return this._factory.createKeyResolver(this, key);
   }
 
   public createMethodResolver(
-    target: Object | Function,
+    target: Object | Resolvable,
     method: string | symbol,
   ): ResolverContract {
     return this._factory.createMethodResolver(this, target, method);
@@ -169,17 +156,9 @@ export class Registry implements RegistryContract {
     return this._factory.createTagResolver(this, tag);
   }
 
-  public getResolverByKey(
-    bindingKey: BindingKey,
-  ): ResolverContract | undefined {
-    if (typeof bindingKey === "string") {
-      const pattern = /^([\p{Alpha}\p{N}]+)#([\p{Alpha}\p{N}]+)$/u;
-      const matched = bindingKey.match(pattern);
-      if (matched) bindingKey = [matched[1], matched[2]];
-    }
-    if (!Array.isArray(bindingKey))
-      bindingKey = [bindingKey, Symbol.for("undefined")];
-    const [primary, secondary] = bindingKey;
+  public getResolverByKey([primary, secondary]: BindingKey):
+    | ResolverContract
+    | undefined {
     const table = this._resolverByKey.get(primary);
     return typeof table !== "undefined" ? table.get(secondary) : undefined;
   }
@@ -194,26 +173,13 @@ export class Registry implements RegistryContract {
     resolvable: Resolvable,
     ...args: unknown[]
   ): Result {
-    if (typeof resolvable === "string") {
-      const pattern = /^([\p{Alpha}\p{N}]+)#([\p{Alpha}\p{N}]+)$/u;
-      const matched = resolvable.match(pattern);
-      if (matched) resolvable = [matched[1], matched[2]];
-    }
     return this.createKeyResolver(resolvable).resolve(scope, ...args);
   }
 
   public setResolverByKey(
-    bindingKey: BindingKey,
+    [primary, secondary]: BindingKey,
     resolver: ResolverContract,
   ): this {
-    if (typeof bindingKey === "string") {
-      const pattern = /^([\p{Alpha}\p{N}]+)#([\p{Alpha}\p{N}]+)$/u;
-      const matched = bindingKey.match(pattern);
-      if (matched) bindingKey = [matched[1], matched[2]];
-    }
-    if (!Array.isArray(bindingKey))
-      bindingKey = [bindingKey, Symbol.for("undefined")];
-    const [primary, secondary] = bindingKey;
     const table =
       this._resolverByKey.get(primary) ||
       new Map<BindingToken, ResolverContract>();
@@ -233,6 +199,12 @@ export class Registry implements RegistryContract {
     }
     resolvers.add(resolver);
     return this;
+  }
+
+  public unbind(bindable: Bindable): Map<BindingToken, ResolverContract> {
+    const resolvers = this._resolverByKey.get(bindable);
+    this._resolverByKey.delete(bindable);
+    return resolvers || new Map();
   }
 }
 
