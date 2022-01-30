@@ -2,8 +2,6 @@ import { ContainerContract } from "./contracts/container.js";
 import { ProviderContract, ProviderName } from "./contracts/provider.js";
 import {
   Bindable,
-  BindingKey,
-  BindingRoot,
   RegistryBinding,
   RegistryContract,
   Resolvable,
@@ -54,16 +52,7 @@ export class Container implements ContainerContract {
   }
 
   public fetch(resolvable: Resolvable): ResolverContract | undefined {
-    let resolveKey: BindingKey;
-    if (typeof resolvable === "string") {
-      const pattern = /^([\p{Alpha}\p{N}]+)#([\p{Alpha}\p{N}]+)$/u;
-      const matched = resolvable.match(pattern);
-      if (matched) resolveKey = [matched[1], matched[2]];
-    }
-    resolveKey = !Array.isArray(resolvable)
-      ? ([resolvable, BindingRoot] as BindingKey)
-      : (resolvable as BindingKey);
-    return this._registry.getResolverByKey(resolveKey);
+    return this._registry.fetch(resolvable);
   }
 
   public fork(): this {
