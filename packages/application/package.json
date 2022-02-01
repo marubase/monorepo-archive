@@ -1,5 +1,5 @@
 {
-  "name": "@marubase/framework",
+  "name": "@marubase/application",
   "version": "0.0.0",
   "type": "module",
   "main": "./build/commonjs/index.js",
