@@ -93,6 +93,12 @@ importers:
     dependencies:
       reflect-metadata: 0.1.13
 
+  packages/container/build/commonjs:
+    specifiers: {}
+
+  packages/container/build/module:
+    specifiers: {}
+
   packages/storage:
     specifiers:
       '@marubase/collator': workspace:^0.0.0
@@ -112,6 +118,12 @@ importers:
     devDependencies:
       '@marubase/storage-tester': link:../storage-tester
 
+  packages/storage-fdb/build/commonjs:
+    specifiers: {}
+
+  packages/storage-fdb/build/module:
+    specifiers: {}
+
   packages/storage-idb:
     specifiers:
       '@marubase/collator': workspace:^0.0.0
@@ -124,6 +136,12 @@ importers:
       idb: 7.0.0
     devDependencies:
       '@marubase/storage-tester': link:../storage-tester
+
+  packages/storage-idb/build/commonjs:
+    specifiers: {}
+
+  packages/storage-idb/build/module:
+    specifiers: {}
 
   packages/storage-lmdb:
     specifiers:
