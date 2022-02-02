@@ -1,0 +1,54 @@
+{
+  "name": "@marubase/datastore",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "./build/commonjs/index.js",
+  "module": "./build/module/index.js",
+  "types": "./build/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./build/module/index.js",
+      "require": "./build/commonjs/index.js",
+      "types": "./build/types/index.d.ts"
+    },
+    "./*": {
+      "import": "./build/module/*",
+      "require": "./build/commonjs/*",
+      "types": "./build/types/*"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "pnpm clean:build && pnpm build:commonjs && pnpm build:module && pnpm build:types && pnpm build:bundle",
+    "build:bundle": "webpack",
+    "build:commonjs": "tsc --project ./tsconfig.commonjs.json && echo '{\"type\":\"commonjs\"}' > ./build/commonjs/package.json",
+    "build:module": "tsc --project ./tsconfig.module.json && echo '{\"type\":\"module\"}' > ./build/module/package.json",
+    "build:types": "tsc --project ./tsconfig.types.json",
+    "clean": "pnpm clean:build && pnpm clean:coverage && pnpm clean:log && pnpm clean:report",
+    "clean:build": "rm -rf ./build",
+    "clean:coverage": "rm -rf ./coverage",
+    "clean:log": "rm -f ./.pnpm-debug.log",
+    "clean:report": "rm -rf ./report",
+    "clean:vendor": "rm -rf ./node_modules",
+    "coverage:html": "pnpm clean:report && nyc report --reporter=html --report-dir=./report --temp-dir=./coverage",
+    "coverage:json": "pnpm coverage:json:nodejs && pnpm coverage:json:browser && pnpm coverage:json:merge",
+    "coverage:json:browser": "KARMA_BROWSER=Chromium,Firefox,WebKit KARMA_REPORT=json karma start ../../karma.conf.js",
+    "coverage:json:chromium": "KARMA_BROWSER=Chromium KARMA_REPORT=json karma start ../../karma.conf.js",
+    "coverage:json:firefox": "KARMA_BROWSER=Chromium KARMA_REPORT=json karma start ../../karma.conf.js",
+    "coverage:json:nodejs": "c8 --reporter=json --report-dir=./coverage/NodeJS mocha --recursive ./source",
+    "coverage:json:webkit": "KARMA_BROWSER=Chromium KARMA_REPORT=json karma start ../../karma.conf.js",
+    "coverage:json:merge": "istanbul-merge ./coverage/*/coverage-final.json ./coverage/coverage-final.json",
+    "coverage:text": "nyc report --reporter=text --temp-dir=./coverage",
+    "lint": "eslint --ext .cjs,.cts,.js,.jsx,.mjs,.mts,.ts,.tsx ./source",
+    "prepare": "pnpm lint && pnpm test && pnpm build",
+    "test": "pnpm clean:coverage && pnpm coverage:json && pnpm coverage:text",
+    "test:browser": "KARMA_BROWSER=Chromium,Firefox,WebKit KARMA_REPORT_COMBINE=1 karma start ../../karma.conf.js",
+    "test:chromium": "KARMA_BROWSER=Chromium karma start ../../karma.conf.js",
+    "test:firefox": "KARMA_BROWSER=Firefox karma start ../../karma.conf.js",
+    "test:nodejs": "c8 --reporter=text mocha --recursive ./source",
+    "test:webkit": "KARMA_BROWSER=WebKit karma start ../../karma.conf.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
