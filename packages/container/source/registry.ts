@@ -107,6 +107,8 @@ export class Registry implements RegistryContract {
           .setScope(scope);
       },
 
+      toInstance: (instance) => this.bind(bindable).toConstant(instance),
+
       toKey: (key) => this.createKeyResolver(key).setBindingKey(bindingKey),
 
       toMethod: (target, method) => {
