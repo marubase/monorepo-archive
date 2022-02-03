@@ -1,4 +1,4 @@
-import { decode } from "@marubase/collator";
+import { decode } from "@marubase/storage";
 import { ArrayLikeIterable } from "lmdb";
 
 export class RangeIterable<Key, Value> implements AsyncIterable<[Key, Value]> {
