@@ -1,5 +1,4 @@
-import { decode } from "@marubase/collator";
-import { RangeOptions } from "@marubase/storage";
+import { decode, RangeOptions } from "@marubase/storage";
 import { IDBPCursorWithValueIteratorValue } from "idb/with-async-ittr";
 
 export class RangeIterable<Key, Value> implements AsyncIterable<[Key, Value]> {
