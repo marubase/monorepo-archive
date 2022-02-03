@@ -92,6 +92,13 @@ describe("Registry (Bind)", function () {
     });
   });
 
+  describe("#bind(bindable).toInstance(constant)", function () {
+    it("should return resolver", async function () {
+      const resolver = registry.bind("test").toInstance(true);
+      expect(resolver).to.be.an.instanceOf(BaseResolver);
+    });
+  });
+
   describe("#bind(bindable).toKey(bindingKey)", function () {
     it("should return resolver", async function () {
       const resolver = registry.bind("test").toKey(["test", "method"]);
