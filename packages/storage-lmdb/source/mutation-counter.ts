@@ -1,4 +1,4 @@
-import { encode } from "@marubase/collator";
+import { encode } from "@marubase/storage";
 
 export class MutationCounter {
   public static get key(): Buffer {
