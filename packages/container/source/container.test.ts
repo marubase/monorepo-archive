@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { expect } from "chai";
 import "reflect-metadata";
 import { Container } from "./container.js";
@@ -24,15 +23,27 @@ class Tester {
 }
 
 class TestProvider implements ProviderContract {
-  public async boot(): Promise<void> {}
-  public install(): void {}
-  public async shutdown(): Promise<void> {}
-  public uninstall(): void {}
+  public async boot(): Promise<void> {
+    return;
+  }
+  public install(): void {
+    return;
+  }
+  public async shutdown(): Promise<void> {
+    return;
+  }
+  public uninstall(): void {
+    return;
+  }
 }
 
 class ShutdowProvider implements ProviderContract {
-  public async boot(): Promise<void> {}
-  public async shutdown(): Promise<void> {}
+  public async boot(): Promise<void> {
+    return;
+  }
+  public async shutdown(): Promise<void> {
+    return;
+  }
 }
 
 class EmptyProvider implements ProviderContract {}
