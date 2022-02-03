@@ -5,12 +5,12 @@ import {
   int32,
   int64,
   int8,
+  TransactionCast,
   uint16,
   uint32,
   uint64,
   uint8,
-} from "@marubase/collator";
-import { TransactionCast } from "@marubase/storage";
+} from "@marubase/storage";
 
 export const cast: TransactionCast = {
   float32,
