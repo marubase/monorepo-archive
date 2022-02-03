@@ -1,5 +1,6 @@
-import { decode, encode } from "@marubase/collator";
 import {
+  decode,
+  encode,
   RangeOptions,
   ReadBucketContract,
   ReadTransactionContract,
