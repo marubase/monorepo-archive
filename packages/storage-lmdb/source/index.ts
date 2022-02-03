@@ -1,4 +1,3 @@
-export * from "@marubase/collator";
 export * from "@marubase/storage";
 export * from "./mutation-counter.js";
 export * from "./range-iterable.js";
