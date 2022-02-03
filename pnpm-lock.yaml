@@ -124,15 +124,13 @@ importers:
 
   packages/storage-idb:
     specifiers:
-      '@marubase/collator': workspace:^0.0.0
       '@marubase/storage': workspace:^0.0.0
       '@marubase/storage-tester': workspace:^0.0.0
       idb: ^7.0.0
     dependencies:
-      '@marubase/collator': link:../collator
-      '@marubase/storage': link:../storage
       idb: 7.0.0
     devDependencies:
+      '@marubase/storage': link:../storage
       '@marubase/storage-tester': link:../storage-tester
 
   packages/storage-idb/build/commonjs:
