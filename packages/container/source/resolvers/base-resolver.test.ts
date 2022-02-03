@@ -2,8 +2,13 @@ import { expect } from "chai";
 import { instance, mock, reset, when } from "ts-mockito";
 import { RegistryContract } from "../contracts/registry.contract.js";
 import { ScopeContract } from "../contracts/scope.contract.js";
-import { ContainerError } from "../errors/container.error.js";
 import { BaseResolver } from "./base-resolver.js";
+
+class TestResolver extends BaseResolver {
+  public resolve<Result>(): Result {
+    return undefined as unknown as Result;
+  }
+}
 
 describe("BaseResolver", function () {
   let mockRegistry: RegistryContract;
@@ -16,7 +21,7 @@ describe("BaseResolver", function () {
     mockScope = mock();
     registry = instance(mockRegistry);
     scope = instance(mockScope);
-    resolver = new BaseResolver(registry);
+    resolver = new TestResolver(registry);
   });
   afterEach(async function () {
     reset(mockRegistry);
@@ -164,13 +169,6 @@ describe("BaseResolver", function () {
         const self = resolver.clearDependencies();
         expect(self).to.equal(resolver);
       });
-    });
-  });
-
-  describe("#resolve(scope, ...args)", function () {
-    it("should throw error", async function () {
-      const process = (): unknown => resolver.resolve(scope);
-      expect(process).to.throw(ContainerError);
     });
   });
 
