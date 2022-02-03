@@ -1,4 +1,3 @@
-import { versionstamp } from "@marubase/collator";
 import {
   ReadTransactionContract,
   StorageContract,
@@ -6,6 +5,7 @@ import {
   StorageFactory,
   TransactionCast,
   TransactionOrder,
+  versionstamp,
   WriteBucketContract,
   WriteTransactionContract,
 } from "@marubase/storage";
