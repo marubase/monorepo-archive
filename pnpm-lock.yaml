@@ -99,6 +99,12 @@ importers:
   packages/container/build/module:
     specifiers: {}
 
+  packages/datastore:
+    specifiers:
+      '@marubase/storage': workspace:^0.0.0
+    devDependencies:
+      '@marubase/storage': link:../storage
+
   packages/storage:
     specifiers:
       '@marubase/collator': workspace:^0.0.0
