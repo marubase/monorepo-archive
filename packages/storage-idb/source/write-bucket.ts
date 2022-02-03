@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { decode, encode } from "@marubase/collator";
 import {
+  decode,
+  encode,
   RangeOptions,
   StorageContract,
   StorageError,
