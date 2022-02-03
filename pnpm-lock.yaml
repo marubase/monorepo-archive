@@ -78,6 +78,14 @@ importers:
       webpack: 5.65.0_webpack-cli@4.9.1
       webpack-cli: 4.9.1_webpack@5.65.0
 
+  packages/application:
+    specifiers:
+      '@marubase/storage': workspace:^0.0.0
+      '@marubase/storage-fdb': workspace:^0.0.0
+    dependencies:
+      '@marubase/storage': link:../storage
+      '@marubase/storage-fdb': link:../storage-fdb
+
   packages/collator:
     specifiers: {}
 
