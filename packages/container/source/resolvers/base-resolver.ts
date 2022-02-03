@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   BindingKey,
   BindingTag,
@@ -10,9 +9,8 @@ import {
   ResolverScope,
 } from "../contracts/resolver.contract.js";
 import { ScopeContract } from "../contracts/scope.contract.js";
-import { ContainerError } from "../errors/container.error.js";
 
-export class BaseResolver implements ResolverContract {
+export abstract class BaseResolver implements ResolverContract {
   protected _bindingKey?: BindingKey;
 
   protected _bindingTags: Set<BindingTag> = new Set();
@@ -71,13 +69,6 @@ export class BaseResolver implements ResolverContract {
     return this;
   }
 
-  public resolve<Result>(scope: ScopeContract, ...args: unknown[]): Result {
-    const context = `Resolving instance.`;
-    const problem = `Resolve method not implemented.`;
-    const solution = `Please try concrete resolver instance.`;
-    throw new ContainerError(`${context} ${problem} ${solution}`);
-  }
-
   public resolveDependencies(scope: ScopeContract): unknown[] {
     const toInstance = (resolvable: Resolvable): unknown =>
       this._registry.resolve(scope, resolvable);
@@ -113,4 +104,9 @@ export class BaseResolver implements ResolverContract {
     this._scope = scope;
     return this;
   }
+
+  public abstract resolve<Result>(
+    scope: ScopeContract,
+    ...args: unknown[]
+  ): Result;
 }
