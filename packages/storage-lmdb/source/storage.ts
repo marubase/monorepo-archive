@@ -1,4 +1,3 @@
-import { versionstamp } from "@marubase/collator";
 import {
   RangeOptions,
   ReadBucketContract,
@@ -8,6 +7,7 @@ import {
   StorageFactory,
   TransactionFn,
   TransactionOrder,
+  versionstamp,
   WatcherFn,
   WatchWithValue,
   WriteBucketContract,
