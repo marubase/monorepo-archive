@@ -1,4 +1,4 @@
-import { decode } from "@marubase/collator";
+import { decode } from "@marubase/storage";
 
 export class BatchRangeIterable<Key, Value>
   implements AsyncIterable<[Key, Value]>
