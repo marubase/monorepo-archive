@@ -1,5 +1,4 @@
-import { asc, desc } from "@marubase/collator";
-import { TransactionOrder } from "@marubase/storage";
+import { asc, desc, TransactionOrder } from "@marubase/storage";
 
 export const order: TransactionOrder = {
   asc,
