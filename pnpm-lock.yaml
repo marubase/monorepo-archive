@@ -83,10 +83,12 @@ importers:
       '@marubase/storage': workspace:^0.0.0
       '@marubase/storage-fdb': workspace:^0.0.0
       '@marubase/storage-idb': workspace:^0.0.0
+      '@marubase/storage-lmdb': workspace:^0.0.0
     dependencies:
       '@marubase/storage': link:../storage
       '@marubase/storage-fdb': link:../storage-fdb
       '@marubase/storage-idb': link:../storage-idb
+      '@marubase/storage-lmdb': link:../storage-lmdb
 
   packages/collator:
     specifiers: {}

@@ -54,6 +54,7 @@
   "dependencies": {
     "@marubase/storage": "workspace:^0.0.0",
     "@marubase/storage-fdb": "workspace:^0.0.0",
-    "@marubase/storage-idb": "workspace:^0.0.0"
+    "@marubase/storage-idb": "workspace:^0.0.0",
+    "@marubase/storage-lmdb": "workspace:^0.0.0"
   }
 }
