@@ -52,6 +52,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@marubase/container": "workspace:^0.0.0",
     "@marubase/storage": "workspace:^0.0.0",
     "@marubase/storage-fdb": "workspace:^0.0.0",
     "@marubase/storage-idb": "workspace:^0.0.0",
