@@ -1,11 +1,13 @@
-import { decode, encode, versionstamp } from "@marubase/collator";
 import {
+  decode,
+  encode,
   ReadTransactionContract,
   StorageContract,
   StorageError,
   StorageFactory,
   TransactionCast,
   TransactionOrder,
+  versionstamp,
   WatcherFn,
   WriteBucketContract,
   WriteTransactionContract,
