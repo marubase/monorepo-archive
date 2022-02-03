@@ -75,6 +75,8 @@ export type RegistryBinding = {
 
   toFunction(target: Function): ResolverContract;
 
+  toInstance(instance: unknown): ResolverContract;
+
   toKey(key: BindingKey): ResolverContract;
 
   toMethod(
