@@ -78,20 +78,6 @@ importers:
       webpack: 5.65.0_webpack-cli@4.9.1
       webpack-cli: 4.9.1_webpack@5.65.0
 
-  packages/application:
-    specifiers:
-      '@marubase/container': workspace:^0.0.0
-      '@marubase/storage': workspace:^0.0.0
-      '@marubase/storage-fdb': workspace:^0.0.0
-      '@marubase/storage-idb': workspace:^0.0.0
-      '@marubase/storage-lmdb': workspace:^0.0.0
-    dependencies:
-      '@marubase/container': link:../container
-      '@marubase/storage': link:../storage
-      '@marubase/storage-fdb': link:../storage-fdb
-      '@marubase/storage-idb': link:../storage-idb
-      '@marubase/storage-lmdb': link:../storage-lmdb
-
   packages/collator:
     specifiers: {}
 
@@ -112,12 +98,6 @@ importers:
 
   packages/container/build/module:
     specifiers: {}
-
-  packages/datastore:
-    specifiers:
-      '@marubase/storage': workspace:^0.0.0
-    devDependencies:
-      '@marubase/storage': link:../storage
 
   packages/storage:
     specifiers:
