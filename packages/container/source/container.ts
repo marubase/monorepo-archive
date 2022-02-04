@@ -11,9 +11,9 @@ import {
   RegistryContract,
   Resolvable,
 } from "./contracts/registry.contract.js";
+import { ResolverContract } from "./contracts/resolver.contract.js";
 import { ScopeContract } from "./contracts/scope.contract.js";
 import { ContainerError } from "./errors/container.error.js";
-import { ResolverContract } from "./index.js";
 
 export class Container implements ContainerContract {
   protected _booted = false;
