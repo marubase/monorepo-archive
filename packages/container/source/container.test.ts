@@ -1,9 +1,10 @@
 import { expect } from "chai";
-import "reflect-metadata";
 import { Container } from "./container.js";
+import { ProviderContract } from "./contracts/provider.contract.js";
 import { inject, resolvable, tag } from "./decorator.js";
-import { BaseResolver, ContainerError, ProviderContract } from "./index.js";
+import { ContainerError } from "./errors/container.error.js";
 import { Registry } from "./registry.js";
+import { BaseResolver } from "./resolvers/base-resolver.js";
 import { Scope } from "./scope.js";
 
 @resolvable()
