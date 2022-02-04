@@ -1,5 +1,4 @@
 import { expect } from "chai";
-import "reflect-metadata";
 import { instance, mock, reset } from "ts-mockito";
 import { BindingAlias, BindingRoot } from "./contracts/registry.contract.js";
 import { ScopeContract } from "./contracts/scope.contract.js";
