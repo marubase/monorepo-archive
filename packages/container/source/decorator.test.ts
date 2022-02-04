@@ -1,5 +1,4 @@
 import { expect } from "chai";
-import "reflect-metadata";
 import { inject, resolvable, tag } from "./decorator.js";
 import {
   getResolverDependencies,
