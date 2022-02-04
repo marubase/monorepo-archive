@@ -1,9 +1,9 @@
 import { expect } from "chai";
-import "reflect-metadata";
 import { inject, resolvable } from "./decorator.js";
-import { BaseResolver, ContainerError } from "./index.js";
+import { ContainerError } from "./errors/container.error.js";
 import { setResolvable } from "./metadata.js";
 import { Registry } from "./registry.js";
+import { BaseResolver } from "./resolvers/base-resolver.js";
 
 @resolvable()
 class Tester {
