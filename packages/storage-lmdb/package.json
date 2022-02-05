@@ -46,8 +46,8 @@
     "lmdb": "^2.1.5"
   },
   "devDependencies": {
-    "@marubase/storage": "workspace:^0.0.0",
-    "@marubase/storage-tester": "workspace:^0.0.0"
+    "@marubase-tools/storage-tester": "workspace:^0.0.0",
+    "@marubase/storage": "workspace:^0.0.0"
   },
   "peerDependencies": {
     "@marubase/storage": "workspace:^0.0.0"

@@ -1,4 +1,3 @@
-import { StorageContract } from "@marubase/storage";
 import {
   basicTest,
   boundTest,
@@ -9,7 +8,8 @@ import {
   transactionTest,
   versionstampTest,
   watchTest,
-} from "@marubase/storage-tester";
+} from "@marubase-tools/storage-tester";
+import { StorageContract } from "@marubase/storage";
 import { rm } from "node:fs/promises";
 import { Storage } from "./storage.js";
 
