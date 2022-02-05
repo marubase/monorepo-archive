@@ -5,7 +5,8 @@
   "main": "./source/index.js",
   "scripts": {
     "clean:vendor": "rm -rf ./node_modules",
-    "lint": "eslint --ext .cjs,.cts,.js,.jsx,.mjs,.mts,.ts,.tsx ./source"
+    "lint": "eslint --ext .cjs,.cts,.js,.jsx,.mjs,.mts,.ts,.tsx ./source",
+    "prepare": "pnpm lint"
   },
   "publishConfig": {
     "access": "public"
