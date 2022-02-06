@@ -50,5 +50,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "find-my-way": "^5.2.0"
   }
 }
