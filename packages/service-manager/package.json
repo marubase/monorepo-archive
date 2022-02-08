@@ -50,5 +50,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "@marubase/container": "workspace:^0.0.0"
   }
 }
