@@ -53,6 +53,7 @@
   },
   "dependencies": {
     "@marubase/container": "workspace:^0.0.0",
-    "@marubase/storage": "workspace:^0.0.0"
+    "@marubase/storage": "workspace:^0.0.0",
+    "find-my-way": "^5.2.0"
   }
 }
