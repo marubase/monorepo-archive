@@ -104,8 +104,10 @@ importers:
   packages/service-manager:
     specifiers:
       '@marubase/container': workspace:^0.0.0
+      '@marubase/storage': workspace:^0.0.0
     dependencies:
       '@marubase/container': link:../container
+      '@marubase/storage': link:../storage
 
   packages/storage:
     specifiers:
