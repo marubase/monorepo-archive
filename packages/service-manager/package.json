@@ -53,6 +53,7 @@
   },
   "dependencies": {
     "@marubase/container": "workspace:^0.0.0",
-    "@marubase/storage": "workspace:^0.0.0"
+    "@marubase/storage": "workspace:^0.0.0",
+    "path-to-regex": "^1.3.8"
   }
 }
