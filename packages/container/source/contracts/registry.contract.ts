@@ -33,6 +33,8 @@ export interface RegistryContract {
 
   fetch(resolvable: Resolvable): ResolverContract | undefined;
 
+  fork(): this;
+
   getResolverByKey(bindingKey: BindingKey): ResolverContract | undefined;
 
   getResolverByTag(bindingTag: BindingTag): ResolverContract[];
