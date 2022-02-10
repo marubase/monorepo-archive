@@ -1,6 +1,7 @@
 import "reflect-metadata";
 export * from "./cache.js";
 export * from "./container.js";
+export * from "./contract.js";
 export * from "./contracts/index.js";
 export * from "./decorator.js";
 export * from "./errors/index.js";
