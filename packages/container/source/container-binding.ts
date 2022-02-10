@@ -1,3 +1,3 @@
-export const Binding = {
+export const ContainerBinding = {
   Container: Symbol("ContainerContract"),
 };

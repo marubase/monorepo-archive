@@ -1,4 +1,4 @@
-import { Binding } from "./binding.js";
+import { ContainerBinding } from "./container-binding.js";
 import { ContainerContract } from "./contracts/container.contract.js";
 import {
   ProviderContract,
@@ -31,7 +31,7 @@ export class Container implements ContainerContract {
     this._registry = registry || new Registry();
     this._scope = scope || new Scope();
     if (typeof registry === "undefined" && typeof scope === "undefined")
-      this.bind(Binding.Container).toInstance(this);
+      this.bind(ContainerBinding.Container).toInstance(this);
   }
 
   public get booted(): boolean {

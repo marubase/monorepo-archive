@@ -1,5 +1,5 @@
 import "reflect-metadata";
-export * from "./binding.js";
+export * from "./container-binding.js";
 export * from "./cache.js";
 export * from "./container.js";
 export * from "./contracts/index.js";
