@@ -14,6 +14,8 @@ import {
 import { ResolverContract } from "./contracts/resolver.contract.js";
 import { ScopeContract } from "./contracts/scope.contract.js";
 import { ContainerError } from "./errors/container.error.js";
+import { Registry } from "./registry.js";
+import { Scope } from "./scope.js";
 
 export class Container implements ContainerContract {
   protected _booted = false;
@@ -24,9 +26,9 @@ export class Container implements ContainerContract {
 
   protected _scope: ScopeContract;
 
-  public constructor(registry: RegistryContract, scope: ScopeContract) {
-    this._registry = registry;
-    this._scope = scope;
+  public constructor(registry?: RegistryContract, scope?: ScopeContract) {
+    this._registry = registry || new Registry();
+    this._scope = scope || new Scope();
   }
 
   public get booted(): boolean {
