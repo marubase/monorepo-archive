@@ -34,12 +34,18 @@ export class Registry implements RegistryContract {
   protected _resolverByKey: Map<
     BindingToken,
     Map<BindingToken, ResolverContract>
-  > = new Map();
+  >;
 
-  protected _resolverByTag: Map<BindingTag, Set<ResolverContract>> = new Map();
+  protected _resolverByTag: Map<BindingTag, Set<ResolverContract>>;
 
-  public constructor(factory: RegistryFactory = DefaultRegistryFactory) {
+  public constructor(
+    factory: RegistryFactory = DefaultRegistryFactory,
+    resolverByKey?: Map<BindingToken, Map<BindingToken, ResolverContract>>,
+    resolverByTag?: Map<BindingTag, Set<ResolverContract>>,
+  ) {
     this._factory = factory;
+    this._resolverByKey = resolverByKey || new Map();
+    this._resolverByTag = resolverByTag || new Map();
   }
 
   public bind(bindable: Bindable): RegistryBinding {
@@ -221,6 +227,22 @@ export class Registry implements RegistryContract {
       this.getResolverByKey(resolveKey) ||
       this.getResolverByKey([resolveKey[0], BindingAlias])
     );
+  }
+
+  public fork(): this {
+    const resolverByKey: Map<
+      BindingToken,
+      Map<BindingToken, ResolverContract>
+    > = new Map();
+    for (const [target, method] of this._resolverByKey)
+      resolverByKey.set(target, new Map(method));
+
+    const resolverByTag: Map<BindingTag, Set<ResolverContract>> = new Map();
+    for (const [bindingTag, resolvers] of this._resolverByTag)
+      resolverByTag.set(bindingTag, new Set(resolvers));
+
+    const Static = this.constructor as typeof Registry;
+    return new Static(this._factory, resolverByKey, resolverByTag) as this;
   }
 
   public getResolverByKey(
