@@ -1,3 +1,4 @@
+import { Contract } from "./contract.js";
 import { ContainerContract } from "./contracts/container.contract.js";
 import {
   ProviderContract,
@@ -29,6 +30,8 @@ export class Container implements ContainerContract {
   public constructor(registry?: RegistryContract, scope?: ScopeContract) {
     this._registry = registry || new Registry();
     this._scope = scope || new Scope();
+    if (typeof registry === "undefined" && typeof scope === "undefined")
+      this.bind(Contract.Container).toInstance(this);
   }
 
   public get booted(): boolean {
