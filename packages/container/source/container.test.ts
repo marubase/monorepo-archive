@@ -52,7 +52,7 @@ class EmptyProvider implements ProviderContract {}
 describe("Container", function () {
   let container: Container;
   beforeEach(async function () {
-    container = new Container(new Registry(), new Scope());
+    container = new Container();
   });
 
   describe("#booted", function () {
