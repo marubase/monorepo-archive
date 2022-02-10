@@ -60,7 +60,7 @@ export class Container implements ContainerContract {
 
   public call<Result>(callable: Callable, ...args: unknown[]): Result {
     const scope = this._scope.fork("request", [BindingRoot, BindingRoot]);
-    return this._registry.call(scope, callable, ...args);
+    return this._registry.fork().call(scope, callable, ...args);
   }
 
   public fetch(resolvable: Resolvable): ResolverContract | undefined {
@@ -69,7 +69,10 @@ export class Container implements ContainerContract {
 
   public fork(): this {
     const Static = this.constructor as typeof Container;
-    return new Static(this._registry, this._scope.fork("container")) as this;
+    return new Static(
+      this._registry.fork(),
+      this._scope.fork("container"),
+    ) as this;
   }
 
   public install(name: ProviderName, provider: ProviderContract): this {
@@ -92,7 +95,7 @@ export class Container implements ContainerContract {
 
   public resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result {
     const scope = this._scope.fork("request", resolvable);
-    return this._registry.resolve(scope, resolvable, ...args);
+    return this._registry.fork().resolve(scope, resolvable, ...args);
   }
 
   public async shutdown(): Promise<void> {
