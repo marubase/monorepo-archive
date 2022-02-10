@@ -174,6 +174,31 @@ describe("Registry", function () {
     });
   });
 
+  describe("#fork()", function () {
+    context("when there is bindingKey", function () {
+      it("should return fork", async function () {
+        registry.createConstantResolver(true).setBindingKey(["test", "method"]);
+
+        const fork = registry.fork();
+        expect(fork).to.be.an.instanceOf(Registry);
+      });
+    });
+    context("when there is bindingTag", function () {
+      it("should return fork", async function () {
+        registry.createConstantResolver(true).setBindingTag("test");
+
+        const fork = registry.fork();
+        expect(fork).to.be.an.instanceOf(Registry);
+      });
+    });
+    context("when there is no binding", function () {
+      it("should return fork", async function () {
+        const fork = registry.fork();
+        expect(fork).to.be.an.instanceOf(Registry);
+      });
+    });
+  });
+
   describe("#getResolverByKey(bindingKey)", function () {
     context("when there is bindingKey", function () {
       it("should return resolver", async function () {
