@@ -1,25 +1,25 @@
 import { expect } from "chai";
 import { anything, instance, mock, reset, when } from "ts-mockito";
-import { CacheContract } from "../contracts/cache.contract.js";
+import { CacheInterface } from "../contracts/cache.contract.js";
 import {
   BindingKey,
-  RegistryContract,
+  RegistryInterface,
 } from "../contracts/registry.contract.js";
-import { ResolverContract } from "../contracts/resolver.contract.js";
-import { ScopeContract } from "../contracts/scope.contract.js";
+import { ResolverInterface } from "../contracts/resolver.contract.js";
+import { ScopeInterface } from "../contracts/scope.contract.js";
 import { ContainerError } from "../errors/container.error.js";
 import { KeyResolver } from "./key-resolver.js";
 
 describe("KeyResolver", function () {
-  let mockCache: CacheContract;
-  let mockConstantResolver: ResolverContract;
-  let mockRegistry: RegistryContract;
-  let mockScope: ScopeContract;
-  let constantResolver: ResolverContract;
-  let cache: CacheContract;
-  let registry: RegistryContract;
+  let mockCache: CacheInterface;
+  let mockConstantResolver: ResolverInterface;
+  let mockRegistry: RegistryInterface;
+  let mockScope: ScopeInterface;
+  let constantResolver: ResolverInterface;
+  let cache: CacheInterface;
+  let registry: RegistryInterface;
   let resolver: KeyResolver;
-  let scope: ScopeContract;
+  let scope: ScopeInterface;
   beforeEach(async function () {
     mockCache = mock();
     mockConstantResolver = mock();
