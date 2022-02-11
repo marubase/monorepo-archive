@@ -1,55 +1,55 @@
-import { ResolverContract } from "./resolver.contract.js";
-import { ScopeContract } from "./scope.contract.js";
+import { ResolverInterface } from "./resolver.contract.js";
+import { ScopeInterface } from "./scope.contract.js";
 
-export interface RegistryContract {
+export interface RegistryInterface {
   bind(bindable: Bindable): RegistryBinding;
 
   call<Result>(
-    scope: ScopeContract,
+    scope: ScopeInterface,
     callable: Callable,
     ...args: unknown[]
   ): Result;
 
   clearResolverByKey(bindingKey: BindingKey): this;
 
-  clearResolverByTag(bindingTag: BindingTag, resolver: ResolverContract): this;
+  clearResolverByTag(bindingTag: BindingTag, resolver: ResolverInterface): this;
 
-  createAliasResolver(alias: Bindable): ResolverContract;
+  createAliasResolver(alias: Bindable): ResolverInterface;
 
-  createClassResolver(target: Function): ResolverContract;
+  createClassResolver(target: Function): ResolverInterface;
 
-  createConstantResolver(constant: unknown): ResolverContract;
+  createConstantResolver(constant: unknown): ResolverInterface;
 
-  createFunctionResolver(target: Function): ResolverContract;
+  createFunctionResolver(target: Function): ResolverInterface;
 
-  createKeyResolver(key: BindingKey): ResolverContract;
+  createKeyResolver(key: BindingKey): ResolverInterface;
 
   createMethodResolver(
     target: Object | Resolvable,
     method: string | symbol,
-  ): ResolverContract;
+  ): ResolverInterface;
 
-  createTagResolver(tag: BindingTag): ResolverContract;
+  createTagResolver(tag: BindingTag): ResolverInterface;
 
-  fetch(resolvable: Resolvable): ResolverContract | undefined;
+  fetch(resolvable: Resolvable): ResolverInterface | undefined;
 
   fork(): this;
 
-  getResolverByKey(bindingKey: BindingKey): ResolverContract | undefined;
+  getResolverByKey(bindingKey: BindingKey): ResolverInterface | undefined;
 
-  getResolverByTag(bindingTag: BindingTag): ResolverContract[];
+  getResolverByTag(bindingTag: BindingTag): ResolverInterface[];
 
   resolve<Result>(
-    scope: ScopeContract,
+    scope: ScopeInterface,
     resolvable: Resolvable,
     ...args: unknown[]
   ): Result;
 
-  setResolverByKey(bindingKey: BindingKey, resolver: ResolverContract): this;
+  setResolverByKey(bindingKey: BindingKey, resolver: ResolverInterface): this;
 
-  setResolverByTag(bindingTag: BindingTag, resolver: ResolverContract): this;
+  setResolverByTag(bindingTag: BindingTag, resolver: ResolverInterface): this;
 
-  unbind(bindable: Bindable): Map<BindingToken, ResolverContract>;
+  unbind(bindable: Bindable): Map<BindingToken, ResolverInterface>;
 }
 
 export const BindingAlias = Symbol("alias");
@@ -67,66 +67,66 @@ export type BindingToken = Function | string | symbol;
 export type Callable = [Object, string | symbol];
 
 export type RegistryBinding = {
-  to(target: Function): ResolverContract;
+  to(target: Function): ResolverInterface;
 
-  toAlias(alias: Bindable): ResolverContract;
+  toAlias(alias: Bindable): ResolverInterface;
 
-  toClass(target: Function): ResolverContract;
+  toClass(target: Function): ResolverInterface;
 
-  toConstant(constant: unknown): ResolverContract;
+  toConstant(constant: unknown): ResolverInterface;
 
-  toFunction(target: Function): ResolverContract;
+  toFunction(target: Function): ResolverInterface;
 
-  toInstance(instance: unknown): ResolverContract;
+  toInstance(instance: unknown): ResolverInterface;
 
-  toKey(key: BindingKey): ResolverContract;
+  toKey(key: BindingKey): ResolverInterface;
 
   toMethod(
     target: Object | Resolvable,
     method: string | symbol,
-  ): ResolverContract;
+  ): ResolverInterface;
 
-  toSelf(): ResolverContract;
+  toSelf(): ResolverInterface;
 
-  toTag(tag: BindingTag): ResolverContract;
+  toTag(tag: BindingTag): ResolverInterface;
 };
 
 export type RegistryFactory = {
   createAliasResolver(
-    registry: RegistryContract,
+    registry: RegistryInterface,
     alias: Bindable,
-  ): ResolverContract;
+  ): ResolverInterface;
 
   createClassResolver(
-    registry: RegistryContract,
+    registry: RegistryInterface,
     target: Function,
-  ): ResolverContract;
+  ): ResolverInterface;
 
   createConstantResolver(
-    registry: RegistryContract,
+    registry: RegistryInterface,
     constant: unknown,
-  ): ResolverContract;
+  ): ResolverInterface;
 
   createFunctionResolver(
-    registry: RegistryContract,
+    registry: RegistryInterface,
     target: Function,
-  ): ResolverContract;
+  ): ResolverInterface;
 
   createKeyResolver(
-    registry: RegistryContract,
+    registry: RegistryInterface,
     key: BindingKey,
-  ): ResolverContract;
+  ): ResolverInterface;
 
   createMethodResolver(
-    registry: RegistryContract,
+    registry: RegistryInterface,
     target: Object | Resolvable,
     method: string | symbol,
-  ): ResolverContract;
+  ): ResolverInterface;
 
   createTagResolver(
-    registry: RegistryContract,
+    registry: RegistryInterface,
     tag: BindingTag,
-  ): ResolverContract;
+  ): ResolverInterface;
 };
 
 export type Resolvable = [BindingToken, BindingToken] | BindingToken;
