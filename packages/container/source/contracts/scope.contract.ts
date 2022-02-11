@@ -1,14 +1,14 @@
-import { CacheContract } from "./cache.contract.js";
+import { CacheInterface } from "./cache.contract.js";
 import { Resolvable } from "./registry.contract.js";
 
-export interface ScopeContract {
-  readonly container: CacheContract;
+export interface ScopeInterface {
+  readonly container: CacheInterface;
 
-  readonly request: CacheContract;
+  readonly request: CacheInterface;
 
   readonly resolvable: Resolvable;
 
-  readonly singleton: CacheContract;
+  readonly singleton: CacheInterface;
 
   fork(type: ScopeForkType, resolvable?: Resolvable): this;
 }
