@@ -5,25 +5,25 @@ import {
   StorageError,
   StorageFactory,
   Watch,
-  WriteBucketContract,
-  WriteTransactionContract,
+  WriteBucketInterface,
+  WriteTransactionInterface,
 } from "@marubase/storage";
 import { keySelector, Transaction } from "foundationdb";
 
 export class WriteBucket<Key, Value>
-  implements WriteBucketContract<Key, Value>
+  implements WriteBucketInterface<Key, Value>
 {
   public readonly factory: StorageFactory;
 
   public readonly name: string;
 
-  public readonly transaction: WriteTransactionContract;
+  public readonly transaction: WriteTransactionInterface;
 
   protected _fdbTransaction: Transaction;
 
   public constructor(
     factory: StorageFactory,
-    transaction: WriteTransactionContract,
+    transaction: WriteTransactionInterface,
     name: string,
     fdbTransaction: Transaction,
   ) {
