@@ -1,9 +1,9 @@
 import {
-  ReadBucketContract,
-  ReadTransactionContract,
-  StorageContract,
+  ReadBucketInterface,
+  ReadTransactionInterface,
   StorageError,
   StorageFactory,
+  StorageInterface,
   TransactionCast,
   TransactionOrder,
   WatcherFn,
@@ -12,7 +12,7 @@ import { Database } from "lmdb";
 import { cast } from "./transaction-cast.js";
 import { order } from "./transaction-order.js";
 
-export class ReadTransaction implements ReadTransactionContract {
+export class ReadTransaction implements ReadTransactionInterface {
   public readonly cast: TransactionCast = cast;
 
   public readonly factory: StorageFactory;
@@ -21,15 +21,15 @@ export class ReadTransaction implements ReadTransactionContract {
 
   public readonly scope: string[];
 
-  public readonly storage: StorageContract;
+  public readonly storage: StorageInterface;
 
-  protected _buckets: ReadBucketContract<unknown, unknown>[] = [];
+  protected _buckets: ReadBucketInterface<unknown, unknown>[] = [];
 
   protected _lmdbDatabase: Database<Buffer, Buffer>;
 
   public constructor(
     factory: StorageFactory,
-    storage: StorageContract,
+    storage: StorageInterface,
     scope: string[],
     lmdbDatabase: Database<Buffer, Buffer>,
   ) {
@@ -42,12 +42,12 @@ export class ReadTransaction implements ReadTransactionContract {
   public get watchers(): WatcherFn[] {
     const toWatchers = (
       watchers: WatcherFn[],
-      bucket: ReadBucketContract<unknown, unknown>,
+      bucket: ReadBucketInterface<unknown, unknown>,
     ): WatcherFn[] => watchers.concat(...(bucket.watchers as WatcherFn[]));
     return this._buckets.reduce(toWatchers, []);
   }
 
-  public bucket<Key, Value>(name: string): ReadBucketContract<Key, Value> {
+  public bucket<Key, Value>(name: string): ReadBucketInterface<Key, Value> {
     if (this.scope.indexOf(name) < 0) {
       const scopes = this.scope.join(", ");
       const context = `Running read transaction in "${name}".`;
