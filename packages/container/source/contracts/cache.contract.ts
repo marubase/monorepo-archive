@@ -1,4 +1,4 @@
-export interface CacheContract {
+export interface CacheInterface {
   clear(key: CacheKey): this;
 
   get(key: CacheKey): unknown;
