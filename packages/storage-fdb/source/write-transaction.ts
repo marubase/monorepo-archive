@@ -1,19 +1,19 @@
 import {
-  ReadTransactionContract,
-  StorageContract,
+  ReadTransactionInterface,
   StorageError,
   StorageFactory,
+  StorageInterface,
   TransactionCast,
   TransactionOrder,
   versionstamp,
-  WriteBucketContract,
-  WriteTransactionContract,
+  WriteBucketInterface,
+  WriteTransactionInterface,
 } from "@marubase/storage";
 import { Directory, Transaction } from "foundationdb";
 import { cast } from "./transaction-cast.js";
 import { order } from "./transaction-order.js";
 
-export class WriteTransaction implements WriteTransactionContract {
+export class WriteTransaction implements WriteTransactionInterface {
   public readonly cast: TransactionCast = cast;
 
   public readonly factory: StorageFactory;
@@ -22,7 +22,7 @@ export class WriteTransaction implements WriteTransactionContract {
 
   public readonly scope: string[];
 
-  public readonly storage: StorageContract;
+  public readonly storage: StorageInterface;
 
   public readonly versionstamp: typeof versionstamp = versionstamp;
 
@@ -32,7 +32,7 @@ export class WriteTransaction implements WriteTransactionContract {
 
   public constructor(
     factory: StorageFactory,
-    storage: StorageContract,
+    storage: StorageInterface,
     scope: string[],
     fdbTransaction: Transaction,
     fdbDirectories: Record<string, Directory>,
@@ -44,7 +44,7 @@ export class WriteTransaction implements WriteTransactionContract {
     this._fdbDirectories = fdbDirectories;
   }
 
-  public bucket<Key, Value>(name: string): WriteBucketContract<Key, Value> {
+  public bucket<Key, Value>(name: string): WriteBucketInterface<Key, Value> {
     if (!(name in this._fdbDirectories)) {
       const scopes = Object.keys(this._fdbDirectories).join(", ");
       const context = `Running write transaction in "${name}".`;
@@ -64,7 +64,7 @@ export class WriteTransaction implements WriteTransactionContract {
     return this._fdbTransaction.getNextTransactionID();
   }
 
-  public snapshot(): ReadTransactionContract {
+  public snapshot(): ReadTransactionInterface {
     return this.factory.createReadTransaction(
       this.factory,
       this.storage,
