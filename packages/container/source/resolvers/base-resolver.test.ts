@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { instance, mock, reset, when } from "ts-mockito";
-import { RegistryContract } from "../contracts/registry.contract.js";
-import { ScopeContract } from "../contracts/scope.contract.js";
+import { RegistryInterface } from "../contracts/registry.contract.js";
+import { ScopeInterface } from "../contracts/scope.contract.js";
 import { BaseResolver } from "./base-resolver.js";
 
 class TestResolver extends BaseResolver {
@@ -11,11 +11,11 @@ class TestResolver extends BaseResolver {
 }
 
 describe("BaseResolver", function () {
-  let mockRegistry: RegistryContract;
-  let mockScope: ScopeContract;
-  let registry: RegistryContract;
+  let mockRegistry: RegistryInterface;
+  let mockScope: ScopeInterface;
+  let registry: RegistryInterface;
   let resolver: BaseResolver;
-  let scope: ScopeContract;
+  let scope: ScopeInterface;
   beforeEach(async function () {
     mockRegistry = mock();
     mockScope = mock();
