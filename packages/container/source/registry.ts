@@ -7,12 +7,12 @@ import {
   BindingToken,
   Callable,
   RegistryBinding,
-  RegistryContract,
   RegistryFactory,
+  RegistryInterface,
   Resolvable,
 } from "./contracts/registry.contract.js";
-import { ResolverContract } from "./contracts/resolver.contract.js";
-import { ScopeContract } from "./contracts/scope.contract.js";
+import { ResolverInterface } from "./contracts/resolver.contract.js";
+import { ScopeInterface } from "./contracts/scope.contract.js";
 import { ContainerError } from "./errors/container.error.js";
 import {
   getResolverDependencies,
@@ -28,20 +28,20 @@ import { KeyResolver } from "./resolvers/key-resolver.js";
 import { MethodResolver } from "./resolvers/method-resolver.js";
 import { TagResolver } from "./resolvers/tag-resolver.js";
 
-export class Registry implements RegistryContract {
+export class Registry implements RegistryInterface {
   protected _factory: RegistryFactory;
 
   protected _resolverByKey: Map<
     BindingToken,
-    Map<BindingToken, ResolverContract>
+    Map<BindingToken, ResolverInterface>
   >;
 
-  protected _resolverByTag: Map<BindingTag, Set<ResolverContract>>;
+  protected _resolverByTag: Map<BindingTag, Set<ResolverInterface>>;
 
   public constructor(
     factory: RegistryFactory = DefaultRegistryFactory,
-    resolverByKey?: Map<BindingToken, Map<BindingToken, ResolverContract>>,
-    resolverByTag?: Map<BindingTag, Set<ResolverContract>>,
+    resolverByKey?: Map<BindingToken, Map<BindingToken, ResolverInterface>>,
+    resolverByTag?: Map<BindingTag, Set<ResolverInterface>>,
   ) {
     this._factory = factory;
     this._resolverByKey = resolverByKey || new Map();
@@ -148,7 +148,7 @@ export class Registry implements RegistryContract {
   }
 
   public call<Result>(
-    scope: ScopeContract,
+    scope: ScopeInterface,
     callable: Callable,
     ...args: unknown[]
   ): Result {
@@ -168,7 +168,7 @@ export class Registry implements RegistryContract {
     const [primary, secondary] = bindingKey;
     const table =
       this._resolverByKey.get(primary) ||
-      new Map<BindingToken, ResolverContract>();
+      new Map<BindingToken, ResolverInterface>();
     table.delete(secondary);
     if (table.size < 1) this._resolverByKey.delete(primary);
     return this;
@@ -176,45 +176,45 @@ export class Registry implements RegistryContract {
 
   public clearResolverByTag(
     bindingTag: BindingTag,
-    resolver: ResolverContract,
+    resolver: ResolverInterface,
   ): this {
     const resolvers = this._resolverByTag.get(bindingTag);
     if (typeof resolvers !== "undefined") resolvers.delete(resolver);
     return this;
   }
 
-  public createAliasResolver(alias: Bindable): ResolverContract {
+  public createAliasResolver(alias: Bindable): ResolverInterface {
     return this._factory.createAliasResolver(this, alias);
   }
 
-  public createClassResolver(target: Function): ResolverContract {
+  public createClassResolver(target: Function): ResolverInterface {
     return this._factory.createClassResolver(this, target);
   }
 
-  public createConstantResolver(constant: unknown): ResolverContract {
+  public createConstantResolver(constant: unknown): ResolverInterface {
     return this._factory.createConstantResolver(this, constant);
   }
 
-  public createFunctionResolver(target: Function): ResolverContract {
+  public createFunctionResolver(target: Function): ResolverInterface {
     return this._factory.createFunctionResolver(this, target);
   }
 
-  public createKeyResolver(key: BindingKey): ResolverContract {
+  public createKeyResolver(key: BindingKey): ResolverInterface {
     return this._factory.createKeyResolver(this, key);
   }
 
   public createMethodResolver(
     target: Object | Resolvable,
     method: string | symbol,
-  ): ResolverContract {
+  ): ResolverInterface {
     return this._factory.createMethodResolver(this, target, method);
   }
 
-  public createTagResolver(tag: BindingTag): ResolverContract {
+  public createTagResolver(tag: BindingTag): ResolverInterface {
     return this._factory.createTagResolver(this, tag);
   }
 
-  public fetch(resolvable: Resolvable): ResolverContract | undefined {
+  public fetch(resolvable: Resolvable): ResolverInterface | undefined {
     let resolveKey = !Array.isArray(resolvable)
       ? ([resolvable, BindingRoot] as BindingKey)
       : (resolvable as BindingKey);
@@ -232,12 +232,12 @@ export class Registry implements RegistryContract {
   public fork(): this {
     const resolverByKey: Map<
       BindingToken,
-      Map<BindingToken, ResolverContract>
+      Map<BindingToken, ResolverInterface>
     > = new Map();
     for (const [target, method] of this._resolverByKey)
       resolverByKey.set(target, new Map(method));
 
-    const resolverByTag: Map<BindingTag, Set<ResolverContract>> = new Map();
+    const resolverByTag: Map<BindingTag, Set<ResolverInterface>> = new Map();
     for (const [bindingTag, resolvers] of this._resolverByTag)
       resolverByTag.set(bindingTag, new Set(resolvers));
 
@@ -247,19 +247,19 @@ export class Registry implements RegistryContract {
 
   public getResolverByKey(
     bindingKey: BindingKey,
-  ): ResolverContract | undefined {
+  ): ResolverInterface | undefined {
     const [primary, secondary] = bindingKey;
     const table = this._resolverByKey.get(primary);
     return typeof table !== "undefined" ? table.get(secondary) : undefined;
   }
 
-  public getResolverByTag(bindingTag: BindingTag): ResolverContract[] {
+  public getResolverByTag(bindingTag: BindingTag): ResolverInterface[] {
     const resolvers = this._resolverByTag.get(bindingTag);
     return typeof resolvers !== "undefined" ? Array.from(resolvers) : [];
   }
 
   public resolve<Result>(
-    scope: ScopeContract,
+    scope: ScopeInterface,
     resolvable: Resolvable,
     ...args: unknown[]
   ): Result {
@@ -276,12 +276,12 @@ export class Registry implements RegistryContract {
 
   public setResolverByKey(
     bindingKey: BindingKey,
-    resolver: ResolverContract,
+    resolver: ResolverInterface,
   ): this {
     const [primary, secondary] = bindingKey;
     const table =
       this._resolverByKey.get(primary) ||
-      new Map<BindingToken, ResolverContract>();
+      new Map<BindingToken, ResolverInterface>();
     table.set(secondary, resolver);
     this._resolverByKey.set(primary, table);
     return this;
@@ -289,18 +289,18 @@ export class Registry implements RegistryContract {
 
   public setResolverByTag(
     bindingTag: BindingTag,
-    resolver: ResolverContract,
+    resolver: ResolverInterface,
   ): this {
     let resolvers = this._resolverByTag.get(bindingTag);
     if (typeof resolvers === "undefined") {
       this._resolverByTag.set(bindingTag, new Set());
-      resolvers = this._resolverByTag.get(bindingTag) as Set<ResolverContract>;
+      resolvers = this._resolverByTag.get(bindingTag) as Set<ResolverInterface>;
     }
     resolvers.add(resolver);
     return this;
   }
 
-  public unbind(bindable: Bindable): Map<BindingToken, ResolverContract> {
+  public unbind(bindable: Bindable): Map<BindingToken, ResolverInterface> {
     const resolvers = this._resolverByKey.get(bindable);
     this._resolverByKey.delete(bindable);
     return resolvers || new Map();
