@@ -3,6 +3,8 @@ import { StorageFactory, StorageInterface } from "./storage.contract.js";
 import { TransactionCast } from "./transaction-cast.contract.js";
 import { TransactionOrder } from "./transaction-order.contract.js";
 
+export const ReadTransactionContract = Symbol("ReadTransactionContract");
+
 export interface ReadTransactionInterface {
   readonly cast: TransactionCast;
 
