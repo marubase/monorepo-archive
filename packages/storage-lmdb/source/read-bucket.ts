@@ -2,21 +2,21 @@ import {
   decode,
   encode,
   RangeOptions,
-  ReadBucketContract,
-  ReadTransactionContract,
-  StorageContract,
+  ReadBucketInterface,
+  ReadTransactionInterface,
   StorageFactory,
+  StorageInterface,
   Watch,
   WatcherFn,
 } from "@marubase/storage";
 import { Database, RangeOptions as LMDBRangeOptions } from "lmdb";
 
-export class ReadBucket<Key, Value> implements ReadBucketContract<Key, Value> {
+export class ReadBucket<Key, Value> implements ReadBucketInterface<Key, Value> {
   public readonly factory: StorageFactory;
 
   public readonly name: string;
 
-  public readonly transaction: ReadTransactionContract;
+  public readonly transaction: ReadTransactionInterface;
 
   public readonly watchers: WatcherFn[] = [];
 
@@ -24,7 +24,7 @@ export class ReadBucket<Key, Value> implements ReadBucketContract<Key, Value> {
 
   public constructor(
     factory: StorageFactory,
-    transaction: ReadTransactionContract,
+    transaction: ReadTransactionInterface,
     name: string,
     lmdbDatabase: Database<Buffer, Buffer>,
   ) {
@@ -86,12 +86,12 @@ export class ReadBucket<Key, Value> implements ReadBucketContract<Key, Value> {
     });
 
     let _value: Buffer | undefined;
-    const watcherFn = async (storage: StorageContract): Promise<void> => {
+    const watcherFn = async (storage: StorageInterface): Promise<void> => {
       _value = await this.getBinary(key);
       setTimeout(() => watcherPoll(storage), 16);
     };
 
-    const watcherPoll = (storage: StorageContract): void => {
+    const watcherPoll = (storage: StorageInterface): void => {
       const poll = async (): Promise<boolean> => {
         while (!_cancelled) {
           await new Promise((resolve) => setTimeout(resolve, 16));
