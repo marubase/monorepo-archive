@@ -5,7 +5,11 @@ export interface MessageInterface {
 
   readonly headers: MessageHeaders;
 
+  clearBody(): this;
+
   clearHeader(key: string): this;
+
+  clearHeaders(): this;
 
   getHeader(key: string): string[] | string | undefined;
 
@@ -14,6 +18,8 @@ export interface MessageInterface {
   setBody(body: unknown): this;
 
   setHeader(key: string, value: string[] | string): this;
+
+  setHeaders(headers: MessageHeaders): this;
 }
 
 export type MessageHeaders = Record<string, string[]>;
