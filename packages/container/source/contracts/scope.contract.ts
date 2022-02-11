@@ -1,6 +1,8 @@
 import { CacheInterface } from "./cache.contract.js";
 import { Resolvable } from "./registry.contract.js";
 
+export const ScopeContract = Symbol("ScopeContract");
+
 export interface ScopeInterface {
   readonly container: CacheInterface;
 
