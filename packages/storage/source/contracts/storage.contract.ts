@@ -1,17 +1,17 @@
 import { versionstamp } from "@marubase/collator";
 import {
   RangeOptions,
-  ReadBucketContract,
+  ReadBucketInterface,
   Watch,
   WatchWithValue,
 } from "./read-bucket.contract.js";
-import { ReadTransactionContract } from "./read-transaction.contract.js";
+import { ReadTransactionInterface } from "./read-transaction.contract.js";
 import { TransactionCast } from "./transaction-cast.contract.js";
 import { TransactionOrder } from "./transaction-order.contract.js";
-import { WriteBucketContract } from "./write-bucket.contract.js";
-import { WriteTransactionContract } from "./write-transaction.contract.js";
+import { WriteBucketInterface } from "./write-bucket.contract.js";
+import { WriteTransactionInterface } from "./write-transaction.contract.js";
 
-export interface StorageContract {
+export interface StorageInterface {
   readonly cast: TransactionCast;
 
   readonly factory: StorageFactory;
@@ -26,12 +26,12 @@ export interface StorageContract {
 
   read<Result>(
     scope: string | string[],
-    transactionFn: TransactionFn<ReadTransactionContract, Result>,
+    transactionFn: TransactionFn<ReadTransactionInterface, Result>,
   ): Promise<Result>;
 
   write<Result>(
     scope: string | string[],
-    transactionFn: TransactionFn<WriteTransactionContract, Result>,
+    transactionFn: TransactionFn<WriteTransactionInterface, Result>,
   ): Promise<Result>;
 }
 
@@ -70,31 +70,31 @@ export type StorageFactory = {
 
   createReadBucket<Key, Value>(
     factory: StorageFactory,
-    transaction: ReadTransactionContract,
+    transaction: ReadTransactionInterface,
     name: string,
     ...args: unknown[]
-  ): ReadBucketContract<Key, Value>;
+  ): ReadBucketInterface<Key, Value>;
 
   createReadTransaction(
     factory: StorageFactory,
-    storage: StorageContract,
+    storage: StorageInterface,
     scope: string[],
     ...args: unknown[]
-  ): ReadTransactionContract;
+  ): ReadTransactionInterface;
 
   createWriteBucket<Key, Value>(
     factory: StorageFactory,
-    transaction: WriteTransactionContract,
+    transaction: WriteTransactionInterface,
     name: string,
     ...args: unknown[]
-  ): WriteBucketContract<Key, Value>;
+  ): WriteBucketInterface<Key, Value>;
 
   createWriteTransaction(
     factory: StorageFactory,
-    storage: StorageContract,
+    storage: StorageInterface,
     scope: string[],
     ...args: unknown[]
-  ): WriteTransactionContract;
+  ): WriteTransactionInterface;
 };
 
 export type TransactionFn<Transaction, Result> = (
