@@ -1,9 +1,9 @@
-import { StorageContract, StorageError } from "@marubase/storage";
+import { StorageError, StorageInterface } from "@marubase/storage";
 import { expect } from "chai";
 
-export function versionstampTest(storageFn: () => StorageContract): void {
+export function versionstampTest(storageFn: () => StorageInterface): void {
   describe("Versionstamp", function () {
-    let storage: StorageContract;
+    let storage: StorageInterface;
     beforeEach(async function () {
       storage = storageFn();
     });
