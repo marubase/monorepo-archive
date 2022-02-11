@@ -1,13 +1,13 @@
-import { ContainerContract } from "./container.contract.js";
+import { ContainerInterface } from "./container.contract.js";
 
-export interface ProviderContract {
-  boot?(container: ContainerContract): Promise<void>;
+export interface ProviderInterface {
+  boot?(container: ContainerInterface): Promise<void>;
 
-  install?(container: ContainerContract): void;
+  install?(container: ContainerInterface): void;
 
-  shutdown?(container: ContainerContract): Promise<void>;
+  shutdown?(container: ContainerInterface): Promise<void>;
 
-  uninstall?(container: ContainerContract): void;
+  uninstall?(container: ContainerInterface): void;
 }
 
 export type ProviderName = string | symbol;
