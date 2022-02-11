@@ -1,22 +1,22 @@
 import { Cache } from "./cache.js";
-import { CacheContract } from "./contracts/cache.contract.js";
+import { CacheInterface } from "./contracts/cache.contract.js";
 import { BindingRoot, Resolvable } from "./contracts/registry.contract.js";
-import { ScopeContract, ScopeForkType } from "./contracts/scope.contract.js";
+import { ScopeForkType, ScopeInterface } from "./contracts/scope.contract.js";
 
-export class Scope implements ScopeContract {
-  protected _container: CacheContract;
+export class Scope implements ScopeInterface {
+  protected _container: CacheInterface;
 
-  protected _request: CacheContract;
+  protected _request: CacheInterface;
 
   protected _resolvable: Resolvable;
 
-  protected _singleton: CacheContract;
+  protected _singleton: CacheInterface;
 
   public constructor(
     resolvable?: Resolvable,
-    singleton?: CacheContract,
-    container?: CacheContract,
-    request?: CacheContract,
+    singleton?: CacheInterface,
+    container?: CacheInterface,
+    request?: CacheInterface,
   ) {
     this._resolvable = resolvable || [BindingRoot, BindingRoot];
     this._singleton = singleton || new Cache();
@@ -24,11 +24,11 @@ export class Scope implements ScopeContract {
     this._request = request || new Cache();
   }
 
-  public get container(): CacheContract {
+  public get container(): CacheInterface {
     return this._container;
   }
 
-  public get request(): CacheContract {
+  public get request(): CacheInterface {
     return this._request;
   }
 
@@ -36,7 +36,7 @@ export class Scope implements ScopeContract {
     return this._resolvable;
   }
 
-  public get singleton(): CacheContract {
+  public get singleton(): CacheInterface {
     return this._singleton;
   }
 
