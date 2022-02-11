@@ -3,7 +3,7 @@ export const MessageContract = Symbol("MessageContract");
 export interface MessageInterface {
   readonly body: unknown;
 
-  readonly headers: MessageHeaders;
+  readonly headers: Record<string, string[]>;
 
   clearBody(): this;
 
@@ -19,7 +19,5 @@ export interface MessageInterface {
 
   setHeader(key: string, value: string[] | string): this;
 
-  setHeaders(headers: MessageHeaders): this;
+  setHeaders(headers: Record<string, string[]>): this;
 }
-
-export type MessageHeaders = Record<string, string[]>;
