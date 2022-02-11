@@ -1,27 +1,27 @@
 import {
   BindingKey,
   BindingTag,
-  RegistryContract,
+  RegistryInterface,
   Resolvable,
 } from "../contracts/registry.contract.js";
 import {
-  ResolverContract,
+  ResolverInterface,
   ResolverScope,
 } from "../contracts/resolver.contract.js";
-import { ScopeContract } from "../contracts/scope.contract.js";
+import { ScopeInterface } from "../contracts/scope.contract.js";
 
-export abstract class BaseResolver implements ResolverContract {
+export abstract class BaseResolver implements ResolverInterface {
   protected _bindingKey?: BindingKey;
 
   protected _bindingTags: Set<BindingTag> = new Set();
 
   protected _dependencies: Resolvable[] = [];
 
-  protected _registry: RegistryContract;
+  protected _registry: RegistryInterface;
 
   protected _scope: ResolverScope = "transient";
 
-  public constructor(registry: RegistryContract) {
+  public constructor(registry: RegistryInterface) {
     this._registry = registry;
   }
 
@@ -37,7 +37,7 @@ export abstract class BaseResolver implements ResolverContract {
     return this._dependencies;
   }
 
-  public get registry(): RegistryContract {
+  public get registry(): RegistryInterface {
     return this._registry;
   }
 
@@ -69,7 +69,7 @@ export abstract class BaseResolver implements ResolverContract {
     return this;
   }
 
-  public resolveDependencies(scope: ScopeContract): unknown[] {
+  public resolveDependencies(scope: ScopeInterface): unknown[] {
     const toInstance = (resolvable: Resolvable): unknown =>
       this._registry.resolve(scope, resolvable);
     return this._dependencies.map(toInstance);
@@ -106,7 +106,7 @@ export abstract class BaseResolver implements ResolverContract {
   }
 
   public abstract resolve<Result>(
-    scope: ScopeContract,
+    scope: ScopeInterface,
     ...args: unknown[]
   ): Result;
 }
