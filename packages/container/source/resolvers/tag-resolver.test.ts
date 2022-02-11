@@ -1,18 +1,18 @@
 import { expect } from "chai";
 import { instance, mock, reset, when } from "ts-mockito";
-import { RegistryContract } from "../contracts/registry.contract.js";
-import { ResolverContract } from "../contracts/resolver.contract.js";
-import { ScopeContract } from "../contracts/scope.contract.js";
+import { RegistryInterface } from "../contracts/registry.contract.js";
+import { ResolverInterface } from "../contracts/resolver.contract.js";
+import { ScopeInterface } from "../contracts/scope.contract.js";
 import { TagResolver } from "./tag-resolver.js";
 
 describe("TagResolver", function () {
-  let mockRegistry: RegistryContract;
-  let mockResolver: ResolverContract;
-  let mockScope: ScopeContract;
-  let constantResolver: ResolverContract;
-  let registry: RegistryContract;
+  let mockRegistry: RegistryInterface;
+  let mockResolver: ResolverInterface;
+  let mockScope: ScopeInterface;
+  let constantResolver: ResolverInterface;
+  let registry: RegistryInterface;
   let resolver: TagResolver;
-  let scope: ScopeContract;
+  let scope: ScopeInterface;
   beforeEach(async function () {
     mockRegistry = mock();
     mockResolver = mock();
