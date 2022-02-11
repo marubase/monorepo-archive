@@ -16,13 +16,6 @@ export class Message implements MessageInterface {
     return this._headers;
   }
 
-  public appendHeader(key: string, value: string[] | string): this {
-    if (!(key in this._headers)) this._headers[key] = [];
-    if (Array.isArray(value)) this._headers[key].push(...value);
-    else this._headers[key].push(value);
-    return this;
-  }
-
   public clearHeader(key: string): this {
     delete this._headers[key];
     return this;
