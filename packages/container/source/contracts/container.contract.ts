@@ -9,6 +9,8 @@ import {
 import { ResolverInterface } from "./resolver.contract.js";
 import { ScopeInterface } from "./scope.contract.js";
 
+export const ContainerContract = Symbol("ContainerContract");
+
 export interface ContainerInterface {
   readonly booted: boolean;
 
