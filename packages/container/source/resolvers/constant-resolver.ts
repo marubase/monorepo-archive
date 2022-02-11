@@ -1,11 +1,14 @@
-import { RegistryContract } from "../contracts/registry.contract.js";
-import { ResolverContract } from "../contracts/resolver.contract.js";
+import { RegistryInterface } from "../contracts/registry.contract.js";
+import { ResolverInterface } from "../contracts/resolver.contract.js";
 import { BaseResolver } from "./base-resolver.js";
 
-export class ConstantResolver extends BaseResolver implements ResolverContract {
+export class ConstantResolver
+  extends BaseResolver
+  implements ResolverInterface
+{
   protected _constant: unknown;
 
-  public constructor(registry: RegistryContract, constant: unknown) {
+  public constructor(registry: RegistryInterface, constant: unknown) {
     super(registry);
     this._constant = constant;
   }
