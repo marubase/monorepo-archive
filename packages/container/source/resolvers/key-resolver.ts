@@ -2,22 +2,22 @@ import {
   BindingAlias,
   BindingKey,
   BindingToken,
-  RegistryContract,
+  RegistryInterface,
 } from "../contracts/registry.contract.js";
-import { ResolverContract } from "../contracts/resolver.contract.js";
-import { ScopeContract } from "../contracts/scope.contract.js";
+import { ResolverInterface } from "../contracts/resolver.contract.js";
+import { ScopeInterface } from "../contracts/scope.contract.js";
 import { ContainerError } from "../errors/container.error.js";
 import { BaseResolver } from "./base-resolver.js";
 
-export class KeyResolver extends BaseResolver implements ResolverContract {
+export class KeyResolver extends BaseResolver implements ResolverInterface {
   protected _key: BindingKey;
 
-  public constructor(registry: RegistryContract, key: BindingKey) {
+  public constructor(registry: RegistryInterface, key: BindingKey) {
     super(registry);
     this._key = key;
   }
 
-  public resolve<Result>(scope: ScopeContract, ...args: unknown[]): Result {
+  public resolve<Result>(scope: ScopeInterface, ...args: unknown[]): Result {
     const resolver =
       this._registry.getResolverByKey(this._key) ||
       this._registry.getResolverByKey([this._key[0], BindingAlias]);
