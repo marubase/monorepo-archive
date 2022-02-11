@@ -1,6 +1,8 @@
 import { ReadTransactionInterface } from "./read-transaction.contract.js";
 import { StorageFactory, StorageInterface } from "./storage.contract.js";
 
+export const ReadBucketContract = Symbol("ReadBucketContract");
+
 export interface ReadBucketInterface<Key, Value> {
   readonly factory: StorageFactory;
 
