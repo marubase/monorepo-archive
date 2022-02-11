@@ -1,19 +1,19 @@
 import {
   BindingKey,
   BindingTag,
-  RegistryContract,
+  RegistryInterface,
   Resolvable,
 } from "./registry.contract.js";
-import { ScopeContract } from "./scope.contract.js";
+import { ScopeInterface } from "./scope.contract.js";
 
-export interface ResolverContract {
+export interface ResolverInterface {
   readonly bindingKey?: BindingKey;
 
   readonly bindingTags: BindingTag[];
 
   readonly dependencies: Resolvable[];
 
-  readonly registry: RegistryContract;
+  readonly registry: RegistryInterface;
 
   readonly scope: ResolverScope;
 
@@ -25,9 +25,9 @@ export interface ResolverContract {
 
   clearDependencies(): this;
 
-  resolve<Result>(scope: ScopeContract, ...args: unknown[]): Result;
+  resolve<Result>(scope: ScopeInterface, ...args: unknown[]): Result;
 
-  resolveDependencies(scope: ScopeContract): unknown[];
+  resolveDependencies(scope: ScopeInterface): unknown[];
 
   setBindingKey(bindingKey: BindingKey): this;
 
