@@ -9,7 +9,7 @@ export interface RequestInterface extends MessageInterface {
 
   setHash(hash: string): this;
 
-  setHost(host: string): this;
+  setHostname(hostname: string): this;
 
   setMethod(method: RequestMethod): this;
 
@@ -17,11 +17,11 @@ export interface RequestInterface extends MessageInterface {
 
   setPassword(password: string): this;
 
-  setPath(path: string): this;
+  setPathname(pathname: string): this;
 
   setPort(port: number): this;
 
-  setScheme(scheme: string): this;
+  setProtocol(protocol: string): this;
 
   setURL(url: URL | string, base?: string): this;
 
