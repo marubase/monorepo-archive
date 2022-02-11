@@ -2,18 +2,18 @@ import {
   decode,
   encode,
   RangeOptions,
-  StorageContract,
   StorageError,
   StorageFactory,
+  StorageInterface,
   Watch,
   WatcherFn,
-  WriteBucketContract,
-  WriteTransactionContract,
+  WriteBucketInterface,
+  WriteTransactionInterface,
 } from "@marubase/storage";
 import { IDBPObjectStore } from "idb/with-async-ittr";
 
 export class WriteBucket<Key, Value>
-  implements WriteBucketContract<Key, Value>
+  implements WriteBucketInterface<Key, Value>
 {
   public readonly factory: StorageFactory;
 
@@ -21,7 +21,7 @@ export class WriteBucket<Key, Value>
 
   public readonly name: string;
 
-  public readonly transaction: WriteTransactionContract;
+  public readonly transaction: WriteTransactionInterface;
 
   public readonly watchers: WatcherFn[] = [];
 
@@ -29,7 +29,7 @@ export class WriteBucket<Key, Value>
 
   public constructor(
     factory: StorageFactory,
-    transaction: WriteTransactionContract,
+    transaction: WriteTransactionInterface,
     name: string,
     idbStore: IDBPObjectStore<unknown, string[], string, "readwrite">,
   ) {
@@ -162,12 +162,12 @@ export class WriteBucket<Key, Value>
     });
 
     let _value: Buffer | undefined;
-    const watcherFn = async (storage: StorageContract): Promise<void> => {
+    const watcherFn = async (storage: StorageInterface): Promise<void> => {
       _value = await this.getBinary(key);
       setTimeout(() => watcherPoll(storage), 16);
     };
 
-    const watcherPoll = (storage: StorageContract): void => {
+    const watcherPoll = (storage: StorageInterface): void => {
       const poll = async (): Promise<boolean> => {
         while (!_cancelled) {
           await new Promise((resolve) => setTimeout(resolve, 16));
