@@ -1,9 +1,9 @@
-import { ReadBucketContract } from "./read-bucket.contract.js";
-import { WriteTransactionContract } from "./write-transaction.contract.js";
+import { ReadBucketInterface } from "./read-bucket.contract.js";
+import { WriteTransactionInterface } from "./write-transaction.contract.js";
 
-export interface WriteBucketContract<Key, Value>
-  extends ReadBucketContract<Key, Value> {
-  readonly transaction: WriteTransactionContract;
+export interface WriteBucketInterface<Key, Value>
+  extends ReadBucketInterface<Key, Value> {
+  readonly transaction: WriteTransactionInterface;
 
   clear(key: Key): void;
 
