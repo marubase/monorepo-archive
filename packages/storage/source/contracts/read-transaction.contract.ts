@@ -1,9 +1,9 @@
-import { ReadBucketContract, WatcherFn } from "./read-bucket.contract.js";
-import { StorageContract, StorageFactory } from "./storage.contract.js";
+import { ReadBucketInterface, WatcherFn } from "./read-bucket.contract.js";
+import { StorageFactory, StorageInterface } from "./storage.contract.js";
 import { TransactionCast } from "./transaction-cast.contract.js";
 import { TransactionOrder } from "./transaction-order.contract.js";
 
-export interface ReadTransactionContract {
+export interface ReadTransactionInterface {
   readonly cast: TransactionCast;
 
   readonly factory: StorageFactory;
@@ -14,9 +14,9 @@ export interface ReadTransactionContract {
 
   readonly scope: string[];
 
-  readonly storage: StorageContract;
+  readonly storage: StorageInterface;
 
   readonly watchers?: WatcherFn[];
 
-  bucket<Key, Value>(name: string): ReadBucketContract<Key, Value>;
+  bucket<Key, Value>(name: string): ReadBucketInterface<Key, Value>;
 }
