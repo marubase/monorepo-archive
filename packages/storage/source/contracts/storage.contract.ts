@@ -11,6 +11,8 @@ import { TransactionOrder } from "./transaction-order.contract.js";
 import { WriteBucketInterface } from "./write-bucket.contract.js";
 import { WriteTransactionInterface } from "./write-transaction.contract.js";
 
+export const StorageContract = Symbol("StorageContract");
+
 export interface StorageInterface {
   readonly cast: TransactionCast;
 
