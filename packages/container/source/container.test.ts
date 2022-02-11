@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { Container } from "./container.js";
-import { ProviderContract } from "./contracts/provider.contract.js";
+import { ProviderInterface } from "./contracts/provider.contract.js";
 import { inject, resolvable, tag } from "./decorator.js";
 import { ContainerError } from "./errors/container.error.js";
 import { Registry } from "./registry.js";
@@ -23,7 +23,7 @@ class Tester {
   }
 }
 
-class TestProvider implements ProviderContract {
+class TestProvider implements ProviderInterface {
   public async boot(): Promise<void> {
     return;
   }
@@ -38,7 +38,7 @@ class TestProvider implements ProviderContract {
   }
 }
 
-class ShutdowProvider implements ProviderContract {
+class ShutdowProvider implements ProviderInterface {
   public async boot(): Promise<void> {
     return;
   }
@@ -47,7 +47,7 @@ class ShutdowProvider implements ProviderContract {
   }
 }
 
-class EmptyProvider implements ProviderContract {}
+class EmptyProvider implements ProviderInterface {}
 
 describe("Container", function () {
   let container: Container;
