@@ -1,9 +1,9 @@
-import { StorageContract } from "@marubase/storage";
+import { StorageInterface } from "@marubase/storage";
 import { expect } from "chai";
 
-export function transactionTest(storageFn: () => StorageContract): void {
+export function transactionTest(storageFn: () => StorageInterface): void {
   describe("Transaction", function () {
-    let storage: StorageContract;
+    let storage: StorageInterface;
     beforeEach(async function () {
       storage = storageFn();
     });
