@@ -1,5 +1,4 @@
 import { ContextInterface } from "./contracts/context.contract.js";
-import { MessageHeaders } from "./contracts/message.contract.js";
 import {
   RequestInterface,
   RequestMethod,
@@ -23,7 +22,7 @@ export class Context implements ContextInterface {
     return this._request.body;
   }
 
-  public get headers(): MessageHeaders {
+  public get headers(): Record<string, string[]> {
     return this._request.headers;
   }
 
