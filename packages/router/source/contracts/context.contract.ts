@@ -1,4 +1,3 @@
-import { MessageHeaders } from "./message.contract.js";
 import { RequestInterface, RequestMethod } from "./request.contract.js";
 import { ResponseInterface, StatusCode } from "./response.contract.js";
 
@@ -7,7 +6,7 @@ export const ContextContract = Symbol("ContextContract");
 export interface ContextInterface {
   readonly body: unknown;
 
-  readonly headers: MessageHeaders;
+  readonly headers: Record<string, string[]>;
 
   readonly method: RequestMethod;
 
