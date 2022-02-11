@@ -2,21 +2,21 @@ import {
   Bindable,
   BindingKey,
   BindingRoot,
-  RegistryContract,
+  RegistryInterface,
 } from "../contracts/registry.contract.js";
-import { ResolverContract } from "../contracts/resolver.contract.js";
-import { ScopeContract } from "../contracts/scope.contract.js";
+import { ResolverInterface } from "../contracts/resolver.contract.js";
+import { ScopeInterface } from "../contracts/scope.contract.js";
 import { BaseResolver } from "./base-resolver.js";
 
-export class AliasResolver extends BaseResolver implements ResolverContract {
+export class AliasResolver extends BaseResolver implements ResolverInterface {
   protected _alias: Bindable;
 
-  public constructor(registry: RegistryContract, alias: Bindable) {
+  public constructor(registry: RegistryInterface, alias: Bindable) {
     super(registry);
     this._alias = alias;
   }
 
-  public resolve<Result>(scope: ScopeContract, ...args: unknown[]): Result {
+  public resolve<Result>(scope: ScopeInterface, ...args: unknown[]): Result {
     let resolveKey = !Array.isArray(scope.resolvable)
       ? ([scope.resolvable, BindingRoot] as BindingKey)
       : (scope.resolvable as BindingKey);
