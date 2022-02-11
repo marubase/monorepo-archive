@@ -5,8 +5,6 @@ export interface MessageInterface {
 
   readonly headers: MessageHeaders;
 
-  appendHeader(key: string, value: string[] | string): this;
-
   clearHeader(key: string): this;
 
   getHeader(key: string): string[] | string | undefined;
