@@ -1,15 +1,15 @@
 import { expect } from "chai";
 import { instance, mock, reset } from "ts-mockito";
 import { BindingAlias, BindingRoot } from "./contracts/registry.contract.js";
-import { ScopeContract } from "./contracts/scope.contract.js";
+import { ScopeInterface } from "./contracts/scope.contract.js";
 import { setResolvable } from "./metadata.js";
 import { Registry } from "./registry.js";
 import { BaseResolver } from "./resolvers/base-resolver.js";
 
 describe("Registry", function () {
-  let mockScope: ScopeContract;
+  let mockScope: ScopeInterface;
   let registry: Registry;
-  let scope: ScopeContract;
+  let scope: ScopeInterface;
   beforeEach(async function () {
     mockScope = mock();
     registry = new Registry();
