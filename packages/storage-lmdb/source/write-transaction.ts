@@ -1,23 +1,23 @@
 import {
   decode,
   encode,
-  ReadTransactionContract,
-  StorageContract,
+  ReadTransactionInterface,
   StorageError,
   StorageFactory,
+  StorageInterface,
   TransactionCast,
   TransactionOrder,
   versionstamp,
   WatcherFn,
-  WriteBucketContract,
-  WriteTransactionContract,
+  WriteBucketInterface,
+  WriteTransactionInterface,
 } from "@marubase/storage";
 import { Database } from "lmdb";
 import { MutationCounter } from "./mutation-counter.js";
 import { cast } from "./transaction-cast.js";
 import { order } from "./transaction-order.js";
 
-export class WriteTransaction implements WriteTransactionContract {
+export class WriteTransaction implements WriteTransactionInterface {
   public readonly cast: TransactionCast = cast;
 
   public readonly factory: StorageFactory;
@@ -26,11 +26,11 @@ export class WriteTransaction implements WriteTransactionContract {
 
   public readonly scope: string[];
 
-  public readonly storage: StorageContract;
+  public readonly storage: StorageInterface;
 
   public readonly versionstamp: typeof versionstamp = versionstamp;
 
-  protected _buckets: WriteBucketContract<unknown, unknown>[] = [];
+  protected _buckets: WriteBucketInterface<unknown, unknown>[] = [];
 
   protected _lmdbDatabase: Database<Buffer, Buffer>;
 
@@ -40,7 +40,7 @@ export class WriteTransaction implements WriteTransactionContract {
 
   public constructor(
     factory: StorageFactory,
-    storage: StorageContract,
+    storage: StorageInterface,
     scope: string[],
     lmdbDatabase: Database<Buffer, Buffer>,
   ) {
@@ -64,12 +64,12 @@ export class WriteTransaction implements WriteTransactionContract {
   public get watchers(): WatcherFn[] {
     const toWatchers = (
       watchers: WatcherFn[],
-      bucket: WriteBucketContract<unknown, unknown>,
+      bucket: WriteBucketInterface<unknown, unknown>,
     ): WatcherFn[] => watchers.concat(...(bucket.watchers as WatcherFn[]));
     return this._buckets.reduce(toWatchers, []);
   }
 
-  public bucket<Key, Value>(name: string): WriteBucketContract<Key, Value> {
+  public bucket<Key, Value>(name: string): WriteBucketInterface<Key, Value> {
     if (this.scope.indexOf(name) < 0) {
       const scopes = this.scope.join(", ");
       const context = `Running write transaction in "${name}".`;
@@ -95,7 +95,7 @@ export class WriteTransaction implements WriteTransactionContract {
     return this._transactionID++;
   }
 
-  public snapshot(): ReadTransactionContract {
+  public snapshot(): ReadTransactionInterface {
     return this.factory.createReadTransaction(
       this.factory,
       this.storage,
