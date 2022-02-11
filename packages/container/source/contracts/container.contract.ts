@@ -1,22 +1,22 @@
-import { ProviderContract, ProviderName } from "./provider.contract.js";
+import { ProviderInterface, ProviderName } from "./provider.contract.js";
 import {
   Bindable,
   Callable,
   RegistryBinding,
-  RegistryContract,
+  RegistryInterface,
   Resolvable,
 } from "./registry.contract.js";
-import { ResolverContract } from "./resolver.contract.js";
-import { ScopeContract } from "./scope.contract.js";
+import { ResolverInterface } from "./resolver.contract.js";
+import { ScopeInterface } from "./scope.contract.js";
 
-export interface ContainerContract {
+export interface ContainerInterface {
   readonly booted: boolean;
 
-  readonly providers: Record<ProviderName, ProviderContract>;
+  readonly providers: Record<ProviderName, ProviderInterface>;
 
-  readonly registry: RegistryContract;
+  readonly registry: RegistryInterface;
 
-  readonly scope: ScopeContract;
+  readonly scope: ScopeInterface;
 
   bind(bindable: Bindable): RegistryBinding;
 
@@ -24,11 +24,11 @@ export interface ContainerContract {
 
   call<Result>(callable: Callable, ...args: unknown[]): Result;
 
-  fetch(resolvable: Resolvable): ResolverContract | undefined;
+  fetch(resolvable: Resolvable): ResolverInterface | undefined;
 
   fork(): this;
 
-  install(name: ProviderName, provider: ProviderContract): this;
+  install(name: ProviderName, provider: ProviderInterface): this;
 
   installed(name: ProviderName): boolean;
 
