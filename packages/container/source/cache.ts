@@ -1,10 +1,10 @@
 import {
-  CacheContract,
+  CacheInterface,
   CacheKey,
   CacheToken,
 } from "./contracts/cache.contract.js";
 
-export class Cache implements CacheContract {
+export class Cache implements CacheInterface {
   protected _store = new Map<CacheToken, Map<CacheToken, unknown>>();
 
   public clear(key: CacheKey): this {
