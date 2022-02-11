@@ -1,6 +1,8 @@
 import { ResolverInterface } from "./resolver.contract.js";
 import { ScopeInterface } from "./scope.contract.js";
 
+export const RegistryContract = Symbol("RegistryContract");
+
 export interface RegistryInterface {
   bind(bindable: Bindable): RegistryBinding;
 
