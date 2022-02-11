@@ -6,6 +6,8 @@ import {
 } from "./registry.contract.js";
 import { ScopeInterface } from "./scope.contract.js";
 
+export const ResolverContract = Symbol("ResolverContract");
+
 export interface ResolverInterface {
   readonly bindingKey?: BindingKey;
 
