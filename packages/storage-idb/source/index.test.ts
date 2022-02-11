@@ -9,12 +9,12 @@ import {
   versionstampTest,
   watchTest,
 } from "@marubase-tools/storage-tester";
-import { StorageContract } from "@marubase/storage";
+import { StorageInterface } from "@marubase/storage";
 import { expect } from "chai";
 import { Storage } from "./storage.js";
 
 describe("Storage", function () {
-  let storage: StorageContract;
+  let storage: StorageInterface;
   beforeEach(async function () {
     storage = await Storage.open("data");
   });
