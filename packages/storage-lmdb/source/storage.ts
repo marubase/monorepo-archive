@@ -1,17 +1,17 @@
 import {
   RangeOptions,
-  ReadBucketContract,
-  ReadTransactionContract,
+  ReadBucketInterface,
+  ReadTransactionInterface,
   StorageBucket,
-  StorageContract,
   StorageFactory,
+  StorageInterface,
   TransactionFn,
   TransactionOrder,
   versionstamp,
   WatcherFn,
   WatchWithValue,
-  WriteBucketContract,
-  WriteTransactionContract,
+  WriteBucketInterface,
+  WriteTransactionInterface,
 } from "@marubase/storage";
 import { TransactionCast } from "@marubase/storage/source";
 import { ArrayLikeIterable, Database, open, RootDatabaseOptions } from "lmdb";
@@ -28,7 +28,7 @@ export const FIXED_OPTIONS: RootDatabaseOptions = {
   keyEncoding: "binary",
 };
 
-export class Storage implements StorageContract {
+export class Storage implements StorageInterface {
   public static async open(
     path: string,
     options?: RootDatabaseOptions,
@@ -134,7 +134,7 @@ export class Storage implements StorageContract {
 
   public async read<Result>(
     scope: string | string[],
-    transactionFn: TransactionFn<ReadTransactionContract, Result>,
+    transactionFn: TransactionFn<ReadTransactionInterface, Result>,
   ): Promise<Result> {
     if (!Array.isArray(scope)) scope = [scope];
     return this._lmdbDatabase.childTransaction(async (): Promise<Result> => {
@@ -159,7 +159,7 @@ export class Storage implements StorageContract {
 
   public async write<Result>(
     scope: string | string[],
-    transactionFn: TransactionFn<WriteTransactionContract, Result>,
+    transactionFn: TransactionFn<WriteTransactionInterface, Result>,
   ): Promise<Result> {
     if (!Array.isArray(scope)) scope = [scope];
     return this._lmdbDatabase.childTransaction(async (): Promise<Result> => {
@@ -192,37 +192,37 @@ export const DefaultStorageFactory = {
 
   createReadBucket<Key, Value>(
     factory: StorageFactory,
-    transaction: ReadTransactionContract,
+    transaction: ReadTransactionInterface,
     name: string,
     lmdbDatabase: Database<Buffer, Buffer>,
-  ): ReadBucketContract<Key, Value> {
+  ): ReadBucketInterface<Key, Value> {
     return new ReadBucket(factory, transaction, name, lmdbDatabase);
   },
 
   createReadTransaction(
     factory: StorageFactory,
-    storage: StorageContract,
+    storage: StorageInterface,
     scope: string[],
     lmdbDatabase: Database<Buffer, Buffer>,
-  ): ReadTransactionContract {
+  ): ReadTransactionInterface {
     return new ReadTransaction(factory, storage, scope, lmdbDatabase);
   },
 
   createWriteBucket<Key, Value>(
     factory: StorageFactory,
-    transaction: WriteTransactionContract,
+    transaction: WriteTransactionInterface,
     name: string,
     lmdbDatabase: Database<Buffer, Buffer>,
-  ): WriteBucketContract<Key, Value> {
+  ): WriteBucketInterface<Key, Value> {
     return new WriteBucket(factory, transaction, name, lmdbDatabase);
   },
 
   createWriteTransaction(
     factory: StorageFactory,
-    storage: StorageContract,
+    storage: StorageInterface,
     scope: string[],
     lmdbDatabase: Database<Buffer, Buffer>,
-  ): WriteTransactionContract {
+  ): WriteTransactionInterface {
     return new WriteTransaction(factory, storage, scope, lmdbDatabase);
   },
 } as StorageFactory;
