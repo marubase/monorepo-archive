@@ -20,8 +20,8 @@ export class Request extends Message implements RequestInterface {
     return this;
   }
 
-  public setHost(host: string): this {
-    this._url.hostname = host;
+  public setHostname(hostname: string): this {
+    this._url.hostname = hostname;
     return this;
   }
 
@@ -41,8 +41,8 @@ export class Request extends Message implements RequestInterface {
     return this;
   }
 
-  public setPath(path: string): this {
-    this._url.pathname = path;
+  public setPathname(pathname: string): this {
+    this._url.pathname = pathname;
     return this;
   }
 
@@ -51,8 +51,8 @@ export class Request extends Message implements RequestInterface {
     return this;
   }
 
-  public setScheme(scheme: string): this {
-    this._url.protocol = scheme;
+  public setProtocol(protocol: string): this {
+    this._url.protocol = protocol;
     return this;
   }
 
