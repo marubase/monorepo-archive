@@ -1,18 +1,18 @@
 import {
   RangeOptions,
-  ReadBucketContract,
-  ReadTransactionContract,
+  ReadBucketInterface,
+  ReadTransactionInterface,
   StorageBucket,
-  StorageContract,
   StorageFactory,
+  StorageInterface,
   TransactionCast,
   TransactionFn,
   TransactionOrder,
   versionstamp,
   WatcherFn,
   WatchWithValue,
-  WriteBucketContract,
-  WriteTransactionContract,
+  WriteBucketInterface,
+  WriteTransactionInterface,
 } from "@marubase/storage";
 import {
   IDBPCursorWithValueIteratorValue,
@@ -29,7 +29,7 @@ import { order } from "./transaction-order.js";
 import { WriteBucket } from "./write-bucket.js";
 import { WriteTransaction } from "./write-transaction.js";
 
-export class Storage implements StorageContract {
+export class Storage implements StorageInterface {
   public static async open(name: string): Promise<Storage> {
     return new Storage(DefaultStorageFactory, name);
   }
@@ -127,7 +127,7 @@ export class Storage implements StorageContract {
 
   public async read<Result>(
     scope: string | string[],
-    transactionFn: TransactionFn<ReadTransactionContract, Result>,
+    transactionFn: TransactionFn<ReadTransactionInterface, Result>,
   ): Promise<Result> {
     if (!Array.isArray(scope)) scope = [scope];
 
@@ -164,7 +164,7 @@ export class Storage implements StorageContract {
 
   public async write<Result>(
     scope: string | string[],
-    transactionFn: TransactionFn<WriteTransactionContract, Result>,
+    transactionFn: TransactionFn<WriteTransactionInterface, Result>,
   ): Promise<Result> {
     if (!Array.isArray(scope)) scope = [scope];
     scope = scope.concat(["_meta"]);
@@ -249,37 +249,37 @@ export const DefaultStorageFactory = {
 
   createReadBucket<Key, Value>(
     factory: StorageFactory,
-    transaction: ReadTransactionContract,
+    transaction: ReadTransactionInterface,
     name: string,
     idbStore: IDBPObjectStore<unknown, string[], string, "readonly">,
-  ): ReadBucketContract<Key, Value> {
+  ): ReadBucketInterface<Key, Value> {
     return new ReadBucket(factory, transaction, name, idbStore);
   },
 
   createReadTransaction(
     factory: StorageFactory,
-    storage: StorageContract,
+    storage: StorageInterface,
     scope: string[],
     idbTransaction: IDBPTransaction<unknown, string[], "readonly">,
-  ): ReadTransactionContract {
+  ): ReadTransactionInterface {
     return new ReadTransaction(factory, storage, scope, idbTransaction);
   },
 
   createWriteBucket<Key, Value>(
     factory: StorageFactory,
-    transaction: WriteTransactionContract,
+    transaction: WriteTransactionInterface,
     name: string,
     idbStore: IDBPObjectStore<unknown, string[], string, "readwrite">,
-  ): WriteBucketContract<Key, Value> {
+  ): WriteBucketInterface<Key, Value> {
     return new WriteBucket(factory, transaction, name, idbStore);
   },
 
   createWriteTransaction(
     factory: StorageFactory,
-    storage: StorageContract,
+    storage: StorageInterface,
     scope: string[],
     idbTransaction: IDBPTransaction<unknown, string[], "readwrite">,
-  ): WriteTransactionContract {
+  ): WriteTransactionInterface {
     return new WriteTransaction(factory, storage, scope, idbTransaction);
   },
 } as StorageFactory;
