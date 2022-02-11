@@ -1,18 +1,15 @@
-import {
-  MessageHeaders,
-  MessageInterface,
-} from "./contracts/message.contract.js";
+import { MessageInterface } from "./contracts/message.contract.js";
 
 export class Message implements MessageInterface {
   protected _body: unknown;
 
-  protected _headers: MessageHeaders = {};
+  protected _headers: Record<string, string[]> = {};
 
   public get body(): unknown {
     return this._body;
   }
 
-  public get headers(): MessageHeaders {
+  public get headers(): Record<string, string[]> {
     return this._headers;
   }
 
@@ -54,7 +51,7 @@ export class Message implements MessageInterface {
     return this;
   }
 
-  public setHeaders(headers: MessageHeaders): this {
+  public setHeaders(headers: Record<string, string[]>): this {
     this._headers = headers;
     return this;
   }
