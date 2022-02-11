@@ -1,9 +1,9 @@
-import { StorageContract } from "@marubase/storage";
+import { StorageInterface } from "@marubase/storage";
 import { expect } from "chai";
 
-export function collationTest(storageFn: () => StorageContract): void {
+export function collationTest(storageFn: () => StorageInterface): void {
   describe("Collation", function () {
-    let storage: StorageContract;
+    let storage: StorageInterface;
     beforeEach(async function () {
       storage = storageFn();
     });
