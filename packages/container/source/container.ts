@@ -1,6 +1,6 @@
-import { ContainerContract } from "./contracts/container.contract.js";
+import { ContainerInterface } from "./contracts/container.contract.js";
 import {
-  ProviderContract,
+  ProviderInterface,
   ProviderName,
 } from "./contracts/provider.contract.js";
 import {
@@ -8,25 +8,25 @@ import {
   BindingRoot,
   Callable,
   RegistryBinding,
-  RegistryContract,
+  RegistryInterface,
   Resolvable,
 } from "./contracts/registry.contract.js";
-import { ResolverContract } from "./contracts/resolver.contract.js";
-import { ScopeContract } from "./contracts/scope.contract.js";
+import { ResolverInterface } from "./contracts/resolver.contract.js";
+import { ScopeInterface } from "./contracts/scope.contract.js";
 import { ContainerError } from "./errors/container.error.js";
 import { Registry } from "./registry.js";
 import { Scope } from "./scope.js";
 
-export class Container implements ContainerContract {
+export class Container implements ContainerInterface {
   protected _booted = false;
 
-  protected _providers: Map<ProviderName, ProviderContract> = new Map();
+  protected _providers: Map<ProviderName, ProviderInterface> = new Map();
 
-  protected _registry: RegistryContract;
+  protected _registry: RegistryInterface;
 
-  protected _scope: ScopeContract;
+  protected _scope: ScopeInterface;
 
-  public constructor(registry?: RegistryContract, scope?: ScopeContract) {
+  public constructor(registry?: RegistryInterface, scope?: ScopeInterface) {
     this._registry = registry || new Registry();
     this._scope = scope || new Scope();
     this.bind(Container).toInstance(this);
@@ -36,15 +36,15 @@ export class Container implements ContainerContract {
     return this._booted;
   }
 
-  public get providers(): Record<ProviderName, ProviderContract> {
+  public get providers(): Record<ProviderName, ProviderInterface> {
     return Object.fromEntries(this._providers);
   }
 
-  public get registry(): RegistryContract {
+  public get registry(): RegistryInterface {
     return this._registry;
   }
 
-  public get scope(): ScopeContract {
+  public get scope(): ScopeInterface {
     return this._scope;
   }
 
@@ -64,7 +64,7 @@ export class Container implements ContainerContract {
     return this._registry.fork().call(scope, callable, ...args);
   }
 
-  public fetch(resolvable: Resolvable): ResolverContract | undefined {
+  public fetch(resolvable: Resolvable): ResolverInterface | undefined {
     return this._registry.fetch(resolvable);
   }
 
@@ -76,7 +76,7 @@ export class Container implements ContainerContract {
     ) as this;
   }
 
-  public install(name: ProviderName, provider: ProviderContract): this {
+  public install(name: ProviderName, provider: ProviderInterface): this {
     if (this._providers.has(name)) {
       const contextName = typeof name === "symbol" ? name.toString() : name;
       const context = `Installing provider named '${contextName}'.`;
