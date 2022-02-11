@@ -1,9 +1,9 @@
-import { RangeOptions, StorageContract } from "@marubase/storage";
+import { RangeOptions, StorageInterface } from "@marubase/storage";
 import { expect } from "chai";
 
-export function boundTest(storageFn: () => StorageContract): void {
+export function boundTest(storageFn: () => StorageInterface): void {
   describe("Range Bound", function () {
-    let storage: StorageContract;
+    let storage: StorageInterface;
     beforeEach(async function () {
       storage = storageFn();
 
