@@ -1,11 +1,11 @@
 import { expect } from "chai";
 import { instance, mock, reset } from "ts-mockito";
-import { RegistryContract } from "../contracts/registry.contract.js";
+import { RegistryInterface } from "../contracts/registry.contract.js";
 import { ConstantResolver } from "./constant-resolver.js";
 
 describe("ConstantResolver", function () {
-  let mockRegistry: RegistryContract;
-  let registry: RegistryContract;
+  let mockRegistry: RegistryInterface;
+  let registry: RegistryInterface;
   let resolver: ConstantResolver;
   beforeEach(async function () {
     mockRegistry = mock();
