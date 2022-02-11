@@ -2,24 +2,24 @@ import {
   decode,
   encode,
   RangeOptions,
-  StorageContract,
   StorageError,
   StorageFactory,
+  StorageInterface,
   Watch,
   WatcherFn,
-  WriteBucketContract,
-  WriteTransactionContract,
+  WriteBucketInterface,
+  WriteTransactionInterface,
 } from "@marubase/storage";
 import { Database, RangeOptions as LMDBRangeOptions } from "lmdb";
 
 export class WriteBucket<Key, Value>
-  implements WriteBucketContract<Key, Value>
+  implements WriteBucketInterface<Key, Value>
 {
   public readonly factory: StorageFactory;
 
   public readonly name: string;
 
-  public readonly transaction: WriteTransactionContract;
+  public readonly transaction: WriteTransactionInterface;
 
   public readonly watchers: WatcherFn[] = [];
 
@@ -27,7 +27,7 @@ export class WriteBucket<Key, Value>
 
   public constructor(
     factory: StorageFactory,
-    transaction: WriteTransactionContract,
+    transaction: WriteTransactionInterface,
     name: string,
     lmdbDatabase: Database<Buffer, Buffer>,
   ) {
@@ -137,12 +137,12 @@ export class WriteBucket<Key, Value>
     });
 
     let _value: Value | undefined;
-    const watcherFn = async (storage: StorageContract): Promise<void> => {
+    const watcherFn = async (storage: StorageInterface): Promise<void> => {
       _value = await this.get(key);
       setTimeout(() => watcherPoll(storage), 16);
     };
 
-    const watcherPoll = async (storage: StorageContract): Promise<void> => {
+    const watcherPoll = async (storage: StorageInterface): Promise<void> => {
       const poll = async (): Promise<boolean> => {
         while (!_cancelled) {
           await new Promise((resolve) => setTimeout(resolve, 16));
