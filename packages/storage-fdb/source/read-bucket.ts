@@ -2,25 +2,25 @@ import {
   decode,
   encode,
   RangeOptions,
-  ReadBucketContract,
-  ReadTransactionContract,
+  ReadBucketInterface,
+  ReadTransactionInterface,
   StorageFactory,
   Watch,
 } from "@marubase/storage";
 import { keySelector, Transaction } from "foundationdb";
 
-export class ReadBucket<Key, Value> implements ReadBucketContract<Key, Value> {
+export class ReadBucket<Key, Value> implements ReadBucketInterface<Key, Value> {
   public readonly factory: StorageFactory;
 
   public readonly name: string;
 
-  public readonly transaction: ReadTransactionContract;
+  public readonly transaction: ReadTransactionInterface;
 
   protected _fdbTransaction: Transaction;
 
   public constructor(
     factory: StorageFactory,
-    transaction: ReadTransactionContract,
+    transaction: ReadTransactionInterface,
     name: string,
     fdbTransaction: Transaction,
   ) {
