@@ -16,8 +16,18 @@ export class Message implements MessageInterface {
     return this._headers;
   }
 
+  public clearBody(): this {
+    delete this._body;
+    return this;
+  }
+
   public clearHeader(key: string): this {
     delete this._headers[key];
+    return this;
+  }
+
+  public clearHeaders(): this {
+    this._headers = {};
     return this;
   }
 
@@ -41,6 +51,11 @@ export class Message implements MessageInterface {
 
   public setHeader(key: string, value: string | string[]): this {
     this._headers[key] = !Array.isArray(value) ? [value] : value;
+    return this;
+  }
+
+  public setHeaders(headers: MessageHeaders): this {
+    this._headers = headers;
     return this;
   }
 }
