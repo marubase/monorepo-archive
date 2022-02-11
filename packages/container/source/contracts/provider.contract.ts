@@ -1,5 +1,7 @@
 import { ContainerInterface } from "./container.contract.js";
 
+export const ProviderContract = Symbol("ProviderContract");
+
 export interface ProviderInterface {
   boot?(container: ContainerInterface): Promise<void>;
 
