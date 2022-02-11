@@ -1,18 +1,18 @@
 import {
-  RegistryContract,
+  RegistryInterface,
   Resolvable,
 } from "../contracts/registry.contract.js";
-import { ResolverContract } from "../contracts/resolver.contract.js";
-import { ScopeContract } from "../contracts/scope.contract.js";
+import { ResolverInterface } from "../contracts/resolver.contract.js";
+import { ScopeInterface } from "../contracts/scope.contract.js";
 import { BaseResolver } from "./base-resolver.js";
 
-export class MethodResolver extends BaseResolver implements ResolverContract {
+export class MethodResolver extends BaseResolver implements ResolverInterface {
   protected _method: string | symbol;
 
   protected _target: Object | Resolvable;
 
   public constructor(
-    registry: RegistryContract,
+    registry: RegistryInterface,
     target: Object | Resolvable,
     method: string | symbol,
   ) {
@@ -21,7 +21,7 @@ export class MethodResolver extends BaseResolver implements ResolverContract {
     this._method = method;
   }
 
-  public resolve<Result>(scope: ScopeContract, ...args: unknown[]): Result {
+  public resolve<Result>(scope: ScopeInterface, ...args: unknown[]): Result {
     const target =
       Array.isArray(this._target) || typeof this._target !== "object"
         ? this._registry.resolve<Instance<Result>>(scope, this._target)
