@@ -1,4 +1,7 @@
-import { ContainerInterface } from "./contracts/container.contract.js";
+import {
+  ContainerContract,
+  ContainerInterface,
+} from "./contracts/container.contract.js";
 import {
   ProviderInterface,
   ProviderName,
@@ -29,7 +32,7 @@ export class Container implements ContainerInterface {
   public constructor(registry?: RegistryInterface, scope?: ScopeInterface) {
     this._registry = registry || new Registry();
     this._scope = scope || new Scope();
-    this.bind(Container).toInstance(this);
+    this.bind(ContainerContract).toInstance(this);
   }
 
   public get booted(): boolean {
