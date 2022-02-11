@@ -1,3 +1,5 @@
+export const CacheContract = Symbol("CacheContract");
+
 export interface CacheInterface {
   clear(key: CacheKey): this;
 
