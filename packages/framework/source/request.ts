@@ -38,7 +38,8 @@ export class Request extends Message implements RequestInterface {
   }
 
   public get port(): number {
-    return parseInt(this._url.port, 10);
+    if (this._url.port !== "") return parseInt(this._url.port, 10);
+    return this._url.protocol.startsWith("https") ? 443 : 80;
   }
 
   public get queries(): Record<string, string> {
