@@ -107,6 +107,12 @@ importers:
     dependencies:
       path-to-regexp: 6.2.0
 
+  packages/service-manager:
+    specifiers:
+      path-to-regexp: ^6.2.0
+    dependencies:
+      path-to-regexp: 6.2.0
+
   packages/storage:
     specifiers:
       '@marubase/collator': workspace:^0.0.0
