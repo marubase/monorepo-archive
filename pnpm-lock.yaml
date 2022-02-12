@@ -107,12 +107,6 @@ importers:
     dependencies:
       path-to-regexp: 6.2.0
 
-  packages/service-framework:
-    specifiers:
-      '@marubase/container': workspace:^0.0.0
-    devDependencies:
-      '@marubase/container': link:../container
-
   packages/service-manager:
     specifiers:
       '@marubase/container': workspace:^0.0.0
