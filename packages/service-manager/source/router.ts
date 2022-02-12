@@ -1,7 +1,10 @@
 import { match } from "path-to-regexp";
 import { ContextInterface } from "./contracts/context.contract.js";
 import { ManagerFactory } from "./contracts/manager.contract.js";
-import { RequestInterface } from "./contracts/request.contract.js";
+import {
+  RequestInterface,
+  RequestMethod,
+} from "./contracts/request.contract.js";
 import {
   ResponseInterface,
   StatusText,
@@ -54,18 +57,43 @@ export class Router implements RouterInterface {
     return _nextFn();
   }
 
+  public use(
+    method: RequestMethod[] | RequestMethod,
+    path: string,
+    handler: HandleFn | RouterInterface,
+  ): this;
   public use(path: string, handler: RouterInterface | HandleFn): this;
   public use(handler: HandleFn | RouterInterface): this;
   public use(
-    pathOrHandler: HandleFn | RouterInterface | string,
+    methodOrPathOrHandler:
+      | RequestMethod[]
+      | RequestMethod
+      | HandleFn
+      | RouterInterface
+      | string,
+    pathOrHandler?: HandleFn | RouterInterface | string,
     handler?: HandleFn | RouterInterface,
   ): this {
-    const _handler =
-      typeof pathOrHandler === "string"
-        ? this._handlePath(pathOrHandler, handler!)
-        : pathOrHandler!;
-    this._handlers.push(_handler);
-    return this;
+    if (Array.isArray(methodOrPathOrHandler)) {
+      const _handler = this._handleMethod(
+        methodOrPathOrHandler,
+        this._handlePath(pathOrHandler as string, handler!),
+      );
+      this._handlers.push(_handler);
+      return this;
+    } else if (typeof methodOrPathOrHandler !== "string") {
+      const _handler = methodOrPathOrHandler;
+      this._handlers.push(_handler);
+      return this;
+    } else if (typeof pathOrHandler === "string") {
+      const _handler = this._handlePath(pathOrHandler, handler!);
+      this._handlers.push(_handler);
+      return this;
+    } else {
+      const _handler = pathOrHandler!;
+      this._handlers.push(_handler);
+      return this;
+    }
   }
 
   protected _defaultNext(): Promise<ResponseInterface> {
@@ -90,6 +118,18 @@ export class Router implements RouterInterface {
             reason: (error as Error).message,
           });
       }
+    };
+  }
+
+  protected _handleMethod(
+    method: RequestMethod[],
+    handler: HandleFn | RouterInterface,
+  ): HandleFn {
+    return async (context, next) => {
+      if (method.indexOf(context.method) < 1) return next();
+      return "dispatch" in handler
+        ? handler.dispatch(context, next)
+        : handler(context, next);
     };
   }
 
