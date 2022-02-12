@@ -9,6 +9,7 @@ export interface RouterInterface {
   dispatch(context: ContextInterface, next: NextFn): Promise<ResponseInterface>;
 
   use(handler: HandleFn | RouterInterface): this;
+  use(path: string, handler: HandleFn | RouterInterface): this;
 }
 
 export type HandleFn = (
