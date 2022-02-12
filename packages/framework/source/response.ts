@@ -10,6 +10,12 @@ export class Response extends Message implements ResponseInterface {
 
   protected _statusText = StatusText[200];
 
+  public constructor(statusCode: StatusCode, statusText?: string) {
+    super();
+    if (typeof statusText === "undefined") this.setStatusCode(statusCode);
+    else this.setStatusCode(statusCode).setStatusText(statusText);
+  }
+
   public get statusCode(): StatusCode {
     return this._statusCode;
   }
