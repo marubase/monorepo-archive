@@ -14,11 +14,6 @@ import {
 } from "./contracts/router.contract.js";
 import { ServiceError } from "./errors/service.error.js";
 
-export const FIXED_ROUTER_OPTIONS = {
-  decode: decodeURIComponent,
-  encode: encodeURIComponent,
-};
-
 export class Router implements RouterInterface {
   protected _factory: ManagerFactory;
 
@@ -30,7 +25,7 @@ export class Router implements RouterInterface {
 
   public constructor(factory: ManagerFactory, options: RouterOptions) {
     this._factory = factory;
-    this._options = Object.assign(options, FIXED_ROUTER_OPTIONS);
+    this._options = options;
   }
 
   public dispatch(request: RequestInterface): Promise<ResponseInterface>;
@@ -79,7 +74,7 @@ export class Router implements RouterInterface {
 
   protected _handleError(): HandleFn {
     const normalize = (statusText: string): string =>
-      statusText.replaceAll(/\s+/, "_").toLowerCase();
+      statusText.replaceAll(/\s+/g, "_").toLowerCase();
     return async (context, next) => {
       try {
         return await next();
@@ -106,7 +101,7 @@ export class Router implements RouterInterface {
       const matchFn = match(path, this._options);
       const matches = matchFn(context.path);
       if (!matches) return next();
-      Object.assign(context.params, matches.params);
+      context.setParams(matches.params as Record<string, string>);
       return "dispatch" in handler
         ? handler.dispatch(context, next)
         : handler(context, next);
