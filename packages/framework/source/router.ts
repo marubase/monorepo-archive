@@ -1,3 +1,4 @@
+import { match } from "path-to-regexp";
 import { ContextInterface } from "./contracts/context.contract.js";
 import { FrameworkFactory } from "./contracts/framework.contract.js";
 import { RequestInterface } from "./contracts/request.contract.js";
@@ -18,6 +19,23 @@ function defaultNext(): Promise<ResponseInterface> {
 
 function normalizeStatusText(statusText: string): string {
   return statusText.replaceAll(/\s+/, "_").toLocaleLowerCase();
+}
+
+function handlePath(
+  path: string,
+  handler: HandleFn | RouterInterface,
+): HandleFn {
+  return async (context, next) => {
+    const matchFn = match(path, {
+      decode: decodeURIComponent,
+      encode: encodeURIComponent,
+    });
+    const matches = matchFn(context.path);
+    if (!matches) return next();
+    return "dispatch" in handler
+      ? handler.dispatch(context, next)
+      : handler(context, next);
+  };
 }
 
 function handleError(): HandleFn {
@@ -71,8 +89,16 @@ export class Router implements RouterInterface {
     return _nextFn();
   }
 
-  public use(handler: RouterInterface | HandleFn): this {
-    this._handlers.push(handler);
+  public use(handler: HandleFn | RouterInterface): this;
+  public use(path: string, handler: HandleFn | RouterInterface): this;
+  public use(
+    handlerOrPath: RouterInterface | HandleFn | string,
+    handler?: HandleFn | RouterInterface,
+  ): this {
+    const _handler =
+      typeof handlerOrPath !== "string" ? handlerOrPath : handler!;
+    if (typeof handlerOrPath !== "string") this._handlers.push(_handler);
+    else this._handlers.push(handlePath(handlerOrPath, _handler));
     return this;
   }
 
