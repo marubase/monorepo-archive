@@ -13,6 +13,11 @@ export interface RouterInterface {
   dispatch(request: RequestInterface): Promise<ResponseInterface>;
   dispatch(context: ContextInterface, next: NextFn): Promise<ResponseInterface>;
 
+  use(
+    method: RequestMethod[] | RequestMethod,
+    path: string,
+    handler: HandleFn | RouterInterface,
+  ): this;
   use(path: string, handler: HandleFn | RouterInterface): this;
   use(handler: HandleFn | RouterInterface): this;
 }
