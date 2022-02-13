@@ -14,7 +14,6 @@ import {
   ConfigureFn,
   HandleFn,
   MatchMethod,
-  MatchOrigin,
   MatchPath,
   NextFn,
   RouterInterface,
@@ -98,39 +97,6 @@ export class Router implements RouterInterface {
     };
   }
 
-  public origin(origin: string): MatchOrigin {
-    return {
-      handle: (handler) => {
-        const _handler = this._handleOrigin(origin, handler);
-        this._handlers.push(_handler);
-      },
-      method: (method) => ({
-        handle: (handler) => {
-          const _method = !Array.isArray(method) ? [method] : method;
-          const _methodHandler = this._handleMethod(_method, handler);
-          const _handler = this._handleOrigin(origin, _methodHandler);
-          this._handlers.push(_handler);
-        },
-        path: (path) => ({
-          handle: (handler) => {
-            const _method = !Array.isArray(method) ? [method] : method;
-            const _pathHandler = this._handlePath(path, handler);
-            const _methodHandler = this._handleMethod(_method, _pathHandler);
-            const _handler = this._handleOrigin(origin, _methodHandler);
-            this._handlers.push(_handler);
-          },
-        }),
-      }),
-      path: (path) => ({
-        handle: (handler) => {
-          const _pathHandler = this._handlePath(path, handler);
-          const _handler = this._handleOrigin(origin, _pathHandler);
-          this._handlers.push(_handler);
-        },
-      }),
-    };
-  }
-
   public path(path: string): MatchPath {
     return {
       handle: (handler) => {
@@ -171,18 +137,6 @@ export class Router implements RouterInterface {
   ): HandleFn {
     return async (context, next) => {
       if (method.indexOf(context.method) < 0) return next();
-      return "dispatch" in handler
-        ? handler.dispatch(context, next)
-        : handler(context, next);
-    };
-  }
-
-  protected _handleOrigin(
-    origin: string,
-    handler: HandleFn | RouterInterface,
-  ): HandleFn {
-    return async (context, next) => {
-      if (context.origin !== origin) return next();
       return "dispatch" in handler
         ? handler.dispatch(context, next)
         : handler(context, next);
