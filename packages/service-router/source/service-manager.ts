@@ -84,12 +84,13 @@ export class ServiceManager implements ServiceManagerInterface {
     method: ServiceRequestMethod,
     path: string,
   ): ServiceRequestInterface {
-    return this._container
-      .resolve<ServiceRequestInterface>(ServiceRequestContract)
-      .setDispatcher(this)
-      .setOrigin(origin)
-      .setMethod(method)
-      .setPath(path);
+    return this._container.resolve<ServiceRequestInterface>(
+      ServiceRequestContract,
+      this,
+      method,
+      path,
+      origin,
+    );
   }
 
   public unhost(origin: string): this {
