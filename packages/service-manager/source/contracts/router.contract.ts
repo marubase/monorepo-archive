@@ -10,8 +10,6 @@ import { ResponseInterface } from "./response.contract.js";
 export const RouterContract = Symbol("RouterContract");
 
 export interface RouterInterface {
-  configure(configureFn: ConfigureFn): this;
-
   dispatch(request: RequestInterface): Promise<ResponseInterface>;
   dispatch(context: ContextInterface, next: NextFn): Promise<ResponseInterface>;
 
@@ -21,8 +19,6 @@ export interface RouterInterface {
 
   path(path: string): MatchPath;
 }
-
-export type ConfigureFn = (router: RouterInterface) => void;
 
 export type HandleFn = (
   context: ContextInterface,
