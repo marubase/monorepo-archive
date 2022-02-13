@@ -19,8 +19,6 @@ export interface RouterInterface {
 
   method(method: RequestMethod[] | RequestMethod): MatchMethod;
 
-  origin(origin: string): MatchOrigin;
-
   path(path: string): MatchPath;
 }
 
@@ -33,14 +31,6 @@ export type HandleFn = (
 
 export type MatchMethod = {
   handle(handler: HandleFn): void;
-
-  path(path: string): MatchPath;
-};
-
-export type MatchOrigin = {
-  handle(handler: HandleFn | RouterInterface): void;
-
-  method(method: RequestMethod[] | RequestMethod): MatchMethod;
 
   path(path: string): MatchPath;
 };
