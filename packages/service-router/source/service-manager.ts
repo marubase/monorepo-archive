@@ -1,5 +1,4 @@
 import {
-  Bindable,
   ContainerContract,
   ContainerInterface,
   inject,
@@ -21,7 +20,7 @@ import {
 } from "./contracts/service-router.contract.js";
 import { ServiceRouterError } from "./errors/service-router.error.js";
 
-@resolvable()
+@resolvable("container")
 export class ServiceManager implements ServiceManagerInterface {
   protected _container: ContainerInterface;
 
@@ -33,10 +32,6 @@ export class ServiceManager implements ServiceManagerInterface {
     this._container = container;
   }
 
-  public get container(): ContainerInterface {
-    return this._container;
-  }
-
   public get hosts(): Record<string, ServiceRouterInterface> {
     return this._hosts;
   }
@@ -45,12 +40,11 @@ export class ServiceManager implements ServiceManagerInterface {
     return this._services;
   }
 
-  public define(service: Bindable, defineFn: DefineFn): this {
-    const router = this._container.resolve<ServiceRouterInterface>(
+  public define(service: string, defineFn: DefineFn): this {
+    this._services[service] = this._container.resolve<ServiceRouterInterface>(
       ServiceRouterContract,
     );
-    this._container.bind(service).toInstance(router);
-    defineFn(router);
+    defineFn(this._services[service]);
     return this;
   }
 
