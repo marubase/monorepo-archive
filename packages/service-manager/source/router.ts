@@ -1,7 +1,5 @@
-import { ContainerInterface } from "@marubase/container";
 import { match } from "path-to-regexp";
 import { ContextInterface } from "./contracts/context.contract.js";
-import { ManagerFactory } from "./contracts/manager.contract.js";
 import {
   RequestInterface,
   RequestMethod,
@@ -18,16 +16,20 @@ import {
   RouterInterface,
   RouterOptions,
 } from "./contracts/router.contract.js";
-import { ServiceError } from "./errors/service.error.js";
+import {
+  ServiceManagerFactory,
+  ServiceManagerInterface,
+} from "./contracts/service-manager.contract.js";
+import { ServiceManagerError } from "./errors/service-manager.error.js";
 
 export class Router implements RouterInterface {
-  protected _container: ContainerInterface;
-
-  protected _factory: ManagerFactory;
+  protected _factory: ServiceManagerFactory;
 
   protected _handlers: Array<HandleFn | RouterInterface> = [
     this._handleError(),
   ];
+
+  protected _manager: ServiceManagerInterface;
 
   protected _options: RouterOptions = {
     decode: decodeURIComponent,
@@ -35,9 +37,12 @@ export class Router implements RouterInterface {
     strict: true,
   };
 
-  public constructor(container: ContainerInterface, factory: ManagerFactory) {
-    this._container = container;
+  public constructor(
+    factory: ServiceManagerFactory,
+    manager: ServiceManagerInterface,
+  ) {
     this._factory = factory;
+    this._manager = manager;
   }
 
   public dispatch(request: RequestInterface): Promise<ResponseInterface>;
@@ -51,9 +56,9 @@ export class Router implements RouterInterface {
   ): Promise<ResponseInterface> {
     const _context = !("respondWith" in contextOrRequest)
       ? this._factory.createContext(
-          this._container,
-          contextOrRequest,
           this._factory,
+          this._manager,
+          contextOrRequest,
         )
       : contextOrRequest;
     const _next = typeof next === "undefined" ? this._defaultNext : next;
@@ -101,7 +106,7 @@ export class Router implements RouterInterface {
   }
 
   protected _defaultNext(): Promise<ResponseInterface> {
-    throw new ServiceError(404, "route not found");
+    throw new ServiceManagerError(404, "route not found");
   }
 
   protected _handleError(): HandleFn {
@@ -112,7 +117,7 @@ export class Router implements RouterInterface {
         return await next();
       } catch (error) {
         const statusCode =
-          error instanceof ServiceError ? error.statusCode : 500;
+          error instanceof ServiceManagerError ? error.statusCode : 500;
         const statusText = StatusText[statusCode];
         return context
           .respondWith(statusCode, statusText)
