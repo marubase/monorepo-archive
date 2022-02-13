@@ -30,7 +30,9 @@ export class ServiceManager
 
   protected _services: Record<string, ServiceDefinitionInterface> = {};
 
-  public constructor(factory: ServiceManagerFactory) {
+  public constructor(
+    factory: ServiceManagerFactory = DefaultServiceManagerFactory,
+  ) {
     super();
     this._factory = factory;
   }
