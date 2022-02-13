@@ -1,21 +1,22 @@
-import { Callable, Resolvable } from "@marubase/container";
+import { Callable, inject, resolvable, Resolvable } from "@marubase/container";
 import { ContextInterface } from "./contracts/context.contract.js";
 import {
+  RequestContract,
   RequestInterface,
   RequestMethod,
 } from "./contracts/request.contract.js";
 import {
+  ResponseContract,
   ResponseInterface,
   StatusCode,
 } from "./contracts/response.contract.js";
 import {
-  ServiceManagerFactory,
+  ServiceManagerContract,
   ServiceManagerInterface,
 } from "./contracts/service-manager.contract.js";
 
+@resolvable()
 export class Context implements ContextInterface {
-  protected _factory: ServiceManagerFactory;
-
   protected _manager: ServiceManagerInterface;
 
   protected _params: Record<string, string> = {};
@@ -25,11 +26,9 @@ export class Context implements ContextInterface {
   protected _store: Record<string, unknown> = {};
 
   public constructor(
-    factory: ServiceManagerFactory,
-    manager: ServiceManagerInterface,
-    request: RequestInterface,
+    @inject(ServiceManagerContract) manager: ServiceManagerInterface,
+    @inject(RequestContract) request: RequestInterface,
   ) {
-    this._factory = factory;
     this._manager = manager;
     this._request = request;
   }
@@ -103,7 +102,7 @@ export class Context implements ContextInterface {
     statusCode: StatusCode,
     statusText?: string,
   ): ResponseInterface {
-    return this._factory.createResponse(statusCode, statusText);
+    return this._manager.resolve(ResponseContract, statusCode, statusText);
   }
 
   public set(key: string, value: unknown): this {
