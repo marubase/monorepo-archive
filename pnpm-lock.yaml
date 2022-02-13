@@ -104,8 +104,10 @@ importers:
   packages/service-engine:
     specifiers:
       '@marubase/container': workspace:^0.0.0
+      path-to-regexp: ^6.2.0
     dependencies:
       '@marubase/container': link:../container
+      path-to-regexp: 6.2.0
 
   packages/service-manager:
     specifiers:
