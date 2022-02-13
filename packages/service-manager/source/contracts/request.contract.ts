@@ -1,4 +1,5 @@
 import { MessageInterface } from "./message.contract.js";
+import { ResponseInterface } from "./response.contract.js";
 
 export const RequestContract = Symbol("RequestContract");
 
@@ -29,6 +30,8 @@ export interface RequestInterface extends MessageInterface {
 
   clearQuery(key: string): this;
 
+  dispatch(): Promise<ResponseInterface>;
+
   setCredential(token: string): this;
   setCredential(username: string, password?: string): this;
 
@@ -50,6 +53,10 @@ export interface RequestInterface extends MessageInterface {
 
   setScheme(scheme: string): this;
 }
+
+export type RequestDispatchable = {
+  dispatch(request: RequestInterface): Promise<ResponseInterface>;
+};
 
 export type RequestMethod =
   | "ACL"
