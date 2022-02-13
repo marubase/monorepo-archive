@@ -11,6 +11,8 @@ export const ServiceRouterContract = Symbol("ServiceRouterContract");
 export interface ServiceRouterInterface {
   readonly container: ContainerInterface;
 
+  configure(configureFn: ConfigureFn): this;
+
   dispatch(request: ServiceRequestInterface): Promise<ServiceResponseInterface>;
   dispatch(
     context: ServiceContextInterface,
