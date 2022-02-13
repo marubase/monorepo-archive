@@ -4,10 +4,7 @@ import {
   inject,
   resolvable,
 } from "@marubase/container";
-import {
-  DefineFn,
-  ServiceManagerInterface,
-} from "./contracts/service-manager.contract.js";
+import { ServiceManagerInterface } from "./contracts/service-manager.contract.js";
 import {
   ServiceRequestContract,
   ServiceRequestInterface,
@@ -15,6 +12,7 @@ import {
 } from "./contracts/service-request.contract.js";
 import { ServiceResponseInterface } from "./contracts/service-response.contract.js";
 import {
+  ConfigureFn,
   ServiceRouterContract,
   ServiceRouterInterface,
 } from "./contracts/service-router.contract.js";
@@ -40,11 +38,10 @@ export class ServiceManager implements ServiceManagerInterface {
     return this._services;
   }
 
-  public define(service: string, defineFn: DefineFn): this {
-    this._services[service] = this._container.resolve<ServiceRouterInterface>(
-      ServiceRouterContract,
-    );
-    defineFn(this._services[service]);
+  public configure(service: string, configureFn: ConfigureFn): this {
+    if (!(service in this._services))
+      this._services[service] = this._container.resolve(ServiceRouterContract);
+    this._services[service].configure(configureFn);
     return this;
   }
 
