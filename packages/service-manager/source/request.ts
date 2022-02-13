@@ -1,3 +1,4 @@
+import { resolvable } from "@marubase/container";
 import {
   RequestDispatchable,
   RequestInterface,
@@ -6,6 +7,7 @@ import {
 import { ResponseInterface } from "./contracts/response.contract.js";
 import { Message } from "./message.js";
 
+@resolvable()
 export class Request extends Message implements RequestInterface {
   protected _dispatchable: RequestDispatchable;
 
