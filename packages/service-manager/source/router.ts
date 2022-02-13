@@ -1,5 +1,9 @@
+import { inject, resolvable } from "@marubase/container";
 import { match } from "path-to-regexp";
-import { ContextInterface } from "./contracts/context.contract.js";
+import {
+  ContextContract,
+  ContextInterface,
+} from "./contracts/context.contract.js";
 import {
   RequestInterface,
   RequestMethod,
@@ -17,14 +21,13 @@ import {
   RouterOptions,
 } from "./contracts/router.contract.js";
 import {
-  ServiceManagerFactory,
+  ServiceManagerContract,
   ServiceManagerInterface,
 } from "./contracts/service-manager.contract.js";
 import { ServiceManagerError } from "./errors/service-manager.error.js";
 
+@resolvable()
 export class Router implements RouterInterface {
-  protected _factory: ServiceManagerFactory;
-
   protected _handlers: Array<HandleFn | RouterInterface> = [
     this._handleError(),
   ];
@@ -38,10 +41,8 @@ export class Router implements RouterInterface {
   };
 
   public constructor(
-    factory: ServiceManagerFactory,
-    manager: ServiceManagerInterface,
+    @inject(ServiceManagerContract) manager: ServiceManagerInterface,
   ) {
-    this._factory = factory;
     this._manager = manager;
   }
 
@@ -55,11 +56,7 @@ export class Router implements RouterInterface {
     next?: NextFn,
   ): Promise<ResponseInterface> {
     const _context = !("respondWith" in contextOrRequest)
-      ? this._factory.createContext(
-          this._factory,
-          this._manager,
-          contextOrRequest,
-        )
+      ? this._manager.resolve<ContextInterface>(ContextContract)
       : contextOrRequest;
     const _next = typeof next === "undefined" ? this._defaultNext : next;
 
