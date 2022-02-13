@@ -1,3 +1,4 @@
+import { resolvable } from "@marubase/container";
 import {
   ResponseInterface,
   StatusCode,
@@ -5,6 +6,7 @@ import {
 } from "./contracts/response.contract.js";
 import { Message } from "./message.js";
 
+@resolvable()
 export class Response extends Message implements ResponseInterface {
   protected _statusCode: StatusCode = 200;
 
