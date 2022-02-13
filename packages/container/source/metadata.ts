@@ -1,6 +1,14 @@
 import { BindingTag, Resolvable } from "./contracts/registry.contract.js";
 import { ResolverScope } from "./contracts/resolver.contract.js";
 
+export const BasicDependencies = [
+  "Boolean",
+  "Function",
+  "Number",
+  "Object",
+  "String",
+];
+
 export function getParamTypes(
   target: Function | Object,
   property?: string | symbol,
@@ -15,11 +23,15 @@ export function getResolverDependencies(
   target: Function | Object,
   property?: string | symbol,
 ): Resolvable[] {
+  const byComplexDependencies = (dependency: Function): boolean =>
+    BasicDependencies.indexOf(dependency.name) < 0;
   const metadataKey = "container:resolver:dependencies";
-  return typeof property !== "undefined"
-    ? Reflect.getMetadata(metadataKey, target, property) ||
+  const dependencies: Function[] =
+    typeof property !== "undefined"
+      ? Reflect.getMetadata(metadataKey, target, property) ||
         getParamTypes(target, property)
-    : Reflect.getMetadata(metadataKey, target) || getParamTypes(target);
+      : Reflect.getMetadata(metadataKey, target) || getParamTypes(target);
+  return dependencies.filter(byComplexDependencies);
 }
 
 export function getResolverScope(
