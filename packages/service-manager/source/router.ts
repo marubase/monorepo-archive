@@ -3,11 +3,11 @@ import { ContextInterface } from "./contracts/context.contract.js";
 import { ManagerFactory } from "./contracts/manager.contract.js";
 import {
   RequestInterface,
-  RequestMethod
+  RequestMethod,
 } from "./contracts/request.contract.js";
 import {
   ResponseInterface,
-  StatusText
+  StatusText,
 } from "./contracts/response.contract.js";
 import {
   ConfigureFn,
@@ -17,7 +17,7 @@ import {
   MatchPath,
   NextFn,
   RouterInterface,
-  RouterOptions
+  RouterOptions,
 } from "./contracts/router.contract.js";
 import { ServiceError } from "./errors/service.error.js";
 
