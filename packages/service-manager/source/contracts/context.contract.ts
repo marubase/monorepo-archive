@@ -35,6 +35,4 @@ export interface ContextInterface {
   respondWith(statusCode: StatusCode, statusText?: string): ResponseInterface;
 
   set(key: string, value: string): this;
-
-  setParams(params: Record<string, string>): this;
 }
