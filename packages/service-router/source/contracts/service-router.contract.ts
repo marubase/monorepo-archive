@@ -23,10 +23,7 @@ export interface ServiceRouterInterface {
 
   path(path: string): MatchPath;
 
-  request(
-    method: ServiceRequestMethod,
-    path: string,
-  ): Promise<ServiceResponseInterface>;
+  request(method: ServiceRequestMethod, path: string): ServiceRequestInterface;
 }
 
 export type ConfigureFn = (router: ServiceRouterInterface) => void;
