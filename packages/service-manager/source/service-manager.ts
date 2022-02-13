@@ -1,41 +1,32 @@
 import { Container } from "@marubase/container";
-import { Context } from "./context.js";
 import {
+  RequestContract,
   RequestInterface,
   RequestMethod,
 } from "./contracts/request.contract.js";
 import {
+  ResponseContract,
   ResponseInterface,
   StatusText,
 } from "./contracts/response.contract.js";
-import { ServiceDefinitionInterface } from "./contracts/service-definition.contract.js";
-import { ServiceInstanceInterface } from "./contracts/service-instance.contract.js";
 import {
-  ServiceManagerFactory,
-  ServiceManagerInterface,
-} from "./contracts/service-manager.contract.js";
+  ServiceDefinitionContract,
+  ServiceDefinitionInterface,
+} from "./contracts/service-definition.contract.js";
+import {
+  ServiceInstanceContract,
+  ServiceInstanceInterface,
+} from "./contracts/service-instance.contract.js";
+import { ServiceManagerInterface } from "./contracts/service-manager.contract.js";
 import { ServiceManagerError } from "./errors/service-manager.error.js";
-import { Request } from "./request.js";
-import { Response } from "./response.js";
-import { ServiceDefinition } from "./service-definition.js";
-import { ServiceInstance } from "./service-instance.js";
 
 export class ServiceManager
   extends Container
   implements ServiceManagerInterface
 {
-  protected _factory: ServiceManagerFactory;
-
   protected _instances: Record<string, ServiceInstanceInterface> = {};
 
   protected _services: Record<string, ServiceDefinitionInterface> = {};
-
-  public constructor(
-    factory: ServiceManagerFactory = DefaultServiceManagerFactory,
-  ) {
-    super();
-    this._factory = factory;
-  }
 
   public get instances(): Record<string, ServiceInstanceInterface> {
     return this._instances;
@@ -51,8 +42,7 @@ export class ServiceManager
       return instance.service.dispatch(request);
     const normalize = (statusText: string): string =>
       statusText.replaceAll(/\s+/g, "_").toLowerCase();
-    const response = this._factory
-      .createResponse(404)
+    const response = this.resolve<ResponseInterface>(ResponseContract, 404)
       .setHeader("Content-Type", "application/json")
       .setBody({
         error: normalize(StatusText[404]),
@@ -62,7 +52,7 @@ export class ServiceManager
   }
 
   public request(method: RequestMethod, path: string): RequestInterface {
-    return this._factory.createRequest(this, method, path);
+    return this.resolve<RequestInterface>(RequestContract, this, method, path);
   }
 
   public restart(
@@ -76,9 +66,8 @@ export class ServiceManager
 
   public service(name: string): ServiceDefinitionInterface {
     if (!(name in this._services))
-      this._services[name] = this._factory.createServiceDefinition(
-        this._factory,
-        this,
+      this._services[name] = this.resolve<ServiceDefinitionInterface>(
+        ServiceDefinitionContract,
         name,
       );
     return this._services[name];
@@ -104,8 +93,8 @@ export class ServiceManager
     const service = this._services[name];
     this.install(origin, service.provider);
 
-    const instance = this._factory.createServiceInstance(
-      this._factory,
+    const instance = this.resolve<ServiceInstanceInterface>(
+      ServiceInstanceContract,
       service,
       origin,
       store,
@@ -128,20 +117,3 @@ export class ServiceManager
     return instance;
   }
 }
-
-export const DefaultServiceManagerFactory: ServiceManagerFactory = {
-  createContext: (factory, manager, request) =>
-    new Context(factory, manager, request),
-
-  createRequest: (dispatchable, method, path) =>
-    new Request(dispatchable, method, path),
-
-  createResponse: (statusCode, StatusText) =>
-    new Response(statusCode, StatusText),
-
-  createServiceDefinition: (factory, manager, name) =>
-    new ServiceDefinition(factory, manager, name),
-
-  createServiceInstance: (factory, service, origin, store) =>
-    new ServiceInstance(factory, service, origin, store),
-};
