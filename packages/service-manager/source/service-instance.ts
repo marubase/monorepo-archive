@@ -1,13 +1,19 @@
+import { inject, resolvable } from "@marubase/container";
 import {
+  RequestContract,
   RequestInterface,
   RequestMethod,
 } from "./contracts/request.contract.js";
 import { ServiceDefinitionInterface } from "./contracts/service-definition.contract.js";
 import { ServiceInstanceInterface } from "./contracts/service-instance.contract.js";
-import { ServiceManagerFactory } from "./contracts/service-manager.contract.js";
+import {
+  ServiceManagerContract,
+  ServiceManagerInterface,
+} from "./contracts/service-manager.contract.js";
 
+@resolvable()
 export class ServiceInstance implements ServiceInstanceInterface {
-  protected _factory: ServiceManagerFactory;
+  protected _manager: ServiceManagerInterface;
 
   protected _origin: string;
 
@@ -16,12 +22,12 @@ export class ServiceInstance implements ServiceInstanceInterface {
   protected _store: Record<string, unknown>;
 
   public constructor(
-    factory: ServiceManagerFactory,
+    @inject(ServiceManagerContract) manager: ServiceManagerInterface,
     service: ServiceDefinitionInterface,
     origin: string,
     store: Record<string, unknown>,
   ) {
-    this._factory = factory;
+    this._manager = manager;
     this._service = service;
     this._origin = origin;
     this._store = store;
@@ -40,8 +46,8 @@ export class ServiceInstance implements ServiceInstanceInterface {
   }
 
   public request(method: RequestMethod, path: string): RequestInterface {
-    return this._factory
-      .createRequest(this._service, method, path)
+    return this._manager
+      .resolve<RequestInterface>(RequestContract, this._service, method, path)
       .setOrigin(this._origin);
   }
 }
