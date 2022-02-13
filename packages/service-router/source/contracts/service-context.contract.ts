@@ -1,4 +1,4 @@
-import { ContainerInterface } from "@marubase/container";
+import { Callable, ContainerInterface, Resolvable } from "@marubase/container";
 import { StatusCode } from "../../../service-manager/source/contracts/response.contract.js";
 import { ServiceRequestMethod } from "./service-request.contract.js";
 import { ServiceResponseInterface } from "./service-response.contract.js";
@@ -28,8 +28,12 @@ export interface ServiceContextInterface extends Map<unknown, unknown> {
 
   readonly scheme: string;
 
+  call<Result>(callable: Callable, ...args: unknown[]): Result;
+
   replyWith(
     statusCode: StatusCode,
     statusText?: string,
   ): ServiceResponseInterface;
+
+  resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result;
 }
