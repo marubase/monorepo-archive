@@ -1,3 +1,4 @@
+import { Callable, ContainerInterface, Resolvable } from "@marubase/container";
 import { ContextInterface } from "./contracts/context.contract.js";
 import { ManagerFactory } from "./contracts/manager.contract.js";
 import {
@@ -10,6 +11,8 @@ import {
 } from "./contracts/response.contract.js";
 
 export class Context implements ContextInterface {
+  protected _container: ContainerInterface;
+
   protected _factory: ManagerFactory;
 
   protected _params: Record<string, string> = {};
@@ -18,7 +21,12 @@ export class Context implements ContextInterface {
 
   protected _store: Record<string, unknown> = {};
 
-  public constructor(request: RequestInterface, factory: ManagerFactory) {
+  public constructor(
+    container: ContainerInterface,
+    request: RequestInterface,
+    factory: ManagerFactory,
+  ) {
+    this._container = container;
     this._request = request;
     this._factory = factory;
   }
@@ -67,6 +75,10 @@ export class Context implements ContextInterface {
     return this._store;
   }
 
+  public call<Result>(callable: Callable, ...args: unknown[]): Result {
+    return this._container.call(callable, ...args);
+  }
+
   public clear(key: string): this {
     delete this._store[key];
     return this;
@@ -78,6 +90,10 @@ export class Context implements ContextInterface {
 
   public has(key: string): boolean {
     return key in this._store;
+  }
+
+  public resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result {
+    return this._container.resolve(resolvable, ...args);
   }
 
   public respondWith(
