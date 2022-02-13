@@ -37,9 +37,9 @@ export interface ServiceManagerInterface extends ContainerInterface {
   stop(origin: string): ServiceInstanceInterface;
 }
 
-export type ManagerFactory = {
+export type ServiceManagerFactory = {
   createContext: (
-    factory: ManagerFactory,
+    factory: ServiceManagerFactory,
     manager: ServiceManagerInterface,
     request: RequestInterface,
   ) => ContextInterface;
