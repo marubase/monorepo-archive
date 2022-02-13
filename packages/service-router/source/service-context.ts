@@ -1,12 +1,14 @@
 import {
-  Callable,
   ContainerContract,
   ContainerInterface,
   inject,
   resolvable,
-  Resolvable,
 } from "@marubase/container";
 import { ServiceContextInterface } from "./contracts/service-context.contract.js";
+import {
+  ServiceManagerContract,
+  ServiceManagerInterface,
+} from "./contracts/service-manager.contract.js";
 import {
   ServiceRequestInterface,
   ServiceRequestMethod,
@@ -24,6 +26,8 @@ export class ServiceContext
 {
   protected _container: ContainerInterface;
 
+  protected _manager: ServiceManagerInterface;
+
   protected _params: Record<string, string> = {};
 
   protected _request: ServiceRequestInterface;
@@ -32,11 +36,17 @@ export class ServiceContext
 
   public constructor(
     @inject(ContainerContract) container: ContainerInterface,
+    @inject(ServiceManagerContract) manager: ServiceManagerInterface,
     request: ServiceRequestInterface,
   ) {
     super();
     this._container = container;
+    this._manager = manager;
     this._request = request;
+  }
+
+  public get container(): ContainerInterface {
+    return this._container;
   }
 
   public get credential(): [string, string] | string | undefined {
@@ -49,6 +59,10 @@ export class ServiceContext
 
   public get hostname(): string {
     return this._request.hostname;
+  }
+
+  public get manager(): ServiceManagerInterface {
+    return this._manager;
   }
 
   public get method(): ServiceRequestMethod {
@@ -83,10 +97,6 @@ export class ServiceContext
     return this._store;
   }
 
-  public call<Result>(callable: Callable, ...args: unknown[]): Result {
-    return this._container.call(callable, ...args);
-  }
-
   public replyWith(
     statusCode: StatusCode,
     statusText?: string,
@@ -97,9 +107,5 @@ export class ServiceContext
     return typeof statusText !== "undefined"
       ? response.setStatusCode(statusCode).setStatusText(statusText)
       : response.setStatusCode(statusCode);
-  }
-
-  public resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result {
-    return this._container.resolve(resolvable, ...args);
   }
 }
