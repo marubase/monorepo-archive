@@ -10,6 +10,7 @@ import {
   StatusText,
 } from "./contracts/response.contract.js";
 import {
+  ConfigureFn,
   HandleFn,
   MatchMethod,
   MatchOrigin,
@@ -32,6 +33,11 @@ export class Router implements RouterInterface {
   public constructor(factory: ManagerFactory, options: RouterOptions) {
     this._factory = factory;
     this._options = options;
+  }
+
+  public configure(configureFn: ConfigureFn): this {
+    configureFn(this);
+    return this;
   }
 
   public dispatch(request: RequestInterface): Promise<ResponseInterface>;
