@@ -13,6 +13,14 @@ export interface RouterInterface {
   dispatch(request: RequestInterface): Promise<ResponseInterface>;
   dispatch(context: ContextInterface, next: NextFn): Promise<ResponseInterface>;
 
+  handle(handler: HandleFn | RouterInterface): void;
+
+  method(method: RequestMethod[] | RequestMethod): MatchMethod;
+
+  origin(origin: string): MatchOrigin;
+
+  path(path: string): MatchPath;
+
   use(
     method: RequestMethod[] | RequestMethod,
     path: string,
@@ -26,6 +34,24 @@ export type HandleFn = (
   context: ContextInterface,
   next: NextFn,
 ) => Promise<ResponseInterface>;
+
+export type MatchMethod = {
+  handle(handler: HandleFn): void;
+
+  path(path: string): MatchPath;
+};
+
+export type MatchOrigin = {
+  handle(handler: HandleFn | RouterInterface): void;
+
+  method(method: RequestMethod[] | RequestMethod): MatchMethod;
+
+  path(path: string): MatchPath;
+};
+
+export type MatchPath = {
+  handle(handler: HandleFn | RouterInterface): void;
+};
 
 export type NextFn = () => Promise<ResponseInterface>;
 
