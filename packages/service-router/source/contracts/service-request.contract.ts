@@ -6,8 +6,6 @@ export const ServiceRequestContract = Symbol("RequestContract");
 export interface ServiceRequestInterface extends ServiceMessageInterface {
   readonly credential?: [string, string] | string;
 
-  readonly dispatcher?: ServiceRequestDispatcher;
-
   readonly hash: string;
 
   readonly hostname: string;
