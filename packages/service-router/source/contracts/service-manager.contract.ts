@@ -1,4 +1,3 @@
-import { ContainerInterface } from "@marubase/container";
 import {
   ServiceRequestInterface,
   ServiceRequestMethod,
@@ -9,8 +8,6 @@ import { ServiceRouterInterface } from "./service-router.contract.js";
 export const ServiceManagerContract = Symbol("ServiceManagerContract");
 
 export interface ServiceManagerInterface {
-  readonly container: ContainerInterface;
-
   readonly hosts: Record<string, ServiceRouterInterface>;
 
   readonly services: Record<string, ServiceRouterInterface>;
