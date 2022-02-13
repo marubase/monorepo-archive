@@ -11,6 +11,9 @@ import {
 } from "./contracts/response.contract.js";
 import {
   HandleFn,
+  MatchMethod,
+  MatchOrigin,
+  MatchPath,
   NextFn,
   RouterInterface,
   RouterOptions,
@@ -55,6 +58,69 @@ export class Router implements RouterInterface {
         : handler(_context, _nextFn);
     };
     return _nextFn();
+  }
+
+  public handle(handler: HandleFn | RouterInterface): void {
+    this._handlers.push(handler);
+  }
+
+  public method(method: RequestMethod[] | RequestMethod): MatchMethod {
+    const _method = !Array.isArray(method) ? [method] : method;
+    return {
+      handle: (handler) => {
+        const _handler = this._handleMethod(_method, handler);
+        this._handlers.push(_handler);
+      },
+      path: (path: string) => ({
+        handle: (handler) => {
+          const _pathHandler = this._handlePath(path, handler);
+          const _handler = this._handleMethod(_method, _pathHandler);
+          this._handlers.push(_handler);
+        },
+      }),
+    };
+  }
+
+  public origin(origin: string): MatchOrigin {
+    return {
+      handle: (handler) => {
+        const _handler = this._handleOrigin(origin, handler);
+        this._handlers.push(_handler);
+      },
+      method: (method) => ({
+        handle: (handler) => {
+          const _method = !Array.isArray(method) ? [method] : method;
+          const _methodHandler = this._handleMethod(_method, handler);
+          const _handler = this._handleOrigin(origin, _methodHandler);
+          this._handlers.push(_handler);
+        },
+        path: (path) => ({
+          handle: (handler) => {
+            const _method = !Array.isArray(method) ? [method] : method;
+            const _pathHandler = this._handlePath(path, handler);
+            const _methodHandler = this._handleMethod(_method, _pathHandler);
+            const _handler = this._handleOrigin(origin, _methodHandler);
+            this._handlers.push(_handler);
+          },
+        }),
+      }),
+      path: (path) => ({
+        handle: (handler) => {
+          const _pathHandler = this._handlePath(path, handler);
+          const _handler = this._handleOrigin(origin, _pathHandler);
+          this._handlers.push(_handler);
+        },
+      }),
+    };
+  }
+
+  public path(path: string): MatchPath {
+    return {
+      handle: (handler) => {
+        const _handler = this._handlePath(path, handler);
+        this._handlers.push(_handler);
+      },
+    };
   }
 
   public use(
@@ -126,7 +192,19 @@ export class Router implements RouterInterface {
     handler: HandleFn | RouterInterface,
   ): HandleFn {
     return async (context, next) => {
-      if (method.indexOf(context.method) < 1) return next();
+      if (method.indexOf(context.method) < 0) return next();
+      return "dispatch" in handler
+        ? handler.dispatch(context, next)
+        : handler(context, next);
+    };
+  }
+
+  protected _handleOrigin(
+    origin: string,
+    handler: HandleFn | RouterInterface,
+  ): HandleFn {
+    return async (context, next) => {
+      if (context.origin !== origin) return next();
       return "dispatch" in handler
         ? handler.dispatch(context, next)
         : handler(context, next);
