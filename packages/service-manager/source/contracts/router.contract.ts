@@ -20,14 +20,6 @@ export interface RouterInterface {
   origin(origin: string): MatchOrigin;
 
   path(path: string): MatchPath;
-
-  use(
-    method: RequestMethod[] | RequestMethod,
-    path: string,
-    handler: HandleFn | RouterInterface,
-  ): this;
-  use(path: string, handler: HandleFn | RouterInterface): this;
-  use(handler: HandleFn | RouterInterface): this;
 }
 
 export type HandleFn = (
