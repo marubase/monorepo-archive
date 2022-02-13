@@ -123,45 +123,6 @@ export class Router implements RouterInterface {
     };
   }
 
-  public use(
-    method: RequestMethod[] | RequestMethod,
-    path: string,
-    handler: HandleFn | RouterInterface,
-  ): this;
-  public use(path: string, handler: RouterInterface | HandleFn): this;
-  public use(handler: HandleFn | RouterInterface): this;
-  public use(
-    methodOrPathOrHandler:
-      | RequestMethod[]
-      | RequestMethod
-      | HandleFn
-      | RouterInterface
-      | string,
-    pathOrHandler?: HandleFn | RouterInterface | string,
-    handler?: HandleFn | RouterInterface,
-  ): this {
-    if (Array.isArray(methodOrPathOrHandler)) {
-      const _handler = this._handleMethod(
-        methodOrPathOrHandler,
-        this._handlePath(pathOrHandler as string, handler!),
-      );
-      this._handlers.push(_handler);
-      return this;
-    } else if (typeof methodOrPathOrHandler !== "string") {
-      const _handler = methodOrPathOrHandler;
-      this._handlers.push(_handler);
-      return this;
-    } else if (typeof pathOrHandler === "string") {
-      const _handler = this._handlePath(pathOrHandler, handler!);
-      this._handlers.push(_handler);
-      return this;
-    } else {
-      const _handler = pathOrHandler!;
-      this._handlers.push(_handler);
-      return this;
-    }
-  }
-
   protected _defaultNext(): Promise<ResponseInterface> {
     throw new ServiceError(404, "route not found");
   }
