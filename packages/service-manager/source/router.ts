@@ -3,11 +3,11 @@ import { ContextInterface } from "./contracts/context.contract.js";
 import { ManagerFactory } from "./contracts/manager.contract.js";
 import {
   RequestInterface,
-  RequestMethod,
+  RequestMethod
 } from "./contracts/request.contract.js";
 import {
   ResponseInterface,
-  StatusText,
+  StatusText
 } from "./contracts/response.contract.js";
 import {
   ConfigureFn,
@@ -17,7 +17,7 @@ import {
   MatchPath,
   NextFn,
   RouterInterface,
-  RouterOptions,
+  RouterOptions
 } from "./contracts/router.contract.js";
 import { ServiceError } from "./errors/service.error.js";
 
@@ -28,11 +28,14 @@ export class Router implements RouterInterface {
     this._handleError(),
   ];
 
-  protected _options: RouterOptions;
+  protected _options: RouterOptions = {
+    decode: decodeURIComponent,
+    sensitive: true,
+    strict: true,
+  };
 
-  public constructor(factory: ManagerFactory, options: RouterOptions) {
+  public constructor(factory: ManagerFactory) {
     this._factory = factory;
-    this._options = options;
   }
 
   public configure(configureFn: ConfigureFn): this {
@@ -186,7 +189,7 @@ export class Router implements RouterInterface {
       const matchFn = match(path, this._options);
       const matches = matchFn(context.path);
       if (!matches) return next();
-      context.setParams(matches.params as Record<string, string>);
+      Object.assign(context.params, matches.params);
       return "dispatch" in handler
         ? handler.dispatch(context, next)
         : handler(context, next);
