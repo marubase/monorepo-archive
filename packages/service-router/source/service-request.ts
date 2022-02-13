@@ -5,7 +5,6 @@ import {
   ServiceRequestMethod,
 } from "./contracts/service-request.contract.js";
 import { ServiceResponseInterface } from "./contracts/service-response.contract.js";
-import { ServiceRouterError } from "./errors/service-router.error.js";
 import { ServiceMessage } from "./service-message.js";
 
 @resolvable()
@@ -13,11 +12,23 @@ export class ServiceRequest
   extends ServiceMessage
   implements ServiceRequestInterface
 {
-  protected _dispatcher?: ServiceRequestDispatcher;
+  protected _dispatcher: ServiceRequestDispatcher;
 
-  protected _method: ServiceRequestMethod = "GET";
+  protected _method: ServiceRequestMethod;
 
-  protected _url: URL = new URL("/", "http://127.0.0.1");
+  protected _url: URL;
+
+  public constructor(
+    dispatcher: ServiceRequestDispatcher,
+    method: ServiceRequestMethod,
+    path: string,
+    origin = "http://127.0.0.1",
+  ) {
+    super();
+    this._dispatcher = dispatcher;
+    this._method = method;
+    this._url = new URL(path, origin);
+  }
 
   public get credential(): [string, string] | string | undefined {
     return this._url.username !== ""
@@ -86,12 +97,6 @@ export class ServiceRequest
   }
 
   public dispatch(): Promise<ServiceResponseInterface> {
-    if (typeof this._dispatcher === "undefined") {
-      const context = `Dispatching service request.`;
-      const problem = `Request dispatcher not set.`;
-      const solution = `Please set the request dispatcher before invoking dispatch.`;
-      throw new ServiceRouterError(500, `${context} ${problem} ${solution}`);
-    }
     return this._dispatcher.dispatch(this);
   }
 
