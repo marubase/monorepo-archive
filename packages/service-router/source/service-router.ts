@@ -24,6 +24,7 @@ import {
   StatusText,
 } from "./contracts/service-response.contract.js";
 import {
+  ConfigureFn,
   HandleFn,
   MatchMethod,
   MatchPath,
@@ -54,6 +55,11 @@ export class ServiceRouter implements ServiceRouterInterface {
 
   public get container(): ContainerInterface {
     return this._container;
+  }
+
+  public configure(configureFn: ConfigureFn): this {
+    configureFn(this);
+    return this;
   }
 
   public dispatch(
