@@ -3,7 +3,10 @@ import {
   ServiceRequestMethod,
 } from "./service-request.contract.js";
 import { ServiceResponseInterface } from "./service-response.contract.js";
-import { ServiceRouterInterface } from "./service-router.contract.js";
+import {
+  ConfigureFn,
+  ServiceRouterInterface,
+} from "./service-router.contract.js";
 
 export const ServiceManagerContract = Symbol("ServiceManagerContract");
 
@@ -12,7 +15,7 @@ export interface ServiceManagerInterface {
 
   readonly services: Record<string, ServiceRouterInterface>;
 
-  define(service: string, defineFn: DefineFn): this;
+  configure(service: string, configureFn: ConfigureFn): this;
 
   dispatch(request: ServiceRequestInterface): Promise<ServiceResponseInterface>;
 
@@ -26,5 +29,3 @@ export interface ServiceManagerInterface {
 
   unhost(origin: string): this;
 }
-
-export type DefineFn = (router: ServiceRouterInterface) => void;
