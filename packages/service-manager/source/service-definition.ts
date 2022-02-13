@@ -1,4 +1,4 @@
-import { ProviderInterface } from "@marubase/container";
+import { inject, ProviderInterface, resolvable } from "@marubase/container";
 import {
   ServiceBootFn,
   ServiceConfigureFn,
@@ -9,11 +9,12 @@ import {
 } from "./contracts/service-definition.contract.js";
 import { ServiceInstanceInterface } from "./contracts/service-instance.contract.js";
 import {
-  ServiceManagerFactory,
+  ServiceManagerContract,
   ServiceManagerInterface,
 } from "./contracts/service-manager.contract.js";
 import { Router } from "./router.js";
 
+@resolvable()
 export class ServiceDefinition
   extends Router
   implements ServiceDefinitionInterface
@@ -31,11 +32,10 @@ export class ServiceDefinition
   protected _uninstallFns: ServiceUninstallFn[] = [];
 
   public constructor(
-    factory: ServiceManagerFactory,
-    manager: ServiceManagerInterface,
+    @inject(ServiceManagerContract) manager: ServiceManagerInterface,
     name: string,
   ) {
-    super(factory, manager);
+    super(manager);
     this._name = name;
   }
 
