@@ -122,9 +122,10 @@ importers:
     specifiers:
       '@marubase/container': workspace:^0.0.0
       path-to-regexp: ^6.2.0
+    dependencies:
+      path-to-regexp: 6.2.0
     devDependencies:
       '@marubase/container': link:../container
-      path-to-regexp: 6.2.0
 
   packages/storage:
     specifiers:
@@ -3181,6 +3182,7 @@ packages:
 
   /path-to-regexp/6.2.0:
     resolution: {integrity: sha512-f66KywYG6+43afgE/8j/GoiNyygk/bnoCbps++3ErRKsIYkGGupyv07R2Ok5m9i67Iqc+T2g1eAUGUPzWhYTyg==}
+    dev: false
 
   /path-type/4.0.0:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}

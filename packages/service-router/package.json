@@ -51,12 +51,13 @@
   "publishConfig": {
     "access": "public"
   },
-  "devDependencies": {
-    "@marubase/container": "workspace:^0.0.0",
+  "dependencies": {
     "path-to-regexp": "^6.2.0"
   },
+  "devDependencies": {
+    "@marubase/container": "workspace:^0.0.0"
+  },
   "peerDependencies": {
-    "@marubase/container": "workspace:^0.0.0",
-    "path-to-regexp": "^6.2.0"
+    "@marubase/container": "workspace:^0.0.0"
   }
 }
