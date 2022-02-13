@@ -1,3 +1,4 @@
+import { ContainerInterface } from "@marubase/container";
 import { match } from "path-to-regexp";
 import { ContextInterface } from "./contracts/context.contract.js";
 import { ManagerFactory } from "./contracts/manager.contract.js";
@@ -22,6 +23,8 @@ import {
 import { ServiceError } from "./errors/service.error.js";
 
 export class Router implements RouterInterface {
+  protected _container: ContainerInterface;
+
   protected _factory: ManagerFactory;
 
   protected _handlers: Array<HandleFn | RouterInterface> = [
@@ -34,7 +37,8 @@ export class Router implements RouterInterface {
     strict: true,
   };
 
-  public constructor(factory: ManagerFactory) {
+  public constructor(container: ContainerInterface, factory: ManagerFactory) {
+    this._container = container;
     this._factory = factory;
   }
 
@@ -53,7 +57,11 @@ export class Router implements RouterInterface {
     next?: NextFn,
   ): Promise<ResponseInterface> {
     const _context = !("respondWith" in contextOrRequest)
-      ? this._factory.createContext(contextOrRequest, this._factory)
+      ? this._factory.createContext(
+          this._container,
+          contextOrRequest,
+          this._factory,
+        )
       : contextOrRequest;
     const _next = typeof next === "undefined" ? this._defaultNext : next;
 
