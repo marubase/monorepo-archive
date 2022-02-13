@@ -123,11 +123,12 @@ export class ServiceRouter implements ServiceRouterInterface {
     method: ServiceRequestMethod,
     path: string,
   ): ServiceRequestInterface {
-    return this._container
-      .resolve<ServiceRequestInterface>(ServiceRequestContract)
-      .setDispatcher(this)
-      .setMethod(method)
-      .setPath(path);
+    return this._container.resolve<ServiceRequestInterface>(
+      ServiceRequestContract,
+      this,
+      method,
+      path,
+    );
   }
 
   protected _defaultNext(): Promise<ServiceResponseInterface> {
