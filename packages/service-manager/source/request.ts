@@ -1,13 +1,28 @@
 import {
+  RequestDispatchable,
   RequestInterface,
   RequestMethod,
 } from "./contracts/request.contract.js";
+import { ResponseInterface } from "./contracts/response.contract.js";
 import { Message } from "./message.js";
 
 export class Request extends Message implements RequestInterface {
-  protected _method: RequestMethod = "GET";
+  protected _dispatchable: RequestDispatchable;
 
-  protected _url = new URL("/", "http://127.0.0.1");
+  protected _method: RequestMethod;
+
+  protected _url: URL;
+
+  public constructor(
+    dispatchable: RequestDispatchable,
+    method: RequestMethod,
+    path: string,
+  ) {
+    super();
+    this._dispatchable = dispatchable;
+    this._method = method;
+    this._url = new URL(path, "http://127.0.0.1");
+  }
 
   public get credential(): [string, string] | string | undefined {
     return this._url.username !== ""
@@ -73,6 +88,10 @@ export class Request extends Message implements RequestInterface {
   public clearQuery(key: string): this {
     this._url.searchParams.delete(key);
     return this;
+  }
+
+  public dispatch(): Promise<ResponseInterface> {
+    return this._dispatchable.dispatch(this);
   }
 
   public setCredential(token: string): this;
