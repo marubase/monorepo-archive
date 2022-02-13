@@ -101,6 +101,12 @@ importers:
   packages/container/build/module:
     specifiers: {}
 
+  packages/service-engine:
+    specifiers:
+      '@marubase/container': workspace:^0.0.0
+    dependencies:
+      '@marubase/container': link:../container
+
   packages/service-manager:
     specifiers:
       '@marubase/container': workspace:^0.0.0
