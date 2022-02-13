@@ -27,10 +27,6 @@ export class ServiceRequest
       : undefined;
   }
 
-  public get dispatcher(): ServiceRequestDispatcher | undefined {
-    return this._dispatcher;
-  }
-
   public get hash(): string {
     return this._url.hash;
   }
