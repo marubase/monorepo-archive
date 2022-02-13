@@ -8,7 +8,6 @@ import {
 } from "@marubase/container";
 import { ServiceContextInterface } from "./contracts/service-context.contract.js";
 import {
-  ServiceRequestContract,
   ServiceRequestInterface,
   ServiceRequestMethod,
 } from "./contracts/service-request.contract.js";
@@ -33,15 +32,11 @@ export class ServiceContext
 
   public constructor(
     @inject(ContainerContract) container: ContainerInterface,
-    @inject(ServiceRequestContract) request: ServiceRequestInterface,
+    request: ServiceRequestInterface,
   ) {
     super();
     this._container = container;
     this._request = request;
-  }
-
-  public get container(): ContainerInterface {
-    return this._container;
   }
 
   public get credential(): [string, string] | string | undefined {
