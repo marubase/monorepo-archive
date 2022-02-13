@@ -62,6 +62,7 @@ export type ServiceManagerFactory = {
   ) => ServiceDefinitionInterface;
 
   createServiceInstance: (
+    factory: ServiceManagerFactory,
     service: ServiceDefinitionInterface,
     origin: string,
     store: Record<string, unknown>,
