@@ -1,4 +1,4 @@
-import { Callable, ContainerInterface, Resolvable } from "@marubase/container";
+import { Callable, Resolvable } from "@marubase/container";
 import { ContextInterface } from "./contracts/context.contract.js";
 import {
   RequestInterface,
@@ -8,12 +8,15 @@ import {
   ResponseInterface,
   StatusCode,
 } from "./contracts/response.contract.js";
-import { ServiceManagerFactory } from "./contracts/service-manager.contract.js";
+import {
+  ServiceManagerFactory,
+  ServiceManagerInterface,
+} from "./contracts/service-manager.contract.js";
 
 export class Context implements ContextInterface {
-  protected _container: ContainerInterface;
-
   protected _factory: ServiceManagerFactory;
+
+  protected _manager: ServiceManagerInterface;
 
   protected _params: Record<string, string> = {};
 
@@ -22,13 +25,13 @@ export class Context implements ContextInterface {
   protected _store: Record<string, unknown> = {};
 
   public constructor(
-    container: ContainerInterface,
-    request: RequestInterface,
     factory: ServiceManagerFactory,
+    manager: ServiceManagerInterface,
+    request: RequestInterface,
   ) {
-    this._container = container;
-    this._request = request;
     this._factory = factory;
+    this._manager = manager;
+    this._request = request;
   }
 
   public get credential(): [string, string] | string | undefined {
@@ -76,7 +79,7 @@ export class Context implements ContextInterface {
   }
 
   public call<Result>(callable: Callable, ...args: unknown[]): Result {
-    return this._container.call(callable, ...args);
+    return this._manager.call(callable, ...args);
   }
 
   public clear(key: string): this {
@@ -93,7 +96,7 @@ export class Context implements ContextInterface {
   }
 
   public resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result {
-    return this._container.resolve(resolvable, ...args);
+    return this._manager.resolve(resolvable, ...args);
   }
 
   public respondWith(
