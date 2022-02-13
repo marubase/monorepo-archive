@@ -91,9 +91,4 @@ export class Context implements ContextInterface {
     this._store[key] = value;
     return this;
   }
-
-  public setParams(params: Record<string, string>): this {
-    this._params = params;
-    return this;
-  }
 }
