@@ -47,7 +47,7 @@ export class ServiceManager implements ServiceManagerInterface {
       throw new ServiceRouterError(500, `${context} ${problem} ${solution}`);
     }
 
-    const router = this._services[service];
+    const router = this._routers[service];
     if (!router) {
       const context = `Hosting service at '${origin}'.`;
       const problem = `Service '${service}' not found.`;
