@@ -6,12 +6,6 @@ import {
 } from "@marubase/container";
 import { ServiceManagerInterface } from "./contracts/service-manager.contract.js";
 import {
-  ServiceRequestContract,
-  ServiceRequestInterface,
-  ServiceRequestMethod,
-} from "./contracts/service-request.contract.js";
-import { ServiceResponseInterface } from "./contracts/service-response.contract.js";
-import {
   ConfigureFn,
   ServiceRouterContract,
   ServiceRouterInterface,
@@ -22,7 +16,7 @@ import { ServiceRouterError } from "./errors/service-router.error.js";
 export class ServiceManager implements ServiceManagerInterface {
   protected _container: ContainerInterface;
 
-  protected _hosts: Record<string, ServiceRouterInterface> = {};
+  protected _routers: Record<string, ServiceRouterInterface> = {};
 
   protected _services: Record<string, ServiceRouterInterface> = {};
 
@@ -30,35 +24,23 @@ export class ServiceManager implements ServiceManagerInterface {
     this._container = container;
   }
 
-  public get hosts(): Record<string, ServiceRouterInterface> {
-    return this._hosts;
+  public get routers(): Record<string, ServiceRouterInterface> {
+    return this._routers;
   }
 
   public get services(): Record<string, ServiceRouterInterface> {
     return this._services;
   }
 
-  public configure(service: string, configureFn: ConfigureFn): this {
-    if (!(service in this._services))
-      this._services[service] = this._container.resolve(ServiceRouterContract);
-    this._services[service].configure(configureFn);
+  public configure(name: string, configureFn: ConfigureFn): this {
+    if (!(name in this._routers))
+      this._routers[name] = this._container.resolve(ServiceRouterContract);
+    this._routers[name].configure(configureFn);
     return this;
   }
 
-  public dispatch(
-    request: ServiceRequestInterface,
-  ): Promise<ServiceResponseInterface> {
-    if (!(request.origin in this._hosts)) {
-      const context = `Dispatching service request.`;
-      const problem = `No service hosting at '${request.origin}'.`;
-      const solution = `Please try to request another origin.`;
-      throw new ServiceRouterError(500, `${context} ${problem} ${solution}`);
-    }
-    return this._hosts[request.origin].dispatch(request);
-  }
-
   public host(origin: string, service: string): this {
-    if (origin in this._hosts) {
+    if (origin in this._services) {
       const context = `Hosting service at '${origin}'.`;
       const problem = `Another service already hosting at '${origin}'.`;
       const solution = `Please try to host service at another origin.`;
@@ -72,32 +54,26 @@ export class ServiceManager implements ServiceManagerInterface {
       const solution = `Please try to host another service.`;
       throw new ServiceRouterError(500, `${context} ${problem} ${solution}`);
     }
-    this._hosts[origin] = router;
+    this._services[origin] = router;
     return this;
   }
 
-  public request(
-    origin: string,
-    method: ServiceRequestMethod,
-    path: string,
-  ): ServiceRequestInterface {
-    return this._container.resolve<ServiceRequestInterface>(
-      ServiceRequestContract,
-      this,
-      method,
-      path,
-      origin,
-    );
+  public router(name: string): ServiceRouterInterface | undefined {
+    return this._routers[name];
+  }
+
+  public service(origin: string): ServiceRouterInterface | undefined {
+    return this._services[origin];
   }
 
   public unhost(origin: string): this {
-    if (!(origin in this._hosts)) {
+    if (!(origin in this._services)) {
       const context = `Un-hosting service at '${origin}'.`;
       const problem = `No service hosting at '${origin}'.`;
       const solution = `Please try to un-host service at another origin.`;
       throw new ServiceRouterError(500, `${context} ${problem} ${solution}`);
     }
-    delete this._hosts[origin];
+    delete this._services[origin];
     return this;
   }
 }
