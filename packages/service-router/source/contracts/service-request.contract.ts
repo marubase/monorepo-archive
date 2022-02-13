@@ -37,6 +37,8 @@ export interface ServiceRequestInterface extends ServiceMessageInterface {
   setCredential(token: string): this;
   setCredential(username: string, password?: string): this;
 
+  setDispatcher(dispatcher: ServiceRequestDispatcher): this;
+
   setHash(hash: string): this;
 
   setHostname(hostname: string): this;
