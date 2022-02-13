@@ -1,3 +1,4 @@
+import { Callable, Resolvable } from "@marubase/container";
 import { RequestMethod } from "./request.contract.js";
 import { ResponseInterface, StatusCode } from "./response.contract.js";
 
@@ -26,11 +27,15 @@ export interface ContextInterface {
 
   readonly store: Record<string, unknown>;
 
+  call<Result>(callable: Callable, ...args: unknown[]): Result;
+
   clear(key: string): this;
 
   get<Result>(key: string): Result | undefined;
 
   has(key: string): boolean;
+
+  resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result;
 
   respondWith(statusCode: StatusCode, statusText?: string): ResponseInterface;
 
