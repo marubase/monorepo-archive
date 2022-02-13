@@ -56,6 +56,7 @@ export type ServiceManagerFactory = {
   ) => ResponseInterface;
 
   createServiceDefinition: (
+    factory: ServiceManagerFactory,
     manager: ServiceManagerInterface,
     name: string,
   ) => ServiceDefinitionInterface;
