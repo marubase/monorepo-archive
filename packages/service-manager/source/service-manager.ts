@@ -48,11 +48,23 @@ export class ServiceManager
     return this;
   }
 
-  public router(name: string): ServiceRouterInterface | undefined {
+  public router(name: string): ServiceRouterInterface {
+    if (!(name in this._routers)) {
+      const context = `Getting service router by name '${name}'.`;
+      const problem = `Service router not found.`;
+      const solution = `Please get another service router.`;
+      throw new ServiceManagerError(500, `${context} ${problem} ${solution}`);
+    }
     return this._routers[name];
   }
 
-  public service(origin: string): ServiceRouterInterface | undefined {
+  public service(origin: string): ServiceRouterInterface {
+    if (!(origin in this._services)) {
+      const context = `Getting service router by origin '${origin}'.`;
+      const problem = `Service router not found.`;
+      const solution = `Please get another service router.`;
+      throw new ServiceManagerError(500, `${context} ${problem} ${solution}`);
+    }
     return this._services[origin];
   }
 
