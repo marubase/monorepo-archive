@@ -1,8 +1,9 @@
-import { ContainerInterface } from "@marubase/container";
-import { StatusCode } from "../../../service-manager/source/contracts/response.contract.js";
-import { ServiceManagerInterface } from "./service-manager.contract.js";
+import { Callable, ContainerInterface, Resolvable } from "@marubase/container";
 import { ServiceRequestMethod } from "./service-request.contract.js";
-import { ServiceResponseInterface } from "./service-response.contract.js";
+import {
+  ServiceResponseInterface,
+  StatusCode,
+} from "./service-response.contract.js";
 
 export const ServiceContextContract = Symbol("ContextContract");
 
@@ -14,8 +15,6 @@ export interface ServiceContextInterface extends Map<unknown, unknown> {
   readonly hash: string;
 
   readonly hostname: string;
-
-  readonly manager: ServiceManagerInterface;
 
   readonly method: ServiceRequestMethod;
 
@@ -31,8 +30,12 @@ export interface ServiceContextInterface extends Map<unknown, unknown> {
 
   readonly scheme: string;
 
+  call<Result>(callable: Callable, ...args: unknown[]): Result;
+
   replyWith(
     statusCode: StatusCode,
     statusText?: string,
   ): ServiceResponseInterface;
+
+  resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result;
 }
