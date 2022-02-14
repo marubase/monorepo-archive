@@ -1,3 +1,4 @@
+import { ContainerInterface } from "@marubase/container";
 import {
   ConfigureFn,
   ServiceRouterInterface,
@@ -5,7 +6,7 @@ import {
 
 export const ServiceManagerContract = Symbol("ServiceManagerContract");
 
-export interface ServiceManagerInterface {
+export interface ServiceManagerInterface extends ContainerInterface {
   readonly routers: Record<string, ServiceRouterInterface>;
 
   readonly services: Record<string, ServiceRouterInterface>;
