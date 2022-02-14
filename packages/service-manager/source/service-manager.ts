@@ -43,16 +43,16 @@ export class ServiceManager
   }
 
   public host(origin: string, name: string): this {
-    if (origin in this._services) {
-      const context = `Hosting service at '${origin}'.`;
-      const problem = `Another service already hosting at '${origin}'.`;
-      const solution = `Please try to host service at another origin.`;
-      throw new ServiceManagerError(500, `${context} ${problem} ${solution}`);
-    }
     if (!(name in this._routers)) {
       const context = `Hosting service at '${origin}'.`;
       const problem = `Service '${name}' not found.`;
       const solution = `Please try to host another service.`;
+      throw new ServiceManagerError(500, `${context} ${problem} ${solution}`);
+    }
+    if (origin in this._services) {
+      const context = `Hosting service at '${origin}'.`;
+      const problem = `Another service already hosting at '${origin}'.`;
+      const solution = `Please try to host service at another origin.`;
       throw new ServiceManagerError(500, `${context} ${problem} ${solution}`);
     }
     this._services[origin] = name;
