@@ -27,11 +27,11 @@ export interface ServiceContextInterface extends Map<unknown, unknown> {
 
   readonly queries: Record<string, string>;
 
-  readonly routers: Record<string, ServiceRouterInterface>;
+  readonly routers: string[];
 
   readonly scheme: string;
 
-  readonly services: Record<string, ServiceRouterInterface>;
+  readonly services: Record<string, string>;
 
   call<Result>(callable: Callable, ...args: unknown[]): Result;
 
