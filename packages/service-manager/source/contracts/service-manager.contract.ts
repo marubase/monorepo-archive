@@ -1,5 +1,10 @@
 import { ContainerInterface } from "@marubase/container";
 import {
+  ServiceRequestInterface,
+  ServiceRequestMethod,
+} from "./service-request.contract.js";
+import { ServiceResponseInterface } from "./service-response.contract.js";
+import {
   ConfigureFn,
   ServiceRouterInterface,
 } from "./service-router.contract.js";
@@ -13,7 +18,15 @@ export interface ServiceManagerInterface extends ContainerInterface {
 
   configure(name: string, configureFn: ConfigureFn): this;
 
+  dispatch(request: ServiceRequestInterface): Promise<ServiceResponseInterface>;
+
   host(origin: string, name: string): this;
+
+  request(
+    method: ServiceRequestMethod,
+    path: string,
+    origin: string,
+  ): ServiceRequestInterface;
 
   router(name: string): ServiceRouterInterface;
 
