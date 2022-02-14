@@ -104,6 +104,14 @@ export class ServiceContext
       : response.setStatusCode(statusCode);
   }
 
+  public request(
+    method: ServiceRequestMethod,
+    path: string,
+    origin: string,
+  ): ServiceRequestInterface {
+    return this._manager.request(method, path, origin);
+  }
+
   public resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result {
     return this._manager.resolve(resolvable, ...args);
   }
