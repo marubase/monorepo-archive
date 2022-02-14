@@ -13,12 +13,13 @@ export class ServiceManager
 {
   protected _routers: Record<string, ServiceRouterInterface> = {};
 
-  protected _services: Record<string, ServiceRouterInterface> = {};
-  public get routers(): Record<string, ServiceRouterInterface> {
-    return this._routers;
+  protected _services: Record<string, string> = {};
+
+  public get routers(): string[] {
+    return Object.keys(this._routers);
   }
 
-  public get services(): Record<string, ServiceRouterInterface> {
+  public get services(): Record<string, string> {
     return this._services;
   }
 
@@ -29,22 +30,20 @@ export class ServiceManager
     return this;
   }
 
-  public host(origin: string, service: string): this {
+  public host(origin: string, name: string): this {
     if (origin in this._services) {
       const context = `Hosting service at '${origin}'.`;
       const problem = `Another service already hosting at '${origin}'.`;
       const solution = `Please try to host service at another origin.`;
       throw new ServiceManagerError(500, `${context} ${problem} ${solution}`);
     }
-
-    const router = this._routers[service];
-    if (!router) {
+    if (!(name in this._routers)) {
       const context = `Hosting service at '${origin}'.`;
-      const problem = `Service '${service}' not found.`;
+      const problem = `Service '${name}' not found.`;
       const solution = `Please try to host another service.`;
       throw new ServiceManagerError(500, `${context} ${problem} ${solution}`);
     }
-    this._services[origin] = router;
+    this._services[origin] = name;
     return this;
   }
 
@@ -65,7 +64,7 @@ export class ServiceManager
       const solution = `Please get another service router.`;
       throw new ServiceManagerError(500, `${context} ${problem} ${solution}`);
     }
-    return this._services[origin];
+    return this._routers[this._services[origin]];
   }
 
   public unhost(origin: string): this {
