@@ -7,9 +7,9 @@ import {
 export const ServiceManagerContract = Symbol("ServiceManagerContract");
 
 export interface ServiceManagerInterface extends ContainerInterface {
-  readonly routers: Record<string, ServiceRouterInterface>;
+  readonly routers: string[];
 
-  readonly services: Record<string, ServiceRouterInterface>;
+  readonly services: Record<string, string>;
 
   configure(name: string, configureFn: ConfigureFn): this;
 
