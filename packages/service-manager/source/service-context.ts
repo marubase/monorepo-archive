@@ -1,12 +1,9 @@
-import {
-  Callable,
-  ContainerContract,
-  ContainerInterface,
-  inject,
-  Resolvable,
-  resolvable,
-} from "@marubase/container";
+import { Callable, inject, Resolvable, resolvable } from "@marubase/container";
 import { ServiceContextInterface } from "./contracts/service-context.contract.js";
+import {
+  ServiceManagerContract,
+  ServiceManagerInterface,
+} from "./contracts/service-manager.contract.js";
 import {
   ServiceRequestInterface,
   ServiceRequestMethod,
@@ -16,31 +13,26 @@ import {
   ServiceResponseInterface,
   StatusCode,
 } from "./contracts/service-response.contract.js";
+import { ServiceRouterInterface } from "./contracts/service-router.contract.js";
 
 @resolvable()
 export class ServiceContext
   extends Map<unknown, unknown>
   implements ServiceContextInterface
 {
-  protected _container: ContainerInterface;
+  protected _manager: ServiceManagerInterface;
 
   protected _params: Record<string, string> = {};
 
   protected _request: ServiceRequestInterface;
 
-  protected _store: Record<string, unknown> = {};
-
   public constructor(
-    @inject(ContainerContract) container: ContainerInterface,
+    @inject(ServiceManagerContract) manager: ServiceManagerInterface,
     request: ServiceRequestInterface,
   ) {
     super();
-    this._container = container;
+    this._manager = manager;
     this._request = request;
-  }
-
-  public get container(): ContainerInterface {
-    return this._container;
   }
 
   public get credential(): [string, string] | string | undefined {
@@ -79,23 +71,32 @@ export class ServiceContext
     return this._request.queries;
   }
 
+  public get routers(): Record<string, ServiceRouterInterface> {
+    return this._manager.routers;
+  }
+
   public get scheme(): string {
     return this._request.scheme;
   }
 
-  public get store(): Record<string, unknown> {
-    return this._store;
+  public get services(): Record<string, ServiceRouterInterface> {
+    return this._manager.services;
   }
 
   public call<Result>(callable: Callable, ...args: unknown[]): Result {
-    return this._container.call(callable, ...args);
+    return this._manager.call(callable, ...args);
+  }
+
+  public host(origin: string, name: string): this {
+    this._manager.host(origin, name);
+    return this;
   }
 
   public replyWith(
     statusCode: StatusCode,
     statusText?: string,
   ): ServiceResponseInterface {
-    const response = this._container.resolve<ServiceResponseInterface>(
+    const response = this._manager.resolve<ServiceResponseInterface>(
       ServiceResponseContract,
     );
     return typeof statusText !== "undefined"
@@ -104,6 +105,19 @@ export class ServiceContext
   }
 
   public resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result {
-    return this._container.resolve(resolvable, ...args);
+    return this._manager.resolve(resolvable, ...args);
+  }
+
+  public router(name: string): ServiceRouterInterface | undefined {
+    return this._manager.router(name);
+  }
+
+  public service(origin: string): ServiceRouterInterface | undefined {
+    return this._manager.service(origin);
+  }
+
+  public unhost(origin: string): this {
+    this._manager.unhost(origin);
+    return this;
   }
 }
