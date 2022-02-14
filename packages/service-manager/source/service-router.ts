@@ -31,7 +31,7 @@ import {
   NextFn,
   ServiceRouterInterface,
 } from "./contracts/service-router.contract.js";
-import { ServiceRouterError } from "./errors/service-router.error.js";
+import { ServiceManagerError } from "./errors/service-manager.error.js";
 
 @resolvable()
 export class ServiceRouter implements ServiceRouterInterface {
@@ -141,7 +141,7 @@ export class ServiceRouter implements ServiceRouterInterface {
     const context = `Dispatching service request.`;
     const problem = `Service request handler not found.`;
     const solution = `Please correct the service router and restart the process.`;
-    throw new ServiceRouterError(404, `${context} ${problem} ${solution}`);
+    throw new ServiceManagerError(404, `${context} ${problem} ${solution}`);
   }
 
   protected _handleError(): HandleFn {
@@ -152,7 +152,7 @@ export class ServiceRouter implements ServiceRouterInterface {
         return await next();
       } catch (error) {
         const statusCode =
-          error instanceof ServiceRouterError ? error.statusCode : 500;
+          error instanceof ServiceManagerError ? error.statusCode : 500;
         const statusText = StatusText[statusCode];
         return context
           .replyWith(statusCode, statusText)
