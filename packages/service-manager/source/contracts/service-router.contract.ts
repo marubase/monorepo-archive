@@ -33,7 +33,7 @@ export type HandleFn = (
 ) => Promise<ServiceResponseInterface>;
 
 export type MatchMethod = {
-  handle(handler: HandleFn): void;
+  handle(handler: HandleFn | ServiceRouterInterface): void;
 
   path(path: string): MatchPath;
 };
