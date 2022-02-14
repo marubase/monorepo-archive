@@ -116,11 +116,11 @@ export class ServiceContext
     return this._manager.resolve(resolvable, ...args);
   }
 
-  public router(name: string): ServiceRouterInterface | undefined {
+  public router(name: string): ServiceRouterInterface {
     return this._manager.router(name);
   }
 
-  public service(origin: string): ServiceRouterInterface | undefined {
+  public service(origin: string): ServiceRouterInterface {
     return this._manager.service(origin);
   }
 
