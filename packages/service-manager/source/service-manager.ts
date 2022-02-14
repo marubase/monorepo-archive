@@ -1,6 +1,12 @@
 import { Container } from "@marubase/container";
 import { ServiceManagerInterface } from "./contracts/service-manager.contract.js";
 import {
+  ServiceRequestContract,
+  ServiceRequestInterface,
+  ServiceRequestMethod,
+} from "./contracts/service-request.contract.js";
+import { ServiceResponseInterface } from "./contracts/service-response.contract.js";
+import {
   ConfigureFn,
   ServiceRouterContract,
   ServiceRouterInterface,
@@ -30,6 +36,12 @@ export class ServiceManager
     return this;
   }
 
+  public dispatch(
+    request: ServiceRequestInterface,
+  ): Promise<ServiceResponseInterface> {
+    return this.service(request.origin).dispatch(request);
+  }
+
   public host(origin: string, name: string): this {
     if (origin in this._services) {
       const context = `Hosting service at '${origin}'.`;
@@ -45,6 +57,14 @@ export class ServiceManager
     }
     this._services[origin] = name;
     return this;
+  }
+
+  public request(
+    method: ServiceRequestMethod,
+    path: string,
+    origin: string,
+  ): ServiceRequestInterface {
+    return this.resolve(ServiceRequestContract, this, method, path, origin);
   }
 
   public router(name: string): ServiceRouterInterface {
