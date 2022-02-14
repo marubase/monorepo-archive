@@ -10,10 +10,10 @@ import { ServiceRequest } from "./service-request.js";
 import { ServiceResponse } from "./service-response.js";
 import { ServiceRouter } from "./service-router.js";
 
-export class ServiceRouterProvider implements ProviderInterface {
+export class ServiceManagerProvider implements ProviderInterface {
   public install(container: ContainerInterface): void {
     container.bind(ServiceContextContract).toClass(ServiceContext);
-    container.bind(ServiceManagerContract).toClass(ServiceManager);
+    container.bind(ServiceManagerContract).toInstance(ServiceManager);
     container.bind(ServiceRequestContract).toClass(ServiceRequest);
     container.bind(ServiceResponseContract).toClass(ServiceResponse);
     container.bind(ServiceRouterContract).toClass(ServiceRouter);
