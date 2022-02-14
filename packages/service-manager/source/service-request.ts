@@ -108,11 +108,6 @@ export class ServiceRequest
     return this;
   }
 
-  public setDispatcher(dispatcher: ServiceRequestDispatcher): this {
-    this._dispatcher = dispatcher;
-    return this;
-  }
-
   public setHash(hash: string): this {
     this._url.hash = hash;
     return this;
@@ -141,8 +136,8 @@ export class ServiceRequest
     return this;
   }
 
-  public setPort(port: string): this {
-    this._url.port = port;
+  public setPort(port: number): this {
+    this._url.port = port.toString();
     return this;
   }
 
