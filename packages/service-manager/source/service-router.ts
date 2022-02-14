@@ -70,11 +70,8 @@ export class ServiceRouter implements ServiceRouterInterface {
     contextOrRequest: ServiceContextInterface | ServiceRequestInterface,
     next?: NextFn,
   ): Promise<ServiceResponseInterface> {
-    const _context = !("replyWith" in contextOrRequest)
-      ? this._manager.resolve<ServiceContextInterface>(
-          ServiceContextContract,
-          contextOrRequest,
-        )
+    const _context: ServiceContextInterface = !("replyWith" in contextOrRequest)
+      ? this._manager.resolve(ServiceContextContract, contextOrRequest)
       : contextOrRequest;
     const _next = typeof next === "undefined" ? this._defaultNext : next;
 
@@ -126,12 +123,7 @@ export class ServiceRouter implements ServiceRouterInterface {
     method: ServiceRequestMethod,
     path: string,
   ): ServiceRequestInterface {
-    return this._manager.resolve<ServiceRequestInterface>(
-      ServiceRequestContract,
-      this,
-      method,
-      path,
-    );
+    return this._manager.resolve(ServiceRequestContract, this, method, path);
   }
 
   protected _defaultNext(): Promise<ServiceResponseInterface> {
