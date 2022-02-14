@@ -1,5 +1,8 @@
 import { Callable, Resolvable } from "@marubase/container";
-import { ServiceRequestMethod } from "./service-request.contract.js";
+import {
+  ServiceRequestInterface,
+  ServiceRequestMethod,
+} from "./service-request.contract.js";
 import {
   ServiceResponseInterface,
   StatusCode,
@@ -41,6 +44,12 @@ export interface ServiceContextInterface extends Map<unknown, unknown> {
     statusCode: StatusCode,
     statusText?: string,
   ): ServiceResponseInterface;
+
+  request(
+    method: ServiceRequestMethod,
+    path: string,
+    origin: string,
+  ): ServiceRequestInterface;
 
   resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result;
 
