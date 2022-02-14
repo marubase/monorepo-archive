@@ -1,4 +1,4 @@
-import { Container, resolvable } from "@marubase/container";
+import { Container } from "@marubase/container";
 import { ServiceManagerInterface } from "./contracts/service-manager.contract.js";
 import {
   ConfigureFn,
@@ -7,7 +7,6 @@ import {
 } from "./contracts/service-router.contract.js";
 import { ServiceManagerError } from "./errors/service-manager.error.js";
 
-@resolvable("container")
 export class ServiceManager
   extends Container
   implements ServiceManagerInterface
