@@ -1,4 +1,3 @@
-import { resolvable } from "@marubase/container";
 import {
   ServiceRequestDispatcher,
   ServiceRequestInterface,
@@ -7,7 +6,6 @@ import {
 import { ServiceResponseInterface } from "./contracts/service-response.contract.js";
 import { ServiceMessage } from "./service-message.js";
 
-@resolvable()
 export class ServiceRequest
   extends ServiceMessage
   implements ServiceRequestInterface
