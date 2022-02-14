@@ -1,5 +1,5 @@
 {
-  "name": "@marubase/service-router",
+  "name": "@marubase/service-manager",
   "version": "0.0.0",
   "type": "module",
   "main": "./build/commonjs/index.js",
