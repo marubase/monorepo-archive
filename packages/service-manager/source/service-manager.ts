@@ -10,7 +10,7 @@ import {
   ServiceRouterContract,
   ServiceRouterInterface,
 } from "./contracts/service-router.contract.js";
-import { ServiceRouterError } from "./errors/service-router.error.js";
+import { ServiceManagerError } from "./errors/service-manager.error.js";
 
 @resolvable("container")
 export class ServiceManager implements ServiceManagerInterface {
@@ -44,7 +44,7 @@ export class ServiceManager implements ServiceManagerInterface {
       const context = `Hosting service at '${origin}'.`;
       const problem = `Another service already hosting at '${origin}'.`;
       const solution = `Please try to host service at another origin.`;
-      throw new ServiceRouterError(500, `${context} ${problem} ${solution}`);
+      throw new ServiceManagerError(500, `${context} ${problem} ${solution}`);
     }
 
     const router = this._routers[service];
@@ -52,7 +52,7 @@ export class ServiceManager implements ServiceManagerInterface {
       const context = `Hosting service at '${origin}'.`;
       const problem = `Service '${service}' not found.`;
       const solution = `Please try to host another service.`;
-      throw new ServiceRouterError(500, `${context} ${problem} ${solution}`);
+      throw new ServiceManagerError(500, `${context} ${problem} ${solution}`);
     }
     this._services[origin] = router;
     return this;
@@ -71,7 +71,7 @@ export class ServiceManager implements ServiceManagerInterface {
       const context = `Un-hosting service at '${origin}'.`;
       const problem = `No service hosting at '${origin}'.`;
       const solution = `Please try to un-host service at another origin.`;
-      throw new ServiceRouterError(500, `${context} ${problem} ${solution}`);
+      throw new ServiceManagerError(500, `${context} ${problem} ${solution}`);
     }
     delete this._services[origin];
     return this;
