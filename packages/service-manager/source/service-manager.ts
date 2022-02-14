@@ -1,9 +1,4 @@
-import {
-  ContainerContract,
-  ContainerInterface,
-  inject,
-  resolvable,
-} from "@marubase/container";
+import { Container, resolvable } from "@marubase/container";
 import { ServiceManagerInterface } from "./contracts/service-manager.contract.js";
 import {
   ConfigureFn,
@@ -13,17 +8,13 @@ import {
 import { ServiceManagerError } from "./errors/service-manager.error.js";
 
 @resolvable("container")
-export class ServiceManager implements ServiceManagerInterface {
-  protected _container: ContainerInterface;
-
+export class ServiceManager
+  extends Container
+  implements ServiceManagerInterface
+{
   protected _routers: Record<string, ServiceRouterInterface> = {};
 
   protected _services: Record<string, ServiceRouterInterface> = {};
-
-  public constructor(@inject(ContainerContract) container: ContainerInterface) {
-    this._container = container;
-  }
-
   public get routers(): Record<string, ServiceRouterInterface> {
     return this._routers;
   }
@@ -34,7 +25,7 @@ export class ServiceManager implements ServiceManagerInterface {
 
   public configure(name: string, configureFn: ConfigureFn): this {
     if (!(name in this._routers))
-      this._routers[name] = this._container.resolve(ServiceRouterContract);
+      this._routers[name] = this.resolve(ServiceRouterContract);
     this._routers[name].configure(configureFn);
     return this;
   }
