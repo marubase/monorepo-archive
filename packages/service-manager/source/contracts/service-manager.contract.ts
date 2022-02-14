@@ -15,9 +15,9 @@ export interface ServiceManagerInterface extends ContainerInterface {
 
   host(origin: string, name: string): this;
 
-  router(name: string): ServiceRouterInterface | undefined;
+  router(name: string): ServiceRouterInterface;
 
-  service(origin: string): ServiceRouterInterface | undefined;
+  service(origin: string): ServiceRouterInterface;
 
   unhost(origin: string): this;
 }
