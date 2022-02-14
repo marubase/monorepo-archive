@@ -1,4 +1,3 @@
-import { inject, resolvable } from "@marubase/container";
 import {
   match,
   ParseOptions,
@@ -9,10 +8,7 @@ import {
   ServiceContextContract,
   ServiceContextInterface,
 } from "./contracts/service-context.contract.js";
-import {
-  ServiceManagerContract,
-  ServiceManagerInterface,
-} from "./contracts/service-manager.contract.js";
+import { ServiceManagerInterface } from "./contracts/service-manager.contract.js";
 import {
   ServiceRequestContract,
   ServiceRequestInterface,
@@ -32,7 +28,6 @@ import {
 } from "./contracts/service-router.contract.js";
 import { ServiceManagerError } from "./errors/service-manager.error.js";
 
-@resolvable()
 export class ServiceRouter implements ServiceRouterInterface {
   protected _handlers: Array<HandleFn | ServiceRouterInterface> = [
     this._handleError(),
@@ -48,9 +43,7 @@ export class ServiceRouter implements ServiceRouterInterface {
     strict: true,
   };
 
-  public constructor(
-    @inject(ServiceManagerContract) manager: ServiceManagerInterface,
-  ) {
+  public constructor(manager: ServiceManagerInterface) {
     this._manager = manager;
   }
 
