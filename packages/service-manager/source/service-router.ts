@@ -1,9 +1,4 @@
-import {
-  ContainerContract,
-  ContainerInterface,
-  inject,
-  resolvable,
-} from "@marubase/container";
+import { inject, resolvable } from "@marubase/container";
 import {
   match,
   ParseOptions,
@@ -14,6 +9,10 @@ import {
   ServiceContextContract,
   ServiceContextInterface,
 } from "./contracts/service-context.contract.js";
+import {
+  ServiceManagerContract,
+  ServiceManagerInterface,
+} from "./contracts/service-manager.contract.js";
 import {
   ServiceRequestContract,
   ServiceRequestInterface,
@@ -35,11 +34,11 @@ import { ServiceManagerError } from "./errors/service-manager.error.js";
 
 @resolvable()
 export class ServiceRouter implements ServiceRouterInterface {
-  protected _container: ContainerInterface;
-
   protected _handlers: Array<HandleFn | ServiceRouterInterface> = [
     this._handleError(),
   ];
+
+  protected _manager: ServiceManagerInterface;
 
   protected _options: ParseOptions &
     TokensToRegexpOptions &
@@ -49,12 +48,10 @@ export class ServiceRouter implements ServiceRouterInterface {
     strict: true,
   };
 
-  public constructor(@inject(ContainerContract) container: ContainerInterface) {
-    this._container = container;
-  }
-
-  public get container(): ContainerInterface {
-    return this._container;
+  public constructor(
+    @inject(ServiceManagerContract) manager: ServiceManagerInterface,
+  ) {
+    this._manager = manager;
   }
 
   public configure(configureFn: ConfigureFn): this {
@@ -74,7 +71,7 @@ export class ServiceRouter implements ServiceRouterInterface {
     next?: NextFn,
   ): Promise<ServiceResponseInterface> {
     const _context = !("replyWith" in contextOrRequest)
-      ? this._container.resolve<ServiceContextInterface>(
+      ? this._manager.resolve<ServiceContextInterface>(
           ServiceContextContract,
           contextOrRequest,
         )
@@ -129,7 +126,7 @@ export class ServiceRouter implements ServiceRouterInterface {
     method: ServiceRequestMethod,
     path: string,
   ): ServiceRequestInterface {
-    return this._container.resolve<ServiceRequestInterface>(
+    return this._manager.resolve<ServiceRequestInterface>(
       ServiceRequestContract,
       this,
       method,
