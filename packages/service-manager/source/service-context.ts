@@ -71,7 +71,7 @@ export class ServiceContext
     return this._request.queries;
   }
 
-  public get routers(): Record<string, ServiceRouterInterface> {
+  public get routers(): string[] {
     return this._manager.routers;
   }
 
@@ -79,7 +79,7 @@ export class ServiceContext
     return this._request.scheme;
   }
 
-  public get services(): Record<string, ServiceRouterInterface> {
+  public get services(): Record<string, string> {
     return this._manager.services;
   }
 
