@@ -11,11 +11,19 @@ import { ServiceRouter } from "./service-router.js";
 
 export class ServiceManagerProvider implements ProviderInterface {
   public install(container: ContainerInterface): void {
-    container.bind(ServiceContextContract).toClass(ServiceContext);
     container.bind(ServiceManagerContract).toInstance(container);
     container.bind(ServiceRequestContract).toClass(ServiceRequest);
     container.bind(ServiceResponseContract).toClass(ServiceResponse);
-    container.bind(ServiceRouterContract).toClass(ServiceRouter);
+
+    container
+      .bind(ServiceContextContract)
+      .toClass(ServiceContext)
+      .setDependencies([ServiceManagerContract]);
+
+    container
+      .bind(ServiceRouterContract)
+      .toClass(ServiceRouter)
+      .setDependencies([ServiceManagerContract]);
   }
 
   public uninstall(container: ContainerInterface): void {
