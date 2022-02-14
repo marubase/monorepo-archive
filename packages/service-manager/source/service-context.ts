@@ -1,9 +1,6 @@
-import { Callable, inject, Resolvable, resolvable } from "@marubase/container";
+import { Callable, Resolvable } from "@marubase/container";
 import { ServiceContextInterface } from "./contracts/service-context.contract.js";
-import {
-  ServiceManagerContract,
-  ServiceManagerInterface,
-} from "./contracts/service-manager.contract.js";
+import { ServiceManagerInterface } from "./contracts/service-manager.contract.js";
 import {
   ServiceRequestInterface,
   ServiceRequestMethod,
@@ -15,7 +12,6 @@ import {
 } from "./contracts/service-response.contract.js";
 import { ServiceRouterInterface } from "./contracts/service-router.contract.js";
 
-@resolvable()
 export class ServiceContext
   extends Map<unknown, unknown>
   implements ServiceContextInterface
@@ -27,7 +23,7 @@ export class ServiceContext
   protected _request: ServiceRequestInterface;
 
   public constructor(
-    @inject(ServiceManagerContract) manager: ServiceManagerInterface,
+    manager: ServiceManagerInterface,
     request: ServiceRequestInterface,
   ) {
     super();
