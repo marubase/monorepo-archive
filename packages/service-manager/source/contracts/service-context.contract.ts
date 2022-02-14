@@ -53,9 +53,9 @@ export interface ServiceContextInterface extends Map<unknown, unknown> {
 
   resolve<Result>(resolvable: Resolvable, ...args: unknown[]): Result;
 
-  router(name: string): ServiceRouterInterface | undefined;
+  router(name: string): ServiceRouterInterface;
 
-  service(origin: string): ServiceRouterInterface | undefined;
+  service(origin: string): ServiceRouterInterface;
 
   unhost(origin: string): this;
 }
