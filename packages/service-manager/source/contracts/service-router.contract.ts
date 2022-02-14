@@ -1,4 +1,3 @@
-import { ContainerInterface } from "@marubase/container";
 import { ServiceContextInterface } from "./service-context.contract.js";
 import {
   ServiceRequestInterface,
@@ -9,8 +8,6 @@ import { ServiceResponseInterface } from "./service-response.contract.js";
 export const ServiceRouterContract = Symbol("ServiceRouterContract");
 
 export interface ServiceRouterInterface {
-  readonly container: ContainerInterface;
-
   configure(configureFn: ConfigureFn): this;
 
   dispatch(request: ServiceRequestInterface): Promise<ServiceResponseInterface>;
