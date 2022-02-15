@@ -134,7 +134,7 @@ export class ServiceRouter implements ServiceRouterInterface {
         return context
           .replyWith(statusCode, statusText)
           .setHeader("Content-Type", "application/json")
-          .setData({
+          .setBody({
             error: normalize(statusText),
             reason: (error as Error).message,
           });
