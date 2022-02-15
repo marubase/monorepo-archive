@@ -1,4 +1,4 @@
-import { Readable } from "node:stream";
+import { Readable } from "@marubase-tools/stream";
 
 export const ServiceMessageContract = Symbol("MessageContract");
 
