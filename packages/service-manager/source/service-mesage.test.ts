@@ -17,13 +17,13 @@ describe("ServiceMessage", function () {
     });
     context("when there is buffer body", function () {
       it("should return readable", async function () {
-        message.setBuffer(Buffer.from([]));
+        message.setBody(Buffer.from([]));
         expect(message.body).to.have.property("read");
       });
     });
     context("when there is data body", function () {
       it("should return readable", async function () {
-        message.setData({});
+        message.setBody({});
         expect(message.body).to.have.property("read");
       });
     });
@@ -69,7 +69,7 @@ describe("ServiceMessage", function () {
     });
     context("when there is buffer body", function () {
       it("should return buffer", async function () {
-        message.setBuffer(Buffer.from([]));
+        message.setBody(Buffer.from([]));
 
         const buffer = await message.buffer();
         expect(buffer).to.be.an.instanceOf(Buffer);
@@ -77,7 +77,7 @@ describe("ServiceMessage", function () {
     });
     context("when there is buffer body (filled)", function () {
       it("should return buffer", async function () {
-        message.setBuffer(Buffer.from("{}"));
+        message.setBody(Buffer.from("{}"));
 
         const buffer = await message.buffer();
         expect(buffer).to.be.an.instanceOf(Buffer);
@@ -85,7 +85,7 @@ describe("ServiceMessage", function () {
     });
     context("when there is data body", function () {
       it("should return buffer", async function () {
-        message.setData({});
+        message.setBody({});
 
         const buffer = await message.buffer();
         expect(buffer).to.be.an.instanceOf(Buffer);
@@ -150,51 +150,51 @@ describe("ServiceMessage", function () {
     });
   });
 
-  describe("#data()", function () {
+  describe("#json()", function () {
     context("when there is readable body", function () {
-      it("should return data", async function () {
+      it("should return json", async function () {
         message.setBody(Readable.from([]));
 
-        const data = await message.data();
-        expect(data).to.be.null;
+        const json = await message.json();
+        expect(json).to.be.null;
       });
     });
     context("when there is readable body (filled)", function () {
-      it("should return data", async function () {
+      it("should return json", async function () {
         message.setBody(Readable.from(Buffer.from("{}")));
 
-        const data = await message.data();
-        expect(data).to.be.deep.equal({});
+        const json = await message.json();
+        expect(json).to.be.deep.equal({});
       });
     });
     context("when there is buffer body", function () {
-      it("should return data", async function () {
-        message.setBuffer(Buffer.from([]));
+      it("should return json", async function () {
+        message.setBody(Buffer.from([]));
 
-        const data = await message.data();
-        expect(data).to.be.null;
+        const json = await message.json();
+        expect(json).to.be.null;
       });
     });
     context("when there is buffer body (filled)", function () {
-      it("should return data", async function () {
-        message.setBuffer(Buffer.from("{}"));
+      it("should return json", async function () {
+        message.setBody(Buffer.from("{}"));
 
-        const data = await message.data();
-        expect(data).to.be.deep.equal({});
+        const json = await message.json();
+        expect(json).to.be.deep.equal({});
       });
     });
-    context("when there is data body", function () {
-      it("should return data", async function () {
-        message.setData({});
+    context("when there is json body", function () {
+      it("should return json", async function () {
+        message.setBody({});
 
-        const data = await message.data();
-        expect(data).to.deep.equal({});
+        const json = await message.json();
+        expect(json).to.deep.equal({});
       });
     });
     context("when there is no body", function () {
-      it("should return data", async function () {
-        const data = await message.data();
-        expect(data).to.be.null;
+      it("should return json", async function () {
+        const json = await message.json();
+        expect(json).to.be.null;
       });
     });
   });
@@ -211,40 +211,6 @@ describe("ServiceMessage", function () {
     context("when there is no body", function () {
       it("should return self", async function () {
         const self = message.setBody(Readable.from([]));
-        expect(self).to.equal(message);
-      });
-    });
-  });
-
-  describe("#setBuffer(body)", function () {
-    context("when there is body", function () {
-      it("should return self", async function () {
-        message.setBuffer(Buffer.from([]));
-
-        const self = message.setBuffer(Buffer.from([]));
-        expect(self).to.equal(message);
-      });
-    });
-    context("when there is no body", function () {
-      it("should return self", async function () {
-        const self = message.setBuffer(Buffer.from([]));
-        expect(self).to.equal(message);
-      });
-    });
-  });
-
-  describe("#setData(body)", function () {
-    context("when there is body", function () {
-      it("should return self", async function () {
-        message.setData(null);
-
-        const self = message.setData(null);
-        expect(self).to.equal(message);
-      });
-    });
-    context("when there is no body", function () {
-      it("should return self", async function () {
-        const self = message.setData(null);
         expect(self).to.equal(message);
       });
     });
