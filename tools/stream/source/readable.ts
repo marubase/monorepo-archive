@@ -1,9 +1,9 @@
-import { Readable as BaseReadable, ReadableOptions } from "readable-stream";
+import Stream from "readable-stream";
 
-export class Readable extends BaseReadable {
+export class Readable extends Stream.Readable {
   public static from(
     iterable: IterableInput,
-    options?: ReadableOptions,
+    options?: Stream.ReadableOptions,
   ): Readable {
     return new IterableReadable(iterable, options);
   }
@@ -12,7 +12,10 @@ export class Readable extends BaseReadable {
 export class IterableReadable extends Readable {
   protected _iterable: IterableInput;
 
-  public constructor(iterable: IterableInput, options: ReadableOptions = {}) {
+  public constructor(
+    iterable: IterableInput,
+    options: Stream.ReadableOptions = {},
+  ) {
     super({ objectMode: isObjectMode(iterable), ...options });
     this._iterable = iterable;
   }
@@ -59,15 +62,13 @@ export class IterableReadable extends Readable {
 }
 
 export function isAsyncIterable<T>(
-  iterable: AsyncIterable<T> | AsyncIterator<T> | Iterable<T> | Iterator<T>,
+  iterable: unknown,
 ): iterable is AsyncIterable<T> {
-  return Symbol.asyncIterator in iterable;
+  return Symbol.asyncIterator in (iterable as AsyncIterable<T>);
 }
 
-export function isIterable<T>(
-  iterable: AsyncIterable<T> | AsyncIterator<T> | Iterable<T> | Iterator<T>,
-): iterable is Iterable<T> {
-  return Symbol.asyncIterator in iterable;
+export function isIterable<T>(iterable: unknown): iterable is Iterable<T> {
+  return Symbol.asyncIterator in (iterable as Iterable<T>);
 }
 
 export function isObjectMode(iterable: IterableInput): boolean {
@@ -77,6 +78,10 @@ export function isObjectMode(iterable: IterableInput): boolean {
     !(iterable instanceof ArrayBuffer) &&
     typeof iterable !== "string"
   );
+}
+
+export function isReadable(readable: unknown): readable is Readable {
+  return "read" in (readable as Readable);
 }
 
 export type IterableInput =
