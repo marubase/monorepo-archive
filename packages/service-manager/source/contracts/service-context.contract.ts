@@ -1,7 +1,7 @@
 import { Callable, Resolvable } from "@marubase/container";
 import {
+  RequestMethod,
   ServiceRequestInterface,
-  ServiceRequestMethod,
 } from "./service-request.contract.js";
 import {
   ServiceResponseInterface,
@@ -22,7 +22,7 @@ export interface ServiceContextInterface extends Map<unknown, unknown> {
 
   readonly hostname: string;
 
-  readonly method: ServiceRequestMethod;
+  readonly method: RequestMethod;
 
   readonly origin: string;
 
@@ -50,7 +50,7 @@ export interface ServiceContextInterface extends Map<unknown, unknown> {
   ): ServiceResponseInterface;
 
   request(
-    method: ServiceRequestMethod,
+    method: RequestMethod,
     path: string,
     origin: string,
   ): ServiceRequestInterface;
