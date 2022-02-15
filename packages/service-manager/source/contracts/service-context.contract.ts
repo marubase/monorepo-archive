@@ -12,9 +12,13 @@ import { ServiceRouterInterface } from "./service-router.contract.js";
 export const ServiceContextContract = Symbol("ContextContract");
 
 export interface ServiceContextInterface extends Map<unknown, unknown> {
+  readonly body: unknown;
+
   readonly credential?: [string, string] | string;
 
   readonly hash: string;
+
+  readonly headers: Record<string, string>;
 
   readonly hostname: string;
 
