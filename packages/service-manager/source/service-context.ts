@@ -2,8 +2,8 @@ import { Callable, Resolvable } from "@marubase/container";
 import { ServiceContextInterface } from "./contracts/service-context.contract.js";
 import { ServiceManagerInterface } from "./contracts/service-manager.contract.js";
 import {
+  RequestMethod,
   ServiceRequestInterface,
-  ServiceRequestMethod,
 } from "./contracts/service-request.contract.js";
 import {
   ServiceResponseContract,
@@ -51,7 +51,7 @@ export class ServiceContext
     return this._request.hostname;
   }
 
-  public get method(): ServiceRequestMethod {
+  public get method(): RequestMethod {
     return this._request.method;
   }
 
@@ -109,7 +109,7 @@ export class ServiceContext
   }
 
   public request(
-    method: ServiceRequestMethod,
+    method: RequestMethod,
     path: string,
     origin: string,
   ): ServiceRequestInterface {
