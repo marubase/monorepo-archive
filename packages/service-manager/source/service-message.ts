@@ -1,4 +1,4 @@
-import { Readable } from "@marubase-tools/stream";
+import { isReadable, Readable } from "@marubase-tools/stream";
 import {
   MessageData,
   ServiceMessageInterface,
@@ -12,7 +12,7 @@ export class ServiceMessage implements ServiceMessageInterface {
   public get body(): Readable {
     if (typeof this._body === "undefined") return Readable.from([]);
     if (Buffer.isBuffer(this._body)) return Readable.from(this._body);
-    return !("read" in this._body)
+    return !isReadable(this._body)
       ? Readable.from(JSON.stringify(this._body.data))
       : this._body;
   }
@@ -23,7 +23,7 @@ export class ServiceMessage implements ServiceMessageInterface {
 
   public async buffer(): Promise<Buffer> {
     if (typeof this._body === "undefined") return Buffer.from([]);
-    if ("read" in this._body) {
+    if (isReadable(this._body)) {
       const chunks: Buffer[] = [];
       for await (const chunk of this._body) chunks.push(chunk);
       return Buffer.concat(chunks);
@@ -48,9 +48,9 @@ export class ServiceMessage implements ServiceMessageInterface {
     return this;
   }
 
-  public async data(): Promise<MessageData> {
+  public async json(): Promise<MessageData> {
     if (typeof this._body === "undefined") return null;
-    if ("read" in this._body) {
+    if (isReadable(this._body)) {
       const chunks: Buffer[] = [];
       for await (const chunk of this._body) chunks.push(chunk);
       const buffer = Buffer.concat(chunks);
@@ -65,18 +65,9 @@ export class ServiceMessage implements ServiceMessageInterface {
       : this._body.data;
   }
 
-  public setBody(body: Readable): this {
-    this._body = body;
-    return this;
-  }
-
-  public setBuffer(buffer: Buffer): this {
-    this._body = buffer;
-    return this;
-  }
-
-  public setData(data: MessageData): this {
-    this._body = { data };
+  public setBody(body: Buffer | MessageData | Readable): this {
+    if (Buffer.isBuffer(body) || isReadable(body)) this._body = body;
+    else this._body = { data: body };
     return this;
   }
 
