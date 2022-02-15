@@ -1,5 +1,6 @@
 import { Callable } from "@marubase/container";
 import { expect } from "chai";
+import { Readable } from "node:stream";
 import { instance, mock, reset, when } from "ts-mockito";
 import { ServiceManagerInterface } from "./contracts/service-manager.contract.js";
 import { ServiceRequestInterface } from "./contracts/service-request.contract.js";
@@ -40,8 +41,8 @@ describe("ServiceContext", function () {
 
   describe("get body", function () {
     it("should return body", async function () {
-      when(mockRequest.body).thenReturn("body");
-      expect(contextTarget.body).to.equal("body");
+      when(mockRequest.body).thenReturn(Readable.from([]));
+      expect(contextTarget.body).to.have.property("read");
     });
   });
 
