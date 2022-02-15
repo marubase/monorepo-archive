@@ -1,7 +1,7 @@
 import {
+  RequestMethod,
   ServiceRequestDispatcher,
   ServiceRequestInterface,
-  ServiceRequestMethod,
 } from "./contracts/service-request.contract.js";
 import { ServiceResponseInterface } from "./contracts/service-response.contract.js";
 import { ServiceMessage } from "./service-message.js";
@@ -12,13 +12,13 @@ export class ServiceRequest
 {
   protected _dispatcher: ServiceRequestDispatcher;
 
-  protected _method: ServiceRequestMethod;
+  protected _method: RequestMethod;
 
   protected _url: URL;
 
   public constructor(
     dispatcher: ServiceRequestDispatcher,
-    method: ServiceRequestMethod,
+    method: RequestMethod,
     path: string,
     origin = "http://127.0.0.1",
   ) {
@@ -44,7 +44,7 @@ export class ServiceRequest
     return this._url.hostname;
   }
 
-  public get method(): ServiceRequestMethod {
+  public get method(): RequestMethod {
     return this._method;
   }
 
@@ -116,7 +116,7 @@ export class ServiceRequest
     return this;
   }
 
-  public setMethod(method: ServiceRequestMethod): this {
+  public setMethod(method: RequestMethod): this {
     this._method = method;
     return this;
   }
