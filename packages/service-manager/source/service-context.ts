@@ -31,12 +31,20 @@ export class ServiceContext
     this._request = request;
   }
 
+  public get body(): unknown {
+    return this._request.body;
+  }
+
   public get credential(): [string, string] | string | undefined {
     return this._request.credential;
   }
 
   public get hash(): string {
     return this._request.hash;
+  }
+
+  public get headers(): Record<string, string> {
+    return this._request.headers;
   }
 
   public get hostname(): string {
