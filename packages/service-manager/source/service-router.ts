@@ -10,9 +10,9 @@ import {
 } from "./contracts/service-context.contract.js";
 import { ServiceManagerInterface } from "./contracts/service-manager.contract.js";
 import {
+  RequestMethod,
   ServiceRequestContract,
   ServiceRequestInterface,
-  ServiceRequestMethod,
 } from "./contracts/service-request.contract.js";
 import {
   ServiceResponseInterface,
@@ -84,9 +84,7 @@ export class ServiceRouter implements ServiceRouterInterface {
     this._handlers.push(handler);
   }
 
-  public method(
-    method: ServiceRequestMethod[] | ServiceRequestMethod,
-  ): MatchMethod {
+  public method(method: RequestMethod[] | RequestMethod): MatchMethod {
     const _method = !Array.isArray(method) ? [method] : method;
     return {
       handle: (handler) => {
@@ -112,10 +110,7 @@ export class ServiceRouter implements ServiceRouterInterface {
     };
   }
 
-  public request(
-    method: ServiceRequestMethod,
-    path: string,
-  ): ServiceRequestInterface {
+  public request(method: RequestMethod, path: string): ServiceRequestInterface {
     return this._manager.resolve(ServiceRequestContract, this, method, path);
   }
 
@@ -148,7 +143,7 @@ export class ServiceRouter implements ServiceRouterInterface {
   }
 
   protected _handleMethod(
-    method: ServiceRequestMethod[],
+    method: RequestMethod[],
     handler: HandleFn | ServiceRouterInterface,
   ): HandleFn {
     return async (context, next) => {
