@@ -15,13 +15,9 @@ export interface ServiceMessageInterface {
 
   clearHeaders(): this;
 
-  data(): Promise<MessageData>;
+  json(): Promise<MessageData>;
 
-  setBody(body: Readable): this;
-
-  setBuffer(buffer: Buffer): this;
-
-  setData(data: MessageData): this;
+  setBody(body: Buffer | MessageData | Readable): this;
 
   setHeader(key: string, value: string): this;
 
