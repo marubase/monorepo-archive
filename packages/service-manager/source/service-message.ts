@@ -1,4 +1,4 @@
-import { Readable } from "node:stream";
+import { Readable } from "@marubase-tools/stream";
 import {
   MessageData,
   ServiceMessageInterface,
