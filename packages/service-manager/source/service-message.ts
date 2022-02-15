@@ -1,11 +1,14 @@
-import { ServiceMessageInterface } from "./contracts/service-message.contract.js";
+import {
+  MessageBody,
+  ServiceMessageInterface,
+} from "./contracts/service-message.contract.js";
 
 export class ServiceMessage implements ServiceMessageInterface {
-  protected _body: unknown;
+  protected _body: MessageBody;
 
   protected _headers: Record<string, string> = {};
 
-  public get body(): unknown {
+  public get body(): MessageBody {
     return this._body;
   }
 
@@ -28,7 +31,7 @@ export class ServiceMessage implements ServiceMessageInterface {
     return this;
   }
 
-  public setBody(body: unknown): this {
+  public setBody(body: MessageBody): this {
     this._body = body;
     return this;
   }
