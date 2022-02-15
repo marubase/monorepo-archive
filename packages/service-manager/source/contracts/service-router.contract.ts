@@ -1,7 +1,7 @@
 import { ServiceContextInterface } from "./service-context.contract.js";
 import {
+  RequestMethod,
   ServiceRequestInterface,
-  ServiceRequestMethod,
 } from "./service-request.contract.js";
 import { ServiceResponseInterface } from "./service-response.contract.js";
 
@@ -18,11 +18,11 @@ export interface ServiceRouterInterface {
 
   handle(handler: HandleFn | ServiceRouterInterface): void;
 
-  method(method: ServiceRequestMethod[] | ServiceRequestMethod): MatchMethod;
+  method(method: RequestMethod[] | RequestMethod): MatchMethod;
 
   path(path: string): MatchPath;
 
-  request(method: ServiceRequestMethod, path: string): ServiceRequestInterface;
+  request(method: RequestMethod, path: string): ServiceRequestInterface;
 }
 
 export type ConfigureFn = (router: ServiceRouterInterface) => void;
