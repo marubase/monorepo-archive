@@ -1,7 +1,7 @@
 import { ContainerInterface } from "@marubase/container";
 import {
+  RequestMethod,
   ServiceRequestInterface,
-  ServiceRequestMethod,
 } from "./service-request.contract.js";
 import { ServiceResponseInterface } from "./service-response.contract.js";
 import {
@@ -23,7 +23,7 @@ export interface ServiceManagerInterface extends ContainerInterface {
   host(origin: string, name: string): this;
 
   request(
-    method: ServiceRequestMethod,
+    method: RequestMethod,
     path: string,
     origin: string,
   ): ServiceRequestInterface;
