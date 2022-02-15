@@ -1,6 +1,6 @@
+import { Readable } from "@marubase-tools/stream";
 import { Callable } from "@marubase/container";
 import { expect } from "chai";
-import { Readable } from "node:stream";
 import { instance, mock, reset, when } from "ts-mockito";
 import { ServiceManagerInterface } from "./contracts/service-manager.contract.js";
 import { ServiceRequestInterface } from "./contracts/service-request.contract.js";
