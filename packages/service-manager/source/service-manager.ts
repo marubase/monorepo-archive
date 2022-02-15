@@ -1,9 +1,9 @@
 import { Container } from "@marubase/container";
 import { ServiceManagerInterface } from "./contracts/service-manager.contract.js";
 import {
+  RequestMethod,
   ServiceRequestContract,
   ServiceRequestInterface,
-  ServiceRequestMethod,
 } from "./contracts/service-request.contract.js";
 import { ServiceResponseInterface } from "./contracts/service-response.contract.js";
 import {
@@ -60,7 +60,7 @@ export class ServiceManager
   }
 
   public request(
-    method: ServiceRequestMethod,
+    method: RequestMethod,
     path: string,
     origin: string,
   ): ServiceRequestInterface {
