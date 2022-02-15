@@ -38,6 +38,13 @@ describe("ServiceContext", function () {
     reset(mockRouter);
   });
 
+  describe("get body", function () {
+    it("should return body", async function () {
+      when(mockRequest.body).thenReturn("body");
+      expect(contextTarget.body).to.equal("body");
+    });
+  });
+
   describe("get credential", function () {
     it("should return credential", async function () {
       when(mockRequest.credential).thenReturn("token");
@@ -49,6 +56,13 @@ describe("ServiceContext", function () {
     it("should return hash", async function () {
       when(mockRequest.hash).thenReturn("hash");
       expect(contextTarget.hash).to.equal("hash");
+    });
+  });
+
+  describe("get headers", function () {
+    it("should return headers", async function () {
+      when(mockRequest.headers).thenReturn({});
+      expect(contextTarget.headers).to.deep.equal({});
     });
   });
 
