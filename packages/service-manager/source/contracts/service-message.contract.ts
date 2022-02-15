@@ -3,9 +3,11 @@ import { Readable } from "node:stream";
 export const ServiceMessageContract = Symbol("MessageContract");
 
 export interface ServiceMessageInterface {
-  readonly body: MessageBody;
+  readonly body: Readable;
 
   readonly headers: Record<string, string>;
+
+  buffer(): Promise<Buffer>;
 
   clearBody(): this;
 
@@ -13,19 +15,23 @@ export interface ServiceMessageInterface {
 
   clearHeaders(): this;
 
-  setBody(body: MessageBody): this;
+  data(): Promise<MessageData>;
+
+  setBody(body: Readable): this;
+
+  setBuffer(buffer: Buffer): this;
+
+  setData(data: MessageData): this;
 
   setHeader(key: string, value: string): this;
 
   setHeaders(headers: Record<string, string>): this;
 }
 
-export type JSONData =
-  | { [element: string]: JSONData }
-  | JSONData[]
+export type MessageData =
+  | { [element: string]: MessageData }
+  | MessageData[]
   | boolean
   | null
   | number
   | string;
-
-export type MessageBody = Buffer | Readable | JSONData | undefined;
