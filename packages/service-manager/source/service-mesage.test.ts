@@ -1,5 +1,5 @@
+import { Readable } from "@marubase-tools/stream";
 import { expect } from "chai";
-import { Readable } from "node:stream";
 import { ServiceMessage } from "./service-message.js";
 
 describe("ServiceMessage", function () {
