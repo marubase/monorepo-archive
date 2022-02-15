@@ -10,7 +10,7 @@ export interface ServiceRequestInterface extends ServiceMessageInterface {
 
   readonly hostname: string;
 
-  readonly method: ServiceRequestMethod;
+  readonly method: RequestMethod;
 
   readonly origin: string;
 
@@ -39,7 +39,7 @@ export interface ServiceRequestInterface extends ServiceMessageInterface {
 
   setHostname(hostname: string): this;
 
-  setMethod(method: ServiceRequestMethod): this;
+  setMethod(method: RequestMethod): this;
 
   setOrigin(origin: string): this;
 
@@ -58,7 +58,7 @@ export type ServiceRequestDispatcher = {
   dispatch(request: ServiceRequestInterface): Promise<ServiceResponseInterface>;
 };
 
-export type ServiceRequestMethod =
+export type RequestMethod =
   | "ACL"
   | "BIND"
   | "CHECKOUT"
