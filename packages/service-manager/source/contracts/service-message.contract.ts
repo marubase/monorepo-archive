@@ -1,8 +1,8 @@
 import { Readable } from "@marubase-tools/stream";
 
-export const ServiceContentContract = Symbol("ServiceContentContract");
+export const ServiceMessageContract = Symbol("ServiceMessageContract");
 
-export interface ServiceContentInterface {
+export interface ServiceMessageInterface {
   readonly body: Readable;
 
   readonly headers: Record<string, string>;
