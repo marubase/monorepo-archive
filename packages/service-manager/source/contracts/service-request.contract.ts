@@ -1,7 +1,7 @@
 import { ServiceMessageInterface } from "./service-message.contract.js";
 import { ServiceResponseInterface } from "./service-response.contract.js";
 
-export const ServiceRequestContract = Symbol("RequestContract");
+export const ServiceRequestContract = Symbol("ServiceRequestContract");
 
 export interface ServiceRequestInterface extends ServiceMessageInterface {
   readonly credential?: [string, string] | string;
