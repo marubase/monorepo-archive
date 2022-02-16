@@ -24,7 +24,12 @@ export interface ServiceContentInterface {
   setHeaders(headers: Record<string, string>): this;
 }
 
-export type ContentBody = Buffer | JsonData | Readable;
+export type ContentBody =
+  | ArrayBuffer
+  | Buffer
+  | JsonData
+  | NodeJS.TypedArray
+  | Readable;
 
 export type JsonData =
   | { [property: string]: JsonData }
