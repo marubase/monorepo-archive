@@ -15,7 +15,7 @@ export interface ServiceContentInterface {
 
   clearHeaders(): this;
 
-  json(): Promise<JsonData>;
+  data(): Promise<JsonData>;
 
   setBody(body: ContentBody): this;
 
