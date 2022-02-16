@@ -3,10 +3,10 @@ import {
   StatusCode,
   StatusText,
 } from "./contracts/service-response.contract.js";
-import { ServiceMessage } from "./service-message.js";
+import { ServiceContent } from "./service-content.js";
 
 export class ServiceResponse
-  extends ServiceMessage
+  extends ServiceContent
   implements ServiceResponseInterface
 {
   protected _statusCode: StatusCode = 200;
