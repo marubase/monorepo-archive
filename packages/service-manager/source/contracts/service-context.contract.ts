@@ -1,3 +1,4 @@
+import { Readable } from "@marubase-tools/stream";
 import { Callable, Resolvable } from "@marubase/container";
 import {
   ContentBody,
@@ -54,7 +55,10 @@ export interface ServiceContextInterface extends Map<unknown, unknown> {
 
   host(origin: string, name: string): this;
 
-  multipart(...parts: ServiceContentInterface[]): ServiceMultipartInterface;
+  multipart(
+    body: Readable | ServiceContentInterface[],
+    headers?: Record<string, string>,
+  ): ServiceMultipartInterface;
 
   replyWith(
     statusCode: StatusCode,
