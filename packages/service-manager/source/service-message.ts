@@ -1,10 +1,10 @@
 import { isReadable, Readable } from "@marubase-tools/stream";
 import {
   MessageData,
-  ServiceContentInterface,
-} from "./contracts/service-content.contract.js";
+  ServiceMessageInterface,
+} from "./contracts/service-message.contract.js";
 
-export class ServiceContent implements ServiceContentInterface {
+export class ServiceMessage implements ServiceMessageInterface {
   protected _body?: Buffer | Readable | { data: MessageData };
 
   protected _headers: Record<string, string> = {};

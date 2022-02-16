@@ -4,7 +4,7 @@ export * from "./errors/index.js";
 export * from "./service-context.js";
 export * from "./service-manager.js";
 export * from "./service-manager.provider.js";
-export * from "./service-content.js";
+export * from "./service-message.js";
 export * from "./service-request.js";
 export * from "./service-response.js";
 export * from "./service-router.js";
