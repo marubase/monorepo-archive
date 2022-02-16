@@ -1,4 +1,10 @@
 import { Readable } from "@marubase-tools/stream";
+import {
+  ContentBody,
+  JsonData,
+  ServiceContentInterface,
+} from "./service-content.contract.js";
+import { ServiceMultipartInterface } from "./service-multipart.contract.js";
 
 export const ServiceMessageContract = Symbol("ServiceMessageContract");
 
@@ -15,19 +21,18 @@ export interface ServiceMessageInterface {
 
   clearHeaders(): this;
 
-  json(): Promise<MessageData>;
+  json(): Promise<JsonData>;
 
-  setBody(body: Buffer | MessageData | Readable): this;
+  multipart(): ServiceMultipartInterface;
+
+  setBody(body: MessageBody): this;
 
   setHeader(key: string, value: string): this;
 
   setHeaders(headers: Record<string, string>): this;
 }
 
-export type MessageData =
-  | { [element: string]: MessageData }
-  | MessageData[]
-  | boolean
-  | null
-  | number
-  | string;
+export type MessageBody =
+  | ContentBody
+  | ServiceContentInterface
+  | ServiceMultipartInterface;
