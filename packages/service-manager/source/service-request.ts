@@ -4,10 +4,10 @@ import {
   ServiceRequestInterface,
 } from "./contracts/service-request.contract.js";
 import { ServiceResponseInterface } from "./contracts/service-response.contract.js";
-import { ServiceContent } from "./service-content.js";
+import { ServiceMessage } from "./service-message.js";
 
 export class ServiceRequest
-  extends ServiceContent
+  extends ServiceMessage
   implements ServiceRequestInterface
 {
   protected _dispatcher: ServiceRequestDispatcher;
