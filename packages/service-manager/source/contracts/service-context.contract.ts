@@ -9,7 +9,7 @@ import {
 } from "./service-response.contract.js";
 import { ServiceRouterInterface } from "./service-router.contract.js";
 
-export const ServiceContextContract = Symbol("ContextContract");
+export const ServiceContextContract = Symbol("ServiceContextContract");
 
 export interface ServiceContextInterface extends Map<unknown, unknown> {
   readonly body: unknown;
