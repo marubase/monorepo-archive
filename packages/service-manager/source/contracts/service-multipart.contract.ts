@@ -1,6 +1,5 @@
 import { Readable } from "@marubase-tools/stream";
 import {
-  ContentBody,
   JsonData,
   ServiceContentInterface,
 } from "./service-content.contract.js";
@@ -13,15 +12,17 @@ export interface ServiceMultipartInterface
 
   readonly boundary: string;
 
-  readonly type: string;
+  readonly contentType: string;
 
-  append(content: ContentBody): this;
+  readonly type: string;
 
   buffer(): Promise<Buffer>;
 
   clearBody(): this;
 
-  json(): Promise<JsonData>;
+  data(): Promise<JsonData>;
+
+  setBody(body: Readable | ServiceContentInterface[]): this;
 
   setBoundary(boundary: string): this;
 
