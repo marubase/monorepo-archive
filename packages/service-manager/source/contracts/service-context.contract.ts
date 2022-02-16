@@ -1,5 +1,10 @@
 import { Callable, Resolvable } from "@marubase/container";
 import {
+  ContentBody,
+  ServiceContentInterface,
+} from "./service-content.contract.js";
+import { ServiceMultipartInterface } from "./service-multipart.contract.js";
+import {
   RequestMethod,
   ServiceRequestInterface,
 } from "./service-request.contract.js";
@@ -42,7 +47,14 @@ export interface ServiceContextInterface extends Map<unknown, unknown> {
 
   call<Result>(callable: Callable, ...args: unknown[]): Result;
 
+  content(
+    body: ContentBody,
+    headers?: Record<string, string>,
+  ): ServiceContentInterface;
+
   host(origin: string, name: string): this;
+
+  multipart(...parts: ServiceContentInterface[]): ServiceMultipartInterface;
 
   replyWith(
     statusCode: StatusCode,
