@@ -1,6 +1,6 @@
 import { ServiceMessageInterface } from "./service-message.contract.js";
 
-export const ServiceResponseContract = Symbol("ResponseContract");
+export const ServiceResponseContract = Symbol("ServiceResponseContract");
 
 export interface ServiceResponseInterface extends ServiceMessageInterface {
   readonly statusCode: StatusCode;
