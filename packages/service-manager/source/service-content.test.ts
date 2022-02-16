@@ -1,35 +1,35 @@
 import { Readable } from "@marubase-tools/stream";
 import { expect } from "chai";
-import { ServiceMessage } from "./service-message.js";
+import { ServiceContent } from "./service-content.js";
 
-describe("ServiceMessage", function () {
-  let message: ServiceMessage;
+describe("ServiceContent", function () {
+  let content: ServiceContent;
   beforeEach(async function () {
-    message = new ServiceMessage();
+    content = new ServiceContent();
   });
 
   describe("get body", function () {
     context("when there is readable body", function () {
       it("should return readable", async function () {
-        message.setBody(Readable.from([]));
-        expect(message.body).to.have.property("read");
+        content.setBody(Readable.from([]));
+        expect(content.body).to.have.property("read");
       });
     });
     context("when there is buffer body", function () {
       it("should return readable", async function () {
-        message.setBody(Buffer.from([]));
-        expect(message.body).to.have.property("read");
+        content.setBody(Buffer.from([]));
+        expect(content.body).to.have.property("read");
       });
     });
     context("when there is data body", function () {
       it("should return readable", async function () {
-        message.setBody({});
-        expect(message.body).to.have.property("read");
+        content.setBody({});
+        expect(content.body).to.have.property("read");
       });
     });
     context("when there is no body", function () {
       it("should return readable", async function () {
-        expect(message.body).to.have.property("read");
+        expect(content.body).to.have.property("read");
       });
     });
   });
@@ -37,15 +37,15 @@ describe("ServiceMessage", function () {
   describe("get headers", function () {
     context("when there is headers", function () {
       it("should return headers", async function () {
-        message.setHeader("Content-Type", "application/json");
-        expect(message.headers).to.deep.equal({
+        content.setHeader("Content-Type", "application/json");
+        expect(content.headers).to.deep.equal({
           "Content-Type": "application/json",
         });
       });
     });
     context("when there is no headers", function () {
       it("should return empty headers", async function () {
-        expect(message.headers).to.deep.equal({});
+        expect(content.headers).to.deep.equal({});
       });
     });
   });
@@ -53,47 +53,47 @@ describe("ServiceMessage", function () {
   describe("#buffer()", function () {
     context("when there is readable body", function () {
       it("should return buffer", async function () {
-        message.setBody(Readable.from([]));
+        content.setBody(Readable.from([]));
 
-        const buffer = await message.buffer();
+        const buffer = await content.buffer();
         expect(buffer).to.be.an.instanceOf(Buffer);
       });
     });
     context("when there is readable body (filled)", function () {
       it("should return buffer", async function () {
-        message.setBody(Readable.from(Buffer.from("{}")));
+        content.setBody(Readable.from(Buffer.from("{}")));
 
-        const buffer = await message.buffer();
+        const buffer = await content.buffer();
         expect(buffer).to.be.an.instanceOf(Buffer);
       });
     });
     context("when there is buffer body", function () {
       it("should return buffer", async function () {
-        message.setBody(Buffer.from([]));
+        content.setBody(Buffer.from([]));
 
-        const buffer = await message.buffer();
+        const buffer = await content.buffer();
         expect(buffer).to.be.an.instanceOf(Buffer);
       });
     });
     context("when there is buffer body (filled)", function () {
       it("should return buffer", async function () {
-        message.setBody(Buffer.from("{}"));
+        content.setBody(Buffer.from("{}"));
 
-        const buffer = await message.buffer();
+        const buffer = await content.buffer();
         expect(buffer).to.be.an.instanceOf(Buffer);
       });
     });
     context("when there is data body", function () {
       it("should return buffer", async function () {
-        message.setBody({});
+        content.setBody({});
 
-        const buffer = await message.buffer();
+        const buffer = await content.buffer();
         expect(buffer).to.be.an.instanceOf(Buffer);
       });
     });
     context("when there is no body", function () {
       it("should return buffer", async function () {
-        const buffer = await message.buffer();
+        const buffer = await content.buffer();
         expect(buffer).to.be.an.instanceOf(Buffer);
       });
     });
@@ -102,16 +102,16 @@ describe("ServiceMessage", function () {
   describe("#clearBody()", function () {
     context("when there is body", function () {
       it("should return self", async function () {
-        message.setBody(Readable.from([]));
+        content.setBody(Readable.from([]));
 
-        const self = message.clearBody();
-        expect(self).to.equal(message);
+        const self = content.clearBody();
+        expect(self).to.equal(content);
       });
     });
     context("when there is no body", function () {
       it("should return self", async function () {
-        const self = message.clearBody();
-        expect(self).to.equal(message);
+        const self = content.clearBody();
+        expect(self).to.equal(content);
       });
     });
   });
@@ -119,16 +119,16 @@ describe("ServiceMessage", function () {
   describe("#clearHeader(key)", function () {
     context("when there is headers", function () {
       it("should return self", async function () {
-        message.setHeader("Content-Type", "application/json");
+        content.setHeader("Content-Type", "application/json");
 
-        const self = message.clearHeader("Content-Type");
-        expect(self).to.equal(message);
+        const self = content.clearHeader("Content-Type");
+        expect(self).to.equal(content);
       });
     });
     context("when there is no headers", function () {
       it("should return self", async function () {
-        const self = message.clearHeader("Content-Type");
-        expect(self).to.equal(message);
+        const self = content.clearHeader("Content-Type");
+        expect(self).to.equal(content);
       });
     });
   });
@@ -136,16 +136,16 @@ describe("ServiceMessage", function () {
   describe("#clearHeaders()", function () {
     context("when there is headers", function () {
       it("should return self", async function () {
-        message.setHeader("Content-Type", "application/json");
+        content.setHeader("Content-Type", "application/json");
 
-        const self = message.clearHeaders();
-        expect(self).to.equal(message);
+        const self = content.clearHeaders();
+        expect(self).to.equal(content);
       });
     });
     context("when there is no headers", function () {
       it("should return self", async function () {
-        const self = message.clearHeaders();
-        expect(self).to.equal(message);
+        const self = content.clearHeaders();
+        expect(self).to.equal(content);
       });
     });
   });
@@ -153,47 +153,47 @@ describe("ServiceMessage", function () {
   describe("#json()", function () {
     context("when there is readable body", function () {
       it("should return json", async function () {
-        message.setBody(Readable.from([]));
+        content.setBody(Readable.from([]));
 
-        const json = await message.json();
+        const json = await content.json();
         expect(json).to.be.null;
       });
     });
     context("when there is readable body (filled)", function () {
       it("should return json", async function () {
-        message.setBody(Readable.from(Buffer.from("{}")));
+        content.setBody(Readable.from(Buffer.from("{}")));
 
-        const json = await message.json();
+        const json = await content.json();
         expect(json).to.be.deep.equal({});
       });
     });
     context("when there is buffer body", function () {
       it("should return json", async function () {
-        message.setBody(Buffer.from([]));
+        content.setBody(Buffer.from([]));
 
-        const json = await message.json();
+        const json = await content.json();
         expect(json).to.be.null;
       });
     });
     context("when there is buffer body (filled)", function () {
       it("should return json", async function () {
-        message.setBody(Buffer.from("{}"));
+        content.setBody(Buffer.from("{}"));
 
-        const json = await message.json();
+        const json = await content.json();
         expect(json).to.be.deep.equal({});
       });
     });
     context("when there is json body", function () {
       it("should return json", async function () {
-        message.setBody({});
+        content.setBody({});
 
-        const json = await message.json();
+        const json = await content.json();
         expect(json).to.deep.equal({});
       });
     });
     context("when there is no body", function () {
       it("should return json", async function () {
-        const json = await message.json();
+        const json = await content.json();
         expect(json).to.be.null;
       });
     });
@@ -202,16 +202,16 @@ describe("ServiceMessage", function () {
   describe("#setBody(body)", function () {
     context("when there is body", function () {
       it("should return self", async function () {
-        message.setBody(Readable.from([]));
+        content.setBody(Readable.from([]));
 
-        const self = message.setBody(Readable.from([]));
-        expect(self).to.equal(message);
+        const self = content.setBody(Readable.from([]));
+        expect(self).to.equal(content);
       });
     });
     context("when there is no body", function () {
       it("should return self", async function () {
-        const self = message.setBody(Readable.from([]));
-        expect(self).to.equal(message);
+        const self = content.setBody(Readable.from([]));
+        expect(self).to.equal(content);
       });
     });
   });
@@ -219,16 +219,16 @@ describe("ServiceMessage", function () {
   describe("#setHeader(key, value)", function () {
     context("when there is headers", function () {
       it("should return self", async function () {
-        message.setHeader("Content-Type", "application/json");
+        content.setHeader("Content-Type", "application/json");
 
-        const self = message.setHeader("Content-Type", "text/plain");
-        expect(self).to.equal(message);
+        const self = content.setHeader("Content-Type", "text/plain");
+        expect(self).to.equal(content);
       });
     });
     context("when there is no headers", function () {
       it("should return self", async function () {
-        const self = message.setHeader("Content-Type", "text/plain");
-        expect(self).to.equal(message);
+        const self = content.setHeader("Content-Type", "text/plain");
+        expect(self).to.equal(content);
       });
     });
   });
@@ -236,16 +236,16 @@ describe("ServiceMessage", function () {
   describe("#setHeaders()", function () {
     context("when there is headers", function () {
       it("should return self", async function () {
-        message.setHeader("Content-Type", "application/json");
+        content.setHeader("Content-Type", "application/json");
 
-        const self = message.setHeaders({ "Content-Type": "text/plain" });
-        expect(self).to.equal(message);
+        const self = content.setHeaders({ "Content-Type": "text/plain" });
+        expect(self).to.equal(content);
       });
     });
     context("when there is no headers", function () {
       it("should return self", async function () {
-        const self = message.setHeaders({ "Content-Type": "text/plain" });
-        expect(self).to.equal(message);
+        const self = content.setHeaders({ "Content-Type": "text/plain" });
+        expect(self).to.equal(content);
       });
     });
   });
