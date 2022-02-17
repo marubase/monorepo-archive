@@ -177,7 +177,10 @@ importers:
     specifiers: {}
 
   tools/http:
-    specifiers: {}
+    specifiers:
+      '@marubase-tools/stream': workspace:^0.0.0
+    dependencies:
+      '@marubase-tools/stream': link:../stream
 
   tools/istanbul-merge:
     specifiers:
