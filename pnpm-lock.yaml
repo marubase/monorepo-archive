@@ -176,6 +176,12 @@ importers:
   packages/storage/build/module:
     specifiers: {}
 
+  tools/http:
+    specifiers:
+      readable-stream: ^3.6.0
+    dependencies:
+      readable-stream: 3.6.0
+
   tools/istanbul-merge:
     specifiers:
       istanbul-lib-coverage: ^3.2.0
