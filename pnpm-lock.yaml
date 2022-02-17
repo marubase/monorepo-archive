@@ -177,10 +177,7 @@ importers:
     specifiers: {}
 
   tools/http:
-    specifiers:
-      readable-stream: ^3.6.0
-    dependencies:
-      readable-stream: 3.6.0
+    specifiers: {}
 
   tools/istanbul-merge:
     specifiers:
