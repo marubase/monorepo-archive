@@ -12,24 +12,37 @@ import stream, {
   Writable,
   WritableOptions,
 } from "readable-stream";
+import {
+  isDuplexStream,
+  isReadableStream,
+  isWritableStream,
+} from "./functions/index.js";
 import { IterableReadable } from "./iterable-readable.js";
 
 declare module "readable-stream" {
   namespace Readable {
     function create(
       iterable: IterableInput,
-      options?: ReadableOptions,
-    ): Readable;
+      options?: stream.ReadableOptions,
+    ): stream.Readable;
   }
 
   export function finished(
-    stream: Duplex | Readable | Transform | Writable,
-    callback: Function,
+    stream:
+      | stream.Duplex
+      | stream.Readable
+      | stream.Transform
+      | stream.Writable,
+    callback: (error?: Error) => void,
   ): Function;
   export function finished(
-    stream: Duplex | Readable | Transform | Writable,
+    stream:
+      | stream.Duplex
+      | stream.Readable
+      | stream.Transform
+      | stream.Writable,
     options: { error?: boolean; readable?: boolean; writable?: boolean },
-    callback: Function,
+    callback: (error?: Error) => void,
   ): Function;
 
   export function isDuplexStream(readable: unknown): boolean;
@@ -39,13 +52,15 @@ declare module "readable-stream" {
   export function isWritableStream(writable: unknown): boolean;
 
   export function pipeline(
-    source: Readable,
-    ...streamOrCallback: Array<Duplex | Writable | ((error: Error) => void)>
-  ): Stream;
+    source: stream.Readable,
+    ...streamOrCallback: Array<
+      stream.Duplex | stream.Writable | ((error?: Error) => void)
+    >
+  ): stream.Readable;
   export function pipeline(
-    streams: Array<Duplex | Readable | Writable>,
-    callback: (error: Error) => void,
-  ): Stream;
+    streams: Array<stream.Duplex | stream.Readable | stream.Writable>,
+    callback: (error?: Error) => void,
+  ): stream.Readable;
 
   export type IterableInput =
     | Array<unknown>
@@ -64,6 +79,12 @@ Readable.create = (
   options: stream.ReadableOptions = {},
 ): stream.Readable => new IterableReadable(iterable, options);
 
+stream.isDuplexStream = isDuplexStream;
+
+stream.isReadableStream = isReadableStream;
+
+stream.isWritableStream = isWritableStream;
+
 export * from "./functions/index.js";
 export {
   Duplex,
@@ -71,6 +92,9 @@ export {
   Readable,
   ReadableOptions,
   finished,
+  isDuplexStream,
+  isReadableStream,
+  isWritableStream,
   PassThrough,
   pipeline,
   Transform,
