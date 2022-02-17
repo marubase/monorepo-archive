@@ -7,7 +7,7 @@ declare module "readable-stream" {
   ): Function;
   export function finished(
     stream: Duplex | Readable | Writable,
-    options: FinishedOptions,
+    options: finishedOptions,
     callback: Function,
   ): Function;
 
@@ -16,7 +16,7 @@ declare module "readable-stream" {
     ...destinationOrCallback: Array<Duplex | Function>
   ): Readable;
 
-  export type FinishedOptions = {
+  export type finishedOptions = {
     error?: boolean;
     readable?: boolean;
     writable?: boolean;
