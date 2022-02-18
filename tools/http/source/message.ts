@@ -130,9 +130,9 @@ export class Message implements MessageInterface {
 export class MessageStream extends Readable {
   protected _iterator?: AsyncIterator<Buffer>;
 
-  protected _message: Message;
+  protected _message: MessageInterface;
 
-  public constructor(message: Message) {
+  public constructor(message: MessageInterface) {
     super();
     this._message = message;
   }
