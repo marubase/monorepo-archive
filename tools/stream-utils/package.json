@@ -34,9 +34,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {
-    "@types/readable-stream": "^2.3.13",
-    "readable-stream": "^3.6.0"
   }
 }
