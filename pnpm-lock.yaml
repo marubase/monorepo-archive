@@ -184,6 +184,12 @@ importers:
     dependencies:
       '@marubase-tools/stream': link:../stream
 
+  tools/http-utils:
+    specifiers:
+      '@marubase-tools/stream-utils': workspace:^0.0.0
+    dependencies:
+      '@marubase-tools/stream-utils': link:../stream-utils
+
   tools/istanbul-merge:
     specifiers:
       istanbul-lib-coverage: ^3.2.0
