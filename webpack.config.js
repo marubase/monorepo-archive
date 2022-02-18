@@ -31,6 +31,7 @@ module.exports = {
     fallback: {
       buffer: require.resolve("buffer"),
       process: require.resolve("process/browser"),
+      stream: require.resolve("readable-stream"),
       util: require.resolve("util"),
     },
     plugins: [new ResolveTsPlugin()],
