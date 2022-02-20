@@ -1,24 +1,25 @@
 import { isReadable, toReadable } from "@marubase-tools/stream";
 import { Readable } from "stream";
-import { MessageInterface } from "./contracts/message.contract.js";
-import { MultipartInterface } from "./contracts/multipart.contract.js";
 import { Message } from "./message.js";
 
-export class Multipart implements MultipartInterface {
+export class Multipart implements AsyncIterable<Message> {
   public static create(
-    boundary: string,
-    parts: MessageInterface[],
+    parts: Message[] | Readable,
+    boundary = Math.random().toString(36).slice(2) +
+      Math.random().toString(36).slice(2) +
+      Math.random().toString(36).slice(2),
     type = "multipart/mixed",
   ): Multipart {
     return new Multipart(parts).setBoundary(boundary).setType(type);
   }
 
-  public static from(
-    boundary: string,
-    stream: Readable,
-    type = "multipart/mixed",
-  ): Multipart {
-    return new Multipart(stream).setBoundary(boundary).setType(type);
+  public static isMultipart(multipart: unknown): multipart is Multipart {
+    return (
+      typeof multipart === "object" &&
+      multipart !== null &&
+      "setBoundary" in multipart &&
+      "setType" in multipart
+    );
   }
 
   protected _boundary =
@@ -26,11 +27,11 @@ export class Multipart implements MultipartInterface {
     Math.random().toString(36).slice(2) +
     Math.random().toString(36).slice(2);
 
-  protected _parts: MessageInterface[] | Readable;
+  protected _parts: Message[] | Readable;
 
   protected _type = "multipart/mixed";
 
-  public constructor(parts: MessageInterface[] | Readable) {
+  public constructor(parts: Message[] | Readable) {
     this._parts = parts;
   }
 
@@ -47,11 +48,11 @@ export class Multipart implements MultipartInterface {
     return this._type;
   }
 
-  public [Symbol.asyncIterator](): AsyncIterator<MessageInterface> {
+  public [Symbol.asyncIterator](): AsyncIterator<Message> {
     if (isReadable(this._parts)) {
       const iterator = toMultiStream(this._boundary, this._parts);
       return {
-        next: async (): Promise<IteratorResult<MessageInterface>> => {
+        next: async (): Promise<IteratorResult<Message>> => {
           const cursor = await iterator.next();
           if (cursor.done) return { done: true, value: undefined };
           return { done: false, value: await Message.from(cursor.value) };
@@ -60,8 +61,8 @@ export class Multipart implements MultipartInterface {
     } else {
       let cursor = 0;
       return {
-        next: async (): Promise<IteratorResult<MessageInterface>> => {
-          const part = (this._parts as MessageInterface[])[cursor++];
+        next: async (): Promise<IteratorResult<Message>> => {
+          const part = (this._parts as Message[])[cursor++];
           return typeof part !== "undefined"
             ? { done: false, value: part }
             : { done: true, value: undefined };
@@ -86,11 +87,11 @@ export class MultipartStream extends Readable {
 
   protected _cursor = 0;
 
-  protected _parts: MessageInterface[];
+  protected _parts: Message[];
 
   protected _reader?: AsyncIterator<Buffer>;
 
-  public constructor(boundary: string, parts: MessageInterface[]) {
+  public constructor(boundary: string, parts: Message[]) {
     super();
     this._boundary = boundary;
     this._parts = parts;
