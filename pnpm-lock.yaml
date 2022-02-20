@@ -190,9 +190,6 @@ importers:
   packages/storage/build/module:
     specifiers: {}
 
-  tools/http:
-    specifiers: {}
-
   tools/istanbul-merge:
     specifiers:
       istanbul-lib-coverage: ^3.2.0
