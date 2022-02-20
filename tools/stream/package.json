@@ -1,5 +1,5 @@
 {
-  "name": "@marubase-tools/stream-utils",
+  "name": "@marubase-tools/stream",
   "version": "0.0.0",
   "type": "module",
   "main": "./build/commonjs/index.js",
