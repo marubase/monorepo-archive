@@ -208,6 +208,12 @@ importers:
   tools/karma-playwright-launcher:
     specifiers: {}
 
+  tools/message:
+    specifiers:
+      '@marubase-tools/stream': workspace:^0.0.0
+    dependencies:
+      '@marubase-tools/stream': link:../stream
+
   tools/storage-tester:
     specifiers:
       '@marubase/storage': workspace:^0.0.0
