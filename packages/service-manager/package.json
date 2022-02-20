@@ -52,7 +52,6 @@
     "access": "public"
   },
   "dependencies": {
-    "@marubase-tools/stream": "workspace:^0.0.0",
     "@marubase/container": "workspace:^0.0.0",
     "hyperid": "^3.0.0",
     "path-to-regexp": "^6.2.0"
