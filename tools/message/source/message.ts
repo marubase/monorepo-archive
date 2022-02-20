@@ -7,10 +7,50 @@ import {
 } from "./contracts/message.contract.js";
 
 export class Message implements MessageInterface {
+  public static create(
+    body: MessageBuffer | MessageData | Readable,
+    headers: Map<string, string> | [string, string][] = new Map(),
+  ): Message {
+    return new Message().setHeaders(headers).setBody(body);
+  }
+
+  public static async from(stream: Readable): Promise<Message> {
+    const headers = new Map<string, string>();
+    const reader = stream[Symbol.asyncIterator]();
+
+    let buffer = Buffer.from([]);
+    let chunk = await reader.next();
+    for (; !chunk.done; chunk = await reader.next()) {
+      buffer = Buffer.concat([buffer, chunk.value]);
+
+      const separator = "\r\n\r\n";
+      const separatorIndex = buffer.indexOf(separator);
+      if (separatorIndex < 0) continue;
+
+      const rawHeaders = buffer.subarray(0, separatorIndex).toString();
+      for (const rawHeader of rawHeaders.split("\r\n")) {
+        const [key, value] = rawHeader.split(":");
+        headers.set(key.trim(), value.trim());
+      }
+      buffer = buffer.subarray(separatorIndex + separator.length);
+      break;
+    }
+
+    const _body = new Readable({
+      read() {
+        reader.next().then(
+          (chunk) => this.push(!chunk.done ? chunk.value : null),
+          (error) => this.destroy(error),
+        );
+      },
+    });
+    _body.push(buffer);
+    return new Message().setHeaders(headers).setBody(_body);
+  }
+
   protected _body?: Buffer | Readable | { data: MessageData };
 
   protected _headers = new Map<string, string>();
-
   public get body(): Readable {
     if (Buffer.isBuffer(this._body)) {
       return toReadable(this._body);
