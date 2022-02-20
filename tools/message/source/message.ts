@@ -155,7 +155,7 @@ export class MessageStream extends Readable {
     this._message = message;
   }
 
-  public read(): void {
+  public _read(): void {
     if (typeof this._reader !== "undefined") {
       this._reader.next().then(
         (chunk) => this.push(!chunk.done ? chunk.value : null),
