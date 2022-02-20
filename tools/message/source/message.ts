@@ -1,12 +1,8 @@
 import { isReadable, toReadable } from "@marubase-tools/stream";
 import { Readable } from "stream";
-import {
-  MessageBuffer,
-  MessageData,
-  MessageInterface,
-} from "./contracts/message.contract.js";
+import { Multipart } from "./multipart.js";
 
-export class Message implements MessageInterface {
+export class Message {
   public static create(
     body: MessageBuffer | MessageData | Readable,
     headers: Map<string, string> | [string, string][] = new Map(),
@@ -36,7 +32,7 @@ export class Message implements MessageInterface {
       break;
     }
 
-    const _body = new Readable({
+    const body = new Readable({
       read() {
         reader.next().then(
           (chunk) => this.push(!chunk.done ? chunk.value : null),
@@ -44,16 +40,21 @@ export class Message implements MessageInterface {
         );
       },
     });
-    _body.push(buffer);
-    return new Message().setHeaders(headers).setBody(_body);
+    body.push(buffer);
+    return new Message().setHeaders(headers).setBody(body);
   }
 
-  protected _body?: Buffer | Readable | { data: MessageData };
+  protected _body?: Buffer | Multipart | Readable | { data: MessageData };
 
   protected _headers = new Map<string, string>();
+
   public get body(): Readable {
     if (Buffer.isBuffer(this._body)) {
       return toReadable(this._body);
+    }
+
+    if (Multipart.isMultipart(this._body)) {
+      return this._body.stream;
     }
 
     if (isReadable(this._body)) {
@@ -79,6 +80,12 @@ export class Message implements MessageInterface {
   public async buffer(): Promise<Buffer> {
     if (Buffer.isBuffer(this._body)) {
       return this._body;
+    }
+
+    if (Multipart.isMultipart(this._body)) {
+      const chunks: Buffer[] = [];
+      for await (const chunk of this._body.stream) chunks.push(chunk);
+      return Buffer.concat(chunks);
     }
 
     if (isReadable(this._body)) {
@@ -125,6 +132,12 @@ export class Message implements MessageInterface {
       }
     }
 
+    if (Multipart.isMultipart(this._body)) {
+      const parts: MessageData[] = [];
+      for await (const part of this._body) parts.push(await part.json());
+      return parts;
+    }
+
     if (isReadable(this._body)) {
       const chunks: Buffer[] = [];
       for await (const chunk of this._body) chunks.push(chunk);
@@ -143,14 +156,17 @@ export class Message implements MessageInterface {
     return typeof this._body !== "undefined" ? this._body.data : null;
   }
 
-  public setBody(body: MessageData | MessageBuffer | Readable): this {
+  public setBody(
+    body: MessageData | MessageBuffer | Multipart | Readable,
+  ): this {
     if (!this._headers.has("Content-Type")) {
-      const contentType =
-        ArrayBuffer.isView(body) ||
-        isReadable(body) ||
-        body instanceof ArrayBuffer
-          ? "application/octet-stream"
-          : "application/json";
+      const contentType = Multipart.isMultipart(body)
+        ? `${body.type}; boundary="${body.boundary}"`
+        : ArrayBuffer.isView(body) ||
+          isReadable(body) ||
+          body instanceof ArrayBuffer
+        ? "application/octet-stream"
+        : "application/json";
       this._headers.set("Content-Type", contentType);
     }
 
@@ -162,6 +178,11 @@ export class Message implements MessageInterface {
 
     if (body instanceof ArrayBuffer) {
       this._body = Buffer.from(body);
+      return this;
+    }
+
+    if (Multipart.isMultipart(body)) {
+      this._body = body;
       return this;
     }
 
@@ -214,3 +235,13 @@ export class MessageStream extends Readable {
     }
   }
 }
+
+export type MessageBuffer = ArrayBuffer | NodeJS.TypedArray;
+
+export type MessageData =
+  | { [key: string]: MessageData }
+  | MessageData[]
+  | boolean
+  | null
+  | number
+  | string;
