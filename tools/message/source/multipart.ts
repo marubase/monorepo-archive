@@ -85,7 +85,7 @@ export class MultipartStream extends Readable {
     if (typeof this._reader !== "undefined") {
       this._reader.next().then(
         (chunk) => {
-          if (chunk.done) delete this._reader;
+          if (chunk.done) delete this._reader, this.push(Buffer.from([]));
           else this.push(chunk.value);
         },
         (error) => this.destroy(error),
