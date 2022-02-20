@@ -1,4 +1,4 @@
-export * from "./is-duplex-stream.js";
-export * from "./is-readable-stream.js";
-export * from "./is-writable-stream.js";
+export * from "./is-duplex.js";
+export * from "./is-readable.js";
+export * from "./is-writable.js";
 export * from "./to-readable.js";

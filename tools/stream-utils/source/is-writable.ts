@@ -1,8 +1,6 @@
 import stream from "readable-stream";
 
-export function isWritableStream(
-  writable: unknown,
-): writable is stream.Writable {
+export function isWritable(writable: unknown): writable is stream.Writable {
   return (
     typeof writable === "object" &&
     writable !== null &&
