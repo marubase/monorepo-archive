@@ -193,12 +193,6 @@ importers:
   tools/http:
     specifiers: {}
 
-  tools/http-utils:
-    specifiers:
-      '@marubase-tools/stream-utils': workspace:^0.0.0
-    dependencies:
-      '@marubase-tools/stream-utils': link:../stream-utils
-
   tools/istanbul-merge:
     specifiers:
       istanbul-lib-coverage: ^3.2.0
@@ -226,13 +220,13 @@ importers:
   tools/storage-tester/build/module:
     specifiers: {}
 
-  tools/stream-utils:
+  tools/stream:
     specifiers: {}
 
-  tools/stream-utils/build/commonjs:
+  tools/stream/build/commonjs:
     specifiers: {}
 
-  tools/stream-utils/build/module:
+  tools/stream/build/module:
     specifiers: {}
 
 packages:
