@@ -190,6 +190,12 @@ importers:
   packages/storage/build/module:
     specifiers: {}
 
+  tools/http:
+    specifiers:
+      '@marubase-tools/stream': workspace:^0.0.0
+    dependencies:
+      '@marubase-tools/stream': link:../stream
+
   tools/istanbul-merge:
     specifiers:
       istanbul-lib-coverage: ^3.2.0
