@@ -10,8 +10,12 @@ export class Multipart implements AsyncIterable<Message> {
       typeof input === "object" &&
       input !== null &&
       "boundary" in (input as Multipart) &&
+      "message" in (input as Multipart) &&
+      "stream" in (input as Multipart) &&
       "type" in (input as Multipart) &&
+      "clearMessage" in (input as Multipart) &&
       "setBoundary" in (input as Multipart) &&
+      "setMessage" in (input as Multipart) &&
       "setType" in (input as Multipart)
     );
   }
