@@ -52,6 +52,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@marubase-tools/message": "workspace:^0.0.0",
     "@marubase-tools/stream": "workspace:^0.0.0",
     "path-to-regexp": "^6.2.0"
   }

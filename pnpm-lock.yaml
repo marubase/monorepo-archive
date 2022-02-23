@@ -121,9 +121,11 @@ importers:
 
   packages/service-router:
     specifiers:
+      '@marubase-tools/message': workspace:^0.0.0
       '@marubase-tools/stream': workspace:^0.0.0
       path-to-regexp: ^6.2.0
     dependencies:
+      '@marubase-tools/message': link:../../tools/message
       '@marubase-tools/stream': link:../../tools/stream
       path-to-regexp: 6.2.0
 
