@@ -1,5 +1,5 @@
 {
-  "name": "@marubase-tools/http",
+  "name": "@marubase-tools/message",
   "version": "0.0.0",
   "type": "module",
   "main": "./build/commonjs/index.js",
