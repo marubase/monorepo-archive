@@ -207,6 +207,12 @@ importers:
     dependencies:
       '@marubase-tools/stream': link:../stream
 
+  tools/message/build/commonjs:
+    specifiers: {}
+
+  tools/message/build/module:
+    specifiers: {}
+
   tools/storage-tester:
     specifiers:
       '@marubase/storage': workspace:^0.0.0
