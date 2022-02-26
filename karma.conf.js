@@ -36,7 +36,7 @@ module.exports = function (karmaConfig) {
     hostname: "127.0.0.1",
     logLevel: karmaConfig.LOG_ERROR,
     plugins: [
-      "@marubase-tools/karma-playwright-launcher",
+      "@endyjasmi/karma-playwright-launcher",
       "karma-coverage-istanbul-reporter",
       "karma-mocha",
       "karma-sourcemap-loader",
