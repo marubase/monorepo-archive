@@ -82,6 +82,9 @@ importers:
       webpack: 5.68.0_webpack-cli@4.9.2
       webpack-cli: 4.9.2_webpack@5.68.0
 
+  modules/service-framework:
+    specifiers: {}
+
   packages/collator:
     specifiers: {}
 
@@ -197,9 +200,6 @@ importers:
       istanbul-lib-coverage: ^3.2.0
     dependencies:
       istanbul-lib-coverage: 3.2.0
-
-  tools/karma-playwright-launcher:
-    specifiers: {}
 
   tools/message:
     specifiers:
