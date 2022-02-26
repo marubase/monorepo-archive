@@ -4,10 +4,10 @@ importers:
 
   .:
     specifiers:
+      '@endyjasmi/karma-playwright-launcher': ^0.0.3
       '@istanbuljs/nyc-config-typescript': ^1.0.2
       '@jsdevtools/coverage-istanbul-loader': ^3.0.5
       '@marubase-tools/istanbul-merge': link:tools/istanbul-merge
-      '@marubase-tools/karma-playwright-launcher': link:tools/karma-playwright-launcher
       '@tsconfig/node16': ^1.0.2
       '@types/chai': ^4.3.0
       '@types/mocha': ^9.1.0
@@ -43,10 +43,10 @@ importers:
       webpack: ^5.68.0
       webpack-cli: ^4.9.2
     devDependencies:
+      '@endyjasmi/karma-playwright-launcher': 0.0.3_playwright@1.18.1
       '@istanbuljs/nyc-config-typescript': 1.0.2_nyc@15.1.0
       '@jsdevtools/coverage-istanbul-loader': 3.0.5
       '@marubase-tools/istanbul-merge': link:tools/istanbul-merge
-      '@marubase-tools/karma-playwright-launcher': link:tools/karma-playwright-launcher
       '@tsconfig/node16': 1.0.2
       '@types/chai': 4.3.0
       '@types/mocha': 9.1.0
@@ -458,6 +458,14 @@ packages:
   /@discoveryjs/json-ext/0.5.6:
     resolution: {integrity: sha512-ws57AidsDvREKrZKYffXddNkyaF14iHNHm8VQnZH6t99E8gczjNN0GpvcGny0imC80yQ0tHz1xVUKk/KFQSUyA==}
     engines: {node: '>=10.0.0'}
+    dev: true
+
+  /@endyjasmi/karma-playwright-launcher/0.0.3_playwright@1.18.1:
+    resolution: {integrity: sha512-sGdFoMWlfRAF8abPyi+CeAc25rdJcXCXGNvksBVD0zC1WV0XQ9HXHUuDF/w1JbWLvd3Rp6EdKyRUM8jkBDAPdw==}
+    peerDependencies:
+      playwright: 1.x
+    dependencies:
+      playwright: 1.18.1
     dev: true
 
   /@eslint/eslintrc/1.0.5:
