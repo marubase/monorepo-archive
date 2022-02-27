@@ -5,6 +5,7 @@
   "type": "commonjs",
   "private": true,
   "devDependencies": {
+    "@endyjasmi/istanbul-merge": "^0.0.0",
     "@endyjasmi/karma-playwright-launcher": "^0.0.3",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@jsdevtools/coverage-istanbul-loader": "^3.0.5",

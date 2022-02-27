@@ -4,6 +4,7 @@ importers:
 
   .:
     specifiers:
+      '@endyjasmi/istanbul-merge': ^0.0.0
       '@endyjasmi/karma-playwright-launcher': ^0.0.3
       '@istanbuljs/nyc-config-typescript': ^1.0.2
       '@jsdevtools/coverage-istanbul-loader': ^3.0.5
@@ -42,6 +43,7 @@ importers:
       webpack: ^5.68.0
       webpack-cli: ^4.9.2
     devDependencies:
+      '@endyjasmi/istanbul-merge': 0.0.0
       '@endyjasmi/karma-playwright-launcher': 0.0.3_playwright@1.18.1
       '@istanbuljs/nyc-config-typescript': 1.0.2_nyc@15.1.0
       '@jsdevtools/coverage-istanbul-loader': 3.0.5
@@ -450,6 +452,15 @@ packages:
   /@discoveryjs/json-ext/0.5.6:
     resolution: {integrity: sha512-ws57AidsDvREKrZKYffXddNkyaF14iHNHm8VQnZH6t99E8gczjNN0GpvcGny0imC80yQ0tHz1xVUKk/KFQSUyA==}
     engines: {node: '>=10.0.0'}
+    dev: true
+
+  /@endyjasmi/istanbul-merge/0.0.0:
+    resolution: {integrity: sha512-V7TsThJepQAIfACAKnKZzUJiKfE/9fh3wL5USxyckWM0Bu7bvuBHmzWkvjyppMy2cIC/0OU6FGO1kWlwZiTd2g==}
+    hasBin: true
+    dependencies:
+      glob: 7.2.0
+      istanbul-lib-coverage: 3.2.0
+      yargs: 17.3.1
     dev: true
 
   /@endyjasmi/karma-playwright-launcher/0.0.3_playwright@1.18.1:
@@ -4340,6 +4351,11 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
+  /yargs-parser/21.0.0:
+    resolution: {integrity: sha512-z9kApYUOCwoeZ78rfRYYWdiU/iNL6mwwYlkkZfJoyMR1xps+NEBX5X7XmRpxkZHhXJ6+Ey00IwKxBBSW9FIjyA==}
+    engines: {node: '>=12'}
+    dev: true
+
   /yargs-unparser/2.0.0:
     resolution: {integrity: sha512-7pRTIA9Qc1caZ0bZ6RYRGbHJthJWuakf+WmHK0rVeLkNrrGhfoabBNdue6kdINI6r4if7ocq9aD/n7xwKOdzOA==}
     engines: {node: '>=10'}
@@ -4378,6 +4394,19 @@ packages:
       string-width: 4.2.3
       y18n: 5.0.8
       yargs-parser: 20.2.9
+    dev: true
+
+  /yargs/17.3.1:
+    resolution: {integrity: sha512-WUANQeVgjLbNsEmGk20f+nlHgOqzRFpiGWVaBrYGYIGANIIu3lWjoyi0fNlFmJkvfhCZ6BXINe7/W2O2bV4iaA==}
+    engines: {node: '>=12'}
+    dependencies:
+      cliui: 7.0.4
+      escalade: 3.1.1
+      get-caller-file: 2.0.5
+      require-directory: 2.1.1
+      string-width: 4.2.3
+      y18n: 5.0.8
+      yargs-parser: 21.0.0
     dev: true
 
   /yauzl/2.10.0:
