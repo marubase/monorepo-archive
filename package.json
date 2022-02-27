@@ -8,7 +8,6 @@
     "@endyjasmi/karma-playwright-launcher": "^0.0.3",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@jsdevtools/coverage-istanbul-loader": "^3.0.5",
-    "@marubase-tools/istanbul-merge": "link:tools/istanbul-merge",
     "@tsconfig/node16": "^1.0.2",
     "@types/chai": "^4.3.0",
     "@types/mocha": "^9.1.0",

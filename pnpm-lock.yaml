@@ -7,7 +7,6 @@ importers:
       '@endyjasmi/karma-playwright-launcher': ^0.0.3
       '@istanbuljs/nyc-config-typescript': ^1.0.2
       '@jsdevtools/coverage-istanbul-loader': ^3.0.5
-      '@marubase-tools/istanbul-merge': link:tools/istanbul-merge
       '@tsconfig/node16': ^1.0.2
       '@types/chai': ^4.3.0
       '@types/mocha': ^9.1.0
@@ -46,7 +45,6 @@ importers:
       '@endyjasmi/karma-playwright-launcher': 0.0.3_playwright@1.18.1
       '@istanbuljs/nyc-config-typescript': 1.0.2_nyc@15.1.0
       '@jsdevtools/coverage-istanbul-loader': 3.0.5
-      '@marubase-tools/istanbul-merge': link:tools/istanbul-merge
       '@tsconfig/node16': 1.0.2
       '@types/chai': 4.3.0
       '@types/mocha': 9.1.0
@@ -194,12 +192,6 @@ importers:
 
   packages/storage/build/module:
     specifiers: {}
-
-  tools/istanbul-merge:
-    specifiers:
-      istanbul-lib-coverage: ^3.2.0
-    dependencies:
-      istanbul-lib-coverage: 3.2.0
 
   tools/message:
     specifiers:
@@ -2531,6 +2523,7 @@ packages:
   /istanbul-lib-coverage/3.2.0:
     resolution: {integrity: sha512-eOeJ5BHCmHYvQK7xt9GkdHuzuCGS1Y6g9Gvnx3Ym33fz/HpLRYxiS0wHNr+m/MBC8B647Xt608vCDEvhl9c6Mw==}
     engines: {node: '>=8'}
+    dev: true
 
   /istanbul-lib-hook/3.0.0:
     resolution: {integrity: sha512-Pt/uge1Q9s+5VAZ+pCo16TYMWPBIl+oaNIjgLQxcX0itS6ueeaA+pEfThZpH8WxhFgCiEb8sAJY6MdUKgiIWaQ==}
