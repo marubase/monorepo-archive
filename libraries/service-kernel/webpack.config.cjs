@@ -6,7 +6,7 @@ module.exports = Object.assign(require("../../webpack.config.js"), {
   output: {
     filename: "bundle.js",
     library: {
-      name: ["Marubase", "ServiceFramework"],
+      name: ["Marubase", "ServiceKernel"],
       type: "assign-properties",
     },
     path: path.join(process.cwd(), "build"),
