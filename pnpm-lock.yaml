@@ -96,7 +96,10 @@ importers:
     specifiers: {}
 
   libraries/router:
-    specifiers: {}
+    specifiers:
+      '@marubase/stream-utils': workspace:^0.0.0
+    dependencies:
+      '@marubase/stream-utils': link:../stream-utils
 
   packages/collator:
     specifiers: {}
