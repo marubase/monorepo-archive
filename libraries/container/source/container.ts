@@ -1,6 +1,7 @@
 import {
   BindOptions,
   ContainerCache,
+  ContainerContract,
   ContainerInterface,
   ContainerResolver,
   ContainerScope,
@@ -35,7 +36,7 @@ export class Container implements ContainerInterface {
     }
 
     if (typeof resolver !== "undefined") this._resolver = resolver;
-    else this._resolver = new Map();
+    else this._resolver = new Map([[ContainerContract, () => this]]);
 
     if (typeof scope !== "undefined") this._scope = scope;
     else this._scope = "container";
