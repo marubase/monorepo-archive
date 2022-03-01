@@ -1,6 +1,9 @@
 import { expect } from "chai";
 import { Container } from "./container.js";
-import { ResolveFactory } from "./contracts/container.contract.js";
+import {
+  ContainerContract,
+  ResolveFactory,
+} from "./contracts/container.contract.js";
 import { ContainerError } from "./errors/container.error.js";
 
 describe("Container", function () {
@@ -179,14 +182,12 @@ describe("Container", function () {
   describe("#resolve(key)", function () {
     context("when there is resolve factory", function () {
       it("should resolve factory", async function () {
-        const factoryFn: ResolveFactory = () => true;
-        const nestedFn: ResolveFactory = (container) =>
-          container.resolve("test");
+        const factoryFn: ResolveFactory = (container) =>
+          container.resolve(ContainerContract);
         container.bind("test", factoryFn);
-        container.bind("nest", nestedFn);
 
-        const instance = container.resolve<true>("nest");
-        expect(instance).to.be.true;
+        const resolved = container.resolve<Container>("test");
+        expect(resolved).to.be.an.instanceOf(Container);
       });
     });
     context("when there is no resolve factory", function () {
