@@ -95,11 +95,20 @@ importers:
   libraries/container/build/module:
     specifiers: {}
 
+  libraries/message:
+    specifiers: {}
+
   libraries/router:
-    specifiers:
-      '@marubase/stream-utils': workspace:^0.0.0
-    dependencies:
-      '@marubase/stream-utils': link:../stream-utils
+    specifiers: {}
+
+  libraries/stream:
+    specifiers: {}
+
+  libraries/stream/build/commonjs:
+    specifiers: {}
+
+  libraries/stream/build/module:
+    specifiers: {}
 
   packages/collator:
     specifiers: {}
