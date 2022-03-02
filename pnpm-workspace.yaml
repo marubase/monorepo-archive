@@ -2,3 +2,4 @@ packages:
   - "libraries/**"
   - "packages/**"
   - "tools/**"
+  - "!**/build/**"

@@ -89,12 +89,6 @@ importers:
   libraries/container:
     specifiers: {}
 
-  libraries/container/build/commonjs:
-    specifiers: {}
-
-  libraries/container/build/module:
-    specifiers: {}
-
   libraries/message:
     specifiers:
       '@marubase/stream': workspace:^0.0.0
@@ -107,12 +101,6 @@ importers:
   libraries/stream:
     specifiers: {}
 
-  libraries/stream/build/commonjs:
-    specifiers: {}
-
-  libraries/stream/build/module:
-    specifiers: {}
-
   packages/collator:
     specifiers: {}
 
@@ -121,12 +109,6 @@ importers:
       reflect-metadata: ^0.1.13
     dependencies:
       reflect-metadata: 0.1.13
-
-  packages/container/build/commonjs:
-    specifiers: {}
-
-  packages/container/build/module:
-    specifiers: {}
 
   packages/service-manager:
     specifiers:
@@ -137,12 +119,6 @@ importers:
       '@marubase/container': link:../container
       hyperid: 3.0.0
       path-to-regexp: 6.2.0
-
-  packages/service-manager/build/commonjs:
-    specifiers: {}
-
-  packages/service-manager/build/module:
-    specifiers: {}
 
   packages/service-router:
     specifiers:
@@ -171,12 +147,6 @@ importers:
       '@marubase-tools/storage-tester': link:../../tools/storage-tester
       '@marubase/storage': link:../storage
 
-  packages/storage-fdb/build/commonjs:
-    specifiers: {}
-
-  packages/storage-fdb/build/module:
-    specifiers: {}
-
   packages/storage-idb:
     specifiers:
       '@marubase-tools/storage-tester': workspace:^0.0.0
@@ -187,12 +157,6 @@ importers:
     devDependencies:
       '@marubase-tools/storage-tester': link:../../tools/storage-tester
       '@marubase/storage': link:../storage
-
-  packages/storage-idb/build/commonjs:
-    specifiers: {}
-
-  packages/storage-idb/build/module:
-    specifiers: {}
 
   packages/storage-lmdb:
     specifiers:
@@ -205,29 +169,11 @@ importers:
       '@marubase-tools/storage-tester': link:../../tools/storage-tester
       '@marubase/storage': link:../storage
 
-  packages/storage-lmdb/build/commonjs:
-    specifiers: {}
-
-  packages/storage-lmdb/build/module:
-    specifiers: {}
-
-  packages/storage/build/commonjs:
-    specifiers: {}
-
-  packages/storage/build/module:
-    specifiers: {}
-
   tools/message:
     specifiers:
       '@marubase-tools/stream': workspace:^0.0.0
     dependencies:
       '@marubase-tools/stream': link:../stream
-
-  tools/message/build/commonjs:
-    specifiers: {}
-
-  tools/message/build/module:
-    specifiers: {}
 
   tools/storage-tester:
     specifiers:
@@ -235,19 +181,7 @@ importers:
     devDependencies:
       '@marubase/storage': link:../../packages/storage
 
-  tools/storage-tester/build/commonjs:
-    specifiers: {}
-
-  tools/storage-tester/build/module:
-    specifiers: {}
-
   tools/stream:
-    specifiers: {}
-
-  tools/stream/build/commonjs:
-    specifiers: {}
-
-  tools/stream/build/module:
     specifiers: {}
 
 packages:
