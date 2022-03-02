@@ -96,7 +96,10 @@ importers:
     specifiers: {}
 
   libraries/message:
-    specifiers: {}
+    specifiers:
+      '@marubase/stream': workspace:^0.0.0
+    dependencies:
+      '@marubase/stream': link:../stream
 
   libraries/router:
     specifiers: {}
